@@ -49,25 +49,30 @@ gem "bootsnap", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
-group :development, :test do
-  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri mingw x64_mingw ]
+group :test do
+  gem "selenium-webdriver"  # Web page interaction
+  gem "capybara"  # For integration testing.
+  gem "webmock"   # Allows mocking of web apis for instance
 end
+
+group :test, :development do
+  gem "rspec-rails"                       # Rspec
+  gem "guard-rspec"                       # Integrate Guard with Rspec
+  gem "guard-spring"                      # Integrate Guard with Spring
+  gem "shoulda-matchers"         # Really handy RSpec matchers not included with RSpec
+  gem "database_cleaner"                  # Allows isolated testing of DB interactions.
+  gem 'spring-commands-rspec', group: :development
+end
+
+# Installed outside of environments to allow access in production. If you don't want this just put it
+# in group :development, :test
+gem "factory_bot_rails"                  # Creates factories for models
+gem 'faker'                               # Handy for creating fake data
 
 group :development do
-  # Use console on exceptions pages [https://github.com/rails/web-console]
-  gem "web-console"
+  # Access an IRB console on exception pages or by using <%= console %> in views
+  gem 'web-console', '~> 2.0'
 
-  # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
-  # gem "rack-mini-profiler"
-
-  # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
-  # gem "spring"
-end
-
-group :test do
-  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem "capybara"
-  gem "selenium-webdriver"
-  gem "webdrivers"
+  # Spring speeds up development by keeping your application running in the background. Read     more:         https://github.com/rails/spring
+  gem 'spring'
 end
