@@ -33,6 +33,8 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
   
+  config.hosts << "bb81d76e148e4d638f37ee2ab74b82ad.vfs.cloud9.us-east-2.amazonaws.com"
+  
   # For the devise config
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
   
