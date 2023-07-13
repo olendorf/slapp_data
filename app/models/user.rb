@@ -6,6 +6,9 @@ class User < ApplicationRecord
   
 
   validate :password_complexity
+  
+  
+  has_many :web_objects, class_name: 'AbstractWebObject', dependent: :destroy
          
   enum role: {
     user: 0,
