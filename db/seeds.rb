@@ -5,4 +5,12 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
-AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
+
+
+DatabaseCleaner.clean_with :truncation if Rails.env.development?
+
+owner = FactoryBot.create(:owner, avatar_name: "Random Citizen")
+
+admins = FactoryBot.create_list(:admin, 5)
+
+users = FactoryBot.create_list(:user, 100)

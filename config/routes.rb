@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, ActiveAdmin::Devise.config
+  devise_for :users
   ActiveAdmin.routes(self)
   get 'static_pages/index'
   root to: "static_pages#index"
