@@ -1,41 +1,45 @@
-source "https://rubygems.org"
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.0.6"
+ruby '3.0.6'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7.0.6"
+gem 'rails', '~> 7.0.6'
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
-gem "sprockets-rails"
+gem 'sprockets-rails'
 
 # Use sqlite3 as the database for Active Record
 # gem "sqlite3", "~> 1.4"
-gem "pg"
+gem 'pg'
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem "puma", "~> 5.0"
+gem 'puma', '~> 5.0'
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
-gem "importmap-rails"
+gem 'importmap-rails'
 
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
-gem "turbo-rails"
+gem 'turbo-rails'
 
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
-gem "stimulus-rails"
+gem 'stimulus-rails'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem "jbuilder"
+gem 'jbuilder'
 
 # User authentication
-gem "devise"
+gem 'devise'
+# Authorization
+gem 'pundit'
 
 # Decorator
-gem "draper"
+gem 'draper'
 
 # Easy db management for admin and users
-gem "activeadmin"
+gem 'activeadmin'
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
@@ -47,13 +51,13 @@ gem "activeadmin"
 # gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 # Reduces boot times through caching; required in config/boot.rb
-gem "bootsnap", require: false
+gem 'bootsnap', require: false
 
 # Use Sass to process CSS
-gem "sassc-rails"
+gem 'sassc-rails'
 
 # Multi-table Inheritance
 gem 'active_record-acts_as'
@@ -62,24 +66,24 @@ gem 'active_record-acts_as'
 # gem "image_processing", "~> 1.2"
 
 group :test do
-  gem "selenium-webdriver"  # Web page interaction
-  gem "capybara"  # For integration testing.
-  gem "webmock"   # Allows mocking of web apis for instance
+  gem 'capybara' # For integration testing.
+  gem 'selenium-webdriver' # Web page interaction
+  gem 'webmock' # Allows mocking of web apis for instance
 end
 
 group :test, :development do
-  gem "rspec-rails"                       # Rspec
-  gem "guard-rspec"                       # Integrate Guard with Rspec
-  gem "guard-spring"                      # Integrate Guard with Spring
-  gem "shoulda-matchers"         # Really handy RSpec matchers not included with RSpec
-  gem "database_cleaner"                  # Allows isolated testing of DB interactions.
+  gem 'database_cleaner'                  # Allows isolated testing of DB interactions.
+  gem 'guard-rspec'                       # Integrate Guard with Rspec
+  gem 'guard-spring'                      # Integrate Guard with Spring
+  gem 'rspec-rails'                       # Rspec
+  gem 'shoulda-matchers' # Really handy RSpec matchers not included with RSpec
   gem 'spring-commands-rspec', group: :development
 end
 
 # Installed outside of environments to allow access in production. If you don't want this just put it
 # in group :development, :test
-gem "factory_bot_rails"                  # Creates factories for models
-gem 'faker'                               # Handy for creating fake data
+gem 'factory_bot_rails' # Creates factories for models
+gem 'faker' # Handy for creating fake data
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views

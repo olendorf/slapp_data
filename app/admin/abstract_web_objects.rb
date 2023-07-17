@@ -1,5 +1,7 @@
-ActiveAdmin.register AbstractWebObject do
+# frozen_string_literal: true
 
+ActiveAdmin.register AbstractWebObject do
+  # rubocop:disable Layout/LineLength
   # See permitted parameters documentation:
   # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
   #
@@ -14,5 +16,5 @@ ActiveAdmin.register AbstractWebObject do
   #   permitted << :other if params[:action] == 'create' && current_user.admin?
   #   permitted
   # end
-  
+  # rubocop:enable Layout/LineLength
 end

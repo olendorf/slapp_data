@@ -1,14 +1,21 @@
+# frozen_string_literal: true
+
+# Base class for all rezzable objects
 class AbstractWebObject < ApplicationRecord
-  
   actable
-  
-  
+
   belongs_to :user, optional: true
-  
-  validates_presence_of :object_name
-  validates_presence_of :object_key
-  validates_presence_of :region
-  validates_presence_of :position
-  validates_presence_of :url
-  
+
+  validates :object_name, presence: true
+  validates :object_key, presence: true
+  validates :region, presence: true
+  validates :position, presence: true
+  validates :url, presence: true
+
+  def settings
+    attributes.merge(actable.attributes).except(
+      'user_id', 'created_at', 'updated_at', 'actable_id', 'actable_type',
+      'id', 'pinged_at'
+    )
+  end
 end

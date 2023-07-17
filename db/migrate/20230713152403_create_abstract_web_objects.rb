@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class CreateAbstractWebObjects < ActiveRecord::Migration[7.0]
   def change
     create_table :abstract_web_objects do |t|
       t.string :object_name
       t.string :object_key
-      t.string :descriptions
+      t.string :description
       t.string :region
       t.string :position
       t.string :url

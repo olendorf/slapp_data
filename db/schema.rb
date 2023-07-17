@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_13_164453) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_17_142542) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "abstract_web_objects", force: :cascade do |t|
     t.string "object_name"
     t.string "object_key"
-    t.string "descriptions"
+    t.string "description"
     t.string "region"
     t.string "position"
     t.string "url"
@@ -49,6 +49,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_13_164453) do
   end
 
   create_table "rezzable_web_objects", force: :cascade do |t|
+    t.string "setting_one"
+    t.integer "setting_two"
   end
 
   create_table "users", force: :cascade do |t|
@@ -64,6 +66,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_13_164453) do
     t.string "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "expiration_date"
     t.index ["avatar_key"], name: "index_users_on_avatar_key", unique: true
     t.index ["avatar_name"], name: "index_users_on_avatar_name", unique: true
     t.index ["role"], name: "index_users_on_role"

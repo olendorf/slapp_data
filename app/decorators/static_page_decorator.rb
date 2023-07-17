@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Decorator for stage pages
 class StaticPageDecorator < Draper::Decorator
   delegate_all
 
@@ -9,5 +12,4 @@ class StaticPageDecorator < Draper::Decorator
   #       object.created_at.strftime("%a %m/%d/%y")
   #     end
   #   end
-
 end
