@@ -41,6 +41,9 @@ gem 'draper'
 # Easy db management for admin and users
 gem 'activeadmin'
 
+# Configuration for application
+gem 'config'
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 

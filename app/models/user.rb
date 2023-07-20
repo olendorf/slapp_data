@@ -19,7 +19,6 @@ class User < ApplicationRecord
 
   def active?
     return true if owner?
-
     expiration_date >= Time.current
   end
 

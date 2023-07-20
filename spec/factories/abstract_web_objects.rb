@@ -15,7 +15,7 @@ FactoryBot.define do
         v.round(4)
       end.to_json
     end
-    api_key { SecureRandom.uuid }
+    # api_key { SecureRandom.uuid }
     url { "https://sim3015.aditi.lindenlab.com:12043/cap/#{object_key}" }
     major_version { rand(0..2) }
     minor_version { rand(0..12) }

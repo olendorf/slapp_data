@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     scope module: :v1, constraints:
               ApiConstraints.new(version: 1, default: true) do
       namespace :rezzable do
-        resources :web_objects
+        resources :web_objects, except: %i[new edit]
       end
     end
   end

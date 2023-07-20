@@ -31,3 +31,16 @@
 
 en:
   hello: "Hello world"
+  api:
+    v1:
+      rezzable:
+        index:
+          success: 'OK'
+        show:
+          success: 'OK'
+        update:
+          success: "This object has been updated."
+        destroy:
+          success: "This object has been deleted."
+        create:
+          success: "The object has been created and registered in the databse."
