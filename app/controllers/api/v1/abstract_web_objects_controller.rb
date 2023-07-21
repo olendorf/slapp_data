@@ -71,6 +71,16 @@ module Api
         }
       end
       
+      def destroy
+        authorize [:api, :v1, @requesting_object]
+        
+        @requesting_object.destroy!
+        
+        render json:{
+          message: I18n.t('api.v1.rezzable.destroy.success')
+        }
+      end
+      
 
       
 

@@ -17,6 +17,111 @@ RSpec.shared_examples 'it has a rezzable api' do |model_name|
     end
   end
   
+  describe 'api validation' do 
+    # post requests use the default API key
+    context 'POST' do 
+      let(:path) { api_rezzable_web_objects_path }
+      let(:new_object) { FactoryBot.build model_name, user_id: user.id }
+      let(:atts) { {url: new_object.url} }
+      
+      context ' with valid credentials' do
+        it 'should return OK status' do 
+          post path, params: atts.to_json, 
+                headers: headers(new_object, api_key: Settings.default.api_key)
+          expect(response).to have_http_status :created
+        end
+      end
+      
+      context 'with invalid api key' do
+        before(:each) {           post path, params: atts.to_json, 
+                headers: headers(new_object, api_key: SecureRandom.uuid)}
+                
+        it 'should return bad request status' do 
+          expect(response).to have_http_status :bad_request
+        end
+        
+        it 'should return a useful message' do 
+          expect(
+            response.parsed_body['message']
+          ).to eq I18n.t('api.v1.errors.auth_digest')
+        end
+      end
+      
+      context 'with invalid auth time' do 
+        before(:each) {           post path, params: atts.to_json, 
+                headers: headers(
+                            new_object, 
+                            api_key: Settings.default.api_key,
+                            auth_time: 60.seconds.ago
+                            )
+        }
+        
+        it 'should return bad request status' do 
+          expect(response).to have_http_status :bad_request
+        end
+        
+        it 'should return a useful message' do 
+          expect(
+            response.parsed_body['message']
+          ).to eq I18n.t('api.v1.errors.auth_time')
+        end
+      end
+      
+    end 
+    
+    # all these use an object's own API key, they are all tested as a GET request
+    context 'GET|PUT|DELETE' do   
+      let(:web_object) do
+        web_object = FactoryBot.build model_name, user_id: user.id 
+        web_object.save
+        web_object
+      end 
+      let(:path) { api_rezzable_web_object_path(web_object.object_id) }
+      
+      context ' with valid credentials' do
+        it 'should return OK status' do 
+          get path,
+                headers: headers(web_object)
+          expect(response).to have_http_status :ok
+        end
+      end
+      
+      context 'with invalid api key' do
+        before(:each)do  
+          get path,
+                headers: headers(web_object, api_key: SecureRandom.uuid)
+        end
+        it 'should return bad request status' do 
+          expect(response).to have_http_status :bad_request
+        end
+        
+        it 'should return a useful message' do 
+          expect(
+            response.parsed_body['message']
+          ).to eq I18n.t('api.v1.errors.auth_digest')
+        end
+      end
+      
+      context 'with invalid auth time' do 
+        before(:each) { get path, headers: headers(
+                              web_object, 
+                              auth_time: 60.seconds.ago
+                            )
+        }
+        
+        it 'should return bad request status' do 
+          expect(response).to have_http_status :bad_request
+        end
+        
+        it 'should return a useful message' do 
+          expect(
+            response.parsed_body['message']
+          ).to eq I18n.t('api.v1.errors.auth_time')
+        end
+      end
+    end
+  end
+  
   describe 'POST' do 
     let(:path) { api_rezzable_web_objects_path }
     
@@ -144,11 +249,29 @@ RSpec.shared_examples 'it has a rezzable api' do |model_name|
           "url" => atts[:url]
           )
       end
-      
-      
+    end
+  end
+  
+  describe 'DELETE' do 
+    let(:path) { api_rezzable_web_object_path(web_object.object_key) }
+    
+    it 'should return ok status' do 
+      delete path, headers: headers(web_object)
+      expect(response).to have_http_status :ok
     end
     
+    it 'should delete the object' do 
+      web_object
+      expect{ 
+        delete path, headers: headers(web_object)
+      }.to change(Rezzable::WebObject, :count).by(-1)
+    end
     
+    it 'should return a nice message' do 
+      delete path, headers: headers(web_object)
+      expect(response.parsed_body['message']
+            ).to eq(I18n.t('api.v1.rezzable.destroy.success'))
+    end
   end
   
 end

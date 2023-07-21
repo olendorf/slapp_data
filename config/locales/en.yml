@@ -44,3 +44,6 @@ en:
           success: "This object has been deleted."
         create:
           success: "The object has been created and registered in the databse."
+      errors:
+        auth_time: Invalid or missing auth_time.
+        auth_digest: Invalid or missing auth_digest.
