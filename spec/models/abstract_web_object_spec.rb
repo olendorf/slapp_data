@@ -40,4 +40,15 @@ RSpec.describe AbstractWebObject do
         )
     end
   end
+  
+  describe 'active?' do
+    it 'returns true when object has been pinged recently' do
+      expect(web_object.active?).to be_truthy
+    end
+
+    it 'returns false when the object has not been pinged recently' do
+      web_object.pinged_at = 1.hour.ago
+      expect(web_object.active?).to be_falsey
+    end
+  end
 end

@@ -33,6 +33,10 @@ class AbstractWebObject < ApplicationRecord
       }
   end
   
+  def active?
+    Time.now - pinged_at <= Settings.default.web_object.inactive_limit.minutes
+  end
+  
   private
   
   def set_pinged_at

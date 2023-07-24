@@ -27,7 +27,7 @@ RSpec.shared_examples 'it has a rezzable api' do |model_name|
       context ' with valid credentials' do
         it 'should return OK status' do 
           post path, params: atts.to_json, 
-                headers: headers(new_object, api_key: Settings.default.api_key)
+                headers: headers(new_object, api_key: Settings.default.web_object.api_key)
           expect(response).to have_http_status :created
         end
       end
@@ -51,7 +51,7 @@ RSpec.shared_examples 'it has a rezzable api' do |model_name|
         before(:each) {           post path, params: atts.to_json, 
                 headers: headers(
                             new_object, 
-                            api_key: Settings.default.api_key,
+                            api_key: Settings.default.web_object.api_key,
                             auth_time: 60.seconds.ago
                             )
         }
@@ -131,20 +131,20 @@ RSpec.shared_examples 'it has a rezzable api' do |model_name|
         
       it 'returns created status' do 
         post path, params: atts.to_json, 
-              headers: headers(new_object, api_key: Settings.default.api_key)
+              headers: headers(new_object, api_key: Settings.default.web_object.api_key)
         expect(response).to have_http_status :created
       end
       
       it 'should return a nice messge' do 
         post path, params: atts.to_json, 
-              headers: headers(new_object, api_key: Settings.default.api_key)
+              headers: headers(new_object, api_key: Settings.default.web_object.api_key)
         expect(response.parsed_body['message']
                     ).to eq I18n.t('api.v1.rezzable.create.success')
       end
       
       it 'should return the object data' do
         post path, params: atts.to_json, 
-              headers: headers(new_object, api_key: Settings.default.api_key)
+              headers: headers(new_object, api_key: Settings.default.web_object.api_key)
         expect(response.parsed_body['data'].keys).to include(
           *new_object.response_data.with_indifferent_access.keys
         )
@@ -153,7 +153,7 @@ RSpec.shared_examples 'it has a rezzable api' do |model_name|
       it 'should create an object' do 
         expect{
         post path, params: atts.to_json, 
-              headers: headers(new_object, api_key: Settings.default.api_key)
+              headers: headers(new_object, api_key: Settings.default.web_object.api_key)
             }.to change(Rezzable::WebObject, :count).by(1)
       end
     end 
@@ -163,7 +163,7 @@ RSpec.shared_examples 'it has a rezzable api' do |model_name|
         
       it 'returns ok status' do 
         post path, params: atts.to_json, 
-              headers: headers(web_object, api_key: Settings.default.api_key)
+              headers: headers(web_object, api_key: Settings.default.web_object.api_key)
         expect(response).to have_http_status :ok
       end
       
@@ -171,13 +171,13 @@ RSpec.shared_examples 'it has a rezzable api' do |model_name|
         web_object
         expect{
           post path, params: atts.to_json, 
-              headers: headers(web_object, api_key: Settings.default.api_key)
+              headers: headers(web_object, api_key: Settings.default.web_object.api_key)
             }.to_not change(Rezzable::WebObject, :count)
       end
       
       it 'should change the object back to defaults' do 
         post path, params: atts.to_json, 
-              headers: headers(web_object, api_key: Settings.default.api_key)
+              headers: headers(web_object, api_key: Settings.default.web_object.api_key)
         expect(web_object.reload.setting_one).to eq('default')
       end
     end

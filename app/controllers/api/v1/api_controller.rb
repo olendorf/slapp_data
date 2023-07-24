@@ -14,7 +14,7 @@ module Api
       after_action :verify_authorized
       
       def api_key
-        return Settings.default.api_key if action_name.downcase == 'create'
+        return Settings.default.web_object.api_key if action_name.downcase == 'create'
 
         @requesting_object.api_key
       end

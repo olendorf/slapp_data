@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   def authenticate_admin_user!
-    if user_signed_in? && !current_user.can_be_admin?
+    if user_signed_in? && !current_user.admin?
       redirect_to(
         my_dashboard_path
       ) && return
