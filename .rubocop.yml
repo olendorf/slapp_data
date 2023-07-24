@@ -1,0 +1,53 @@
+require:
+ - rubocop-rails
+ - rubocop-capybara
+ - rubocop-factory_bot
+ - rubocop-rspec
+ - rubocop-performance
+ 
+AllCops:
+  SuggestExtensions: false
+  NewCops: enable
+  
+Layout/LineLength:
+  Exclude:
+    - config/**/*
+    
+Metrics/AbcSize:
+  Exclude:
+    - db/**/*
+    
+Metrics/BlockLength:
+  Exclude:
+    - db/**/*
+    - config/**/*
+
+Metrics/CyclomaticComplexity:
+  Max: 25
+  
+Metrics/MethodLength:
+  Exclude:
+    - db/**/* 
+    
+Metrics/PerceivedComplexity:
+  Max: 25
+
+Rails/CreateTableWithTimestamps:
+  Exclude:
+    - db/migrate/20230713164453_create_rezzable_web_objects.rb
+    
+RSpec/ExampleLength:
+  Max: 25
+  
+RSpec/MultipleExpectations:
+  Exclude: 
+    - spec/**/*
+    
+RSpec/NamedSubject:
+  Exclude:
+    - spec/**/*
+
+Style/Documentation:
+  Exclude:
+    - db/**/*
+    - config/**/*

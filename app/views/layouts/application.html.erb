@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SlappData</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
+     <% if current_user %>
+        <a href="#"><%= current_user.avatar_name %></a>
+        <ul>
+            <li>
+                <%= link_to 'Logout', destroy_user_session_path, method: :delete %>
+            </li>
+            <li>
+                <%= link_to 'Admin stuff', admin_dashboard_path %>
+            </li>
+        </ul>
+    <% else %>
+        <%= link_to 'Login', new_user_session_path %>
+    <% end %>
+    <%= yield %>
+  </body>
+</html>
