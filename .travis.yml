@@ -1,0 +1,48 @@
+language: ruby
+sudo: required
+rvm:
+  - 3.2.2
+services:
+  - postgresql
+  - redis-server
+branches:
+  only:
+    - master
+    - develop
+env:
+  # - CXX=g++-5.4
+  
+before_script:
+  - bundle exec rake db:create db:migrate RAILS_ENV=test
+
+cache:
+  bundler: true
+  directories:
+    - node_modules
+  # yarn: true
+
+# before_install:
+#   - npm install -g node-gyp
+install:
+  - bundle install
+  - nvm install 14
+  # - npm install bootstrap
+  - node -v
+  # - npm i -g yarn
+  # - yarn
+addons:
+  postgresql: "9.6"   # We need the more recent version of postgresbefore_script:
+  # The installation fails to create a scripts directory or copy the elasticsearch.yml
+  # or logging.yml files over. THis fixes that.
+  # apt:
+  #   sources:
+  #   - ubuntu-toolchain-r-test
+  #   packages:
+  #   - g++-5.4
+before_script:
+  - psql -c 'create database slapp_data_test;' -U postgres
+script: 
+  - rm -rf bin/webpack*
+  - bundle exec rails webpacker:install
+  - bundle exec rails webpacker:compile
+  - bundle exec rails spec   # we should run all the tests in CI
