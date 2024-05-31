@@ -7,3 +7,17 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+DatabaseCleaner.clean_with :truncation if Rails.env.development?
+
+
+# Create an owner
+FactoryBot.create(:owner, avatar_name: 'Random Citizen')
+
+10.times do |i|
+    FactoryBot.create(:admin, avatar_name: "Admin_#{i} Resident")
+end
+
+100.times do |i|
+    FactoryBot.create(:user, avatar_name: "User_#{i} Resident")
+end
+    
