@@ -8,12 +8,12 @@ default: &default
 
 development:
   <<: *default
-  database: slapp_development
+  database: slapp_data_dev
 
 test:
   <<: *default
-  database: slapp_test
+  database: slapp_data_test
 
 production:
   <<: *default
-  database: slapp_production
+  database: slapp_data_production
