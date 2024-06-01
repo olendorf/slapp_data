@@ -3,6 +3,8 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :rememberable, :validatable,
          :trackable, :timeoutable
+         
+  has_many :abstract_web_objects
 
   def email_required?
     false
