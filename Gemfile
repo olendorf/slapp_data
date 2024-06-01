@@ -68,7 +68,8 @@ gem 'active_record-acts_as'
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
-gem 'coveralls', require: false
+# gem 'coveralls', require: false
+gem 'coveralls_reborn', require: false
 
 group :test do
   gem 'capybara' # For integration testing.
