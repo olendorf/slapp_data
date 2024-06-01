@@ -10,9 +10,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_30_192501) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_01_214550) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "abstract_web_objects", force: :cascade do |t|
+    t.string "object_name", null: false
+    t.string "object_key", null: false
+    t.string "owner_name", null: false
+    t.string "owner_key", null: false
+    t.string "region", null: false
+    t.string "position", null: false
+    t.string "shard", default: "Production", null: false
+    t.string "url"
+    t.integer "user_id"
+    t.integer "actable_id"
+    t.string "actable_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["actable_id"], name: "index_abstract_web_objects_on_actable_id"
+    t.index ["actable_type"], name: "index_abstract_web_objects_on_actable_type"
+    t.index ["object_key"], name: "index_abstract_web_objects_on_object_key", unique: true
+    t.index ["object_name"], name: "index_abstract_web_objects_on_object_name"
+    t.index ["owner_key"], name: "index_abstract_web_objects_on_owner_key"
+    t.index ["owner_name"], name: "index_abstract_web_objects_on_owner_name"
+    t.index ["region"], name: "index_abstract_web_objects_on_region"
+    t.index ["user_id"], name: "index_abstract_web_objects_on_user_id"
+  end
+
+  create_table "rezzable_web_objects", force: :cascade do |t|
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "avatar_name", default: "", null: false

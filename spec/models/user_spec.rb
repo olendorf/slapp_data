@@ -5,4 +5,7 @@ RSpec.describe User, type: :model do
     
     it { should define_enum_for(:role).
             with_values(user: 0, admin: 1, owner: 2)}
+            
+    it { should have_many(:abstract_web_objects) }
+    
 end
