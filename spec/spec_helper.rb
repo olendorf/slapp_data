@@ -22,6 +22,7 @@ SimpleCov.formatter = Coveralls::SimpleCov::Formatter
 SimpleCov.start do
   add_filter 'spec/support'
   add_filter 'spec/factories'
+  add_filter 'app/models/rezzable'
 end  
 
 
