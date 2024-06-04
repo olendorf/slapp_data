@@ -14,4 +14,9 @@ RSpec.describe User, type: :model do
         expect(user.email_changed?).to be_falsey
         expect(user.will_save_change_to_email?).to be_falsey
     end
+    
+    it 'should validate password complexity' do
+        bad_user = FactoryBot.build :user, password: 'foobar123', password_confirmation: 'foobar123'
+        expect(bad_user.valid?).to be_falsey
+    end
 end

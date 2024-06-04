@@ -6,7 +6,8 @@ FactoryBot.define do
     end
     avatar_name { "#{first_name} #{last_name}" }
     avatar_key { SecureRandom.uuid }
-    password { 'password' }
+    password { 'Pa$$word123' }
+    password_confirmation { 'Pa$$word123' }
     role { 0 }
     
     factory :admin do

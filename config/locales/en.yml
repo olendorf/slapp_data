@@ -7,3 +7,7 @@ en:
     user:
       create:
         success: "Your account has been created. Please visit %{url} to start!"
+      update:
+        success: "Your account has been updated."
+      destroy:
+        success: "Your account has been deleted. Sorry to see you go!"

@@ -1,5 +1,9 @@
 class Api::V1::UsersController < Api::V1::ApiController
     
+    include ActiveRecord
+    
+    before_action :load_user, except: [:create]
+    
     def create
         @user = User.new(parsed_params)
         @user.save!
@@ -11,23 +15,51 @@ class Api::V1::UsersController < Api::V1::ApiController
     end
     
     def show
-        # puts params
+        data = {
+                    avatar_name: @user.avatar_name, 
+                    avatar_key: @user.avatar_key, 
+                    role: @user.role, 
+                    http_status: 'OK' 
+        }
+        render json: data, status: :ok
+    end
+    
+    def update
+        @user.update! parsed_params
+        data = {
+            avatar_name: @user.avatar_name, 
+            avatar_key: @user.avatar_key, 
+            role: @user.role, 
+            http_status: 'OK' 
+        }
         
-        user = User.find_by_avatar_key(params["avatar_key"])
-        if(user)
-            data = {avatar_name: user.avatar_name, avatar_key: user.avatar_key, role: user.role, http_status: 'OK' }
-            render json: data, status: :ok
-        else
-            data = {error_msg: 'Avatar not found.', http_status: 'NOT FOUND'}
-            render json: data, status: :not_found
-        end
+        render json: {
+            message: I18n.t('api.user.update.success'),
+            data: data
+        }, status: :ok
+
+    end
+    
+    def destroy
+        @user.destroy!
+        
+        render json: {
+            message: I18n.t('api.user.destroy.success'),
+            http_status: 'OK'
+        }, status: :ok
     end
     
     private
     
-  def user_params
-    params.require(:user).permit(:avatar_name, :avatar_key)
-  end
+    def user_params
+        params.require(:user).permit(:avatar_name, :avatar_key)
+    end
+    
+    def load_user
+        @user = User.find_by_avatar_key(params["avatar_key"])
+        raise ActionController::RoutingError.new("User not found. Please try again.") if @user.nil?
+    end
+
 
     
     
