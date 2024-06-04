@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  
+  require 'api_constraints'
+  
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -10,4 +13,11 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  
+  namespace :api, defaults: { format: 'json' } do
+    scope module: :v1, 
+      constraints: ApiConstraints.new(version: 1, default: true) do
+        resources :users, except: %i[index new edit], param: :avatar_key
+      end
+  end
 end

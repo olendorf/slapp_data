@@ -10,6 +10,7 @@ class CreateAbstractWebObjects < ActiveRecord::Migration[7.1]
       t.string :shard,                 null: false, default: "Production"
       t.string :url
       t.integer :user_id
+      t.string :api_key
       t.integer :actable_id
       t.string  :actable_type
 

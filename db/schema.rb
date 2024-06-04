@@ -24,6 +24,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_01_214550) do
     t.string "shard", default: "Production", null: false
     t.string "url"
     t.integer "user_id"
+    t.string "api_key"
     t.integer "actable_id"
     t.string "actable_type"
     t.datetime "created_at", null: false
