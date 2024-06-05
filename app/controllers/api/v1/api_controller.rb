@@ -3,10 +3,48 @@ class Api::V1::ApiController < ApplicationController
     include Api::ExceptionHandler
     include Api::ResponseHandler
     
+    
+    skip_before_action :verify_authenticity_token
+    
     before_action :load_requesting_object, except: [:create]
     before_action :validate_request
     
     def create
+      raise(
+        ActionController::MethodNotAllowed, 
+              I18n.t('errors.method_not_allowed')
+      )
+    end    
+    
+    def index
+      raise(
+        ActionController::MethodNotAllowed, 
+              I18n.t('errors.method_not_allowed')
+      )
+    end
+    
+    def show
+      raise(
+        ActionController::MethodNotAllowed, 
+              I18n.t('errors.method_not_allowed')
+      )
+    end
+    
+    def update
+      raise(
+        ActionController::MethodNotAllowed, 
+              I18n.t('errors.method_not_allowed')
+      )
+    end    
+    
+    def destroy
+      raise(
+        ActionController::MethodNotAllowed, 
+              I18n.t('errors.method_not_allowed')
+      )
+    end
+    
+    def delete
       raise(
         ActionController::MethodNotAllowed, 
               I18n.t('errors.method_not_allowed')
@@ -18,7 +56,11 @@ class Api::V1::ApiController < ApplicationController
     def load_requesting_object
         @requesting_object = AbstractWebObject.find_by_object_key(
           request.headers['HTTP_X_SECONDLIFE_OBJECT_KEY']
-        ).actable
+        )
+        
+        raise ActionController::RoutingError.
+            new("User not found. Please try again.") if @requesting_object.nil?
+        @requesting_object.actable
     end
     
     def hash_time

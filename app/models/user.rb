@@ -6,7 +6,7 @@ class User < ApplicationRecord
          
   validate :password_complexity
          
-  has_many :abstract_web_objects
+  has_many :web_objects, class_name: 'AbstractWebObject', dependent: :destroy 
 
   def email_required?
     false

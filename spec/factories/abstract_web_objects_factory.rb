@@ -6,9 +6,9 @@ FactoryBot.define do
     owner_key { SecureRandom.uuid }
     region { Faker::Lorem.words(number: rand(1..3)).join(' ') }
     position { 
-      [rand(0.0000..256.000), 
-       rand(0.0000..256.000), 
-       rand(0.0000..256.000)].to_json 
+      {x: rand(0.0000..256.000), 
+       y: rand(0.0000..256.000), 
+       z: rand(0.0000..256.000)}.to_json 
     }
     shard { "Production" }
     url { 

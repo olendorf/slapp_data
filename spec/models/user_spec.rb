@@ -7,7 +7,7 @@ RSpec.describe User, type: :model do
     it { should define_enum_for(:role).
             with_values(user: 0, admin: 1, owner: 2)}
             
-    it { should have_many(:abstract_web_objects) }
+    it { should have_many(:web_objects).class_name('AbstractWebObject').dependent(:destroy) }
     
     it 'should override devise' do 
         expect(user.email_required?).to be_falsey

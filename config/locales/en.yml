@@ -11,3 +11,10 @@ en:
         success: "Your account has been updated."
       destroy:
         success: "Your account has been deleted. Sorry to see you go!"
+    web_object:
+      create:
+        success: "The object has been registered with the database."
+      update:
+        success: "The object has been updated."
+      destroy:
+        success: "The object has been destroyed."
