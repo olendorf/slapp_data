@@ -4,7 +4,7 @@ module Api
   # Handles api json responses.
   module ResponseHandler
     def json_response(object, status = :ok)
-      render json: object, status: status
+      render json: object, status:
     end
   end
 end

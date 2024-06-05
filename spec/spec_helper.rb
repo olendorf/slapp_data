@@ -25,8 +25,7 @@ SimpleCov.start do
   add_filter 'spec/support'
   add_filter 'spec/factories'
   add_filter 'app/models/rezzable'
-end  
-
+end
 
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
