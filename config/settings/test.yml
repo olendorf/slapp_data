@@ -1,0 +1,6 @@
+default:
+  site_url: "https://example.com/"
+  web_object:
+    api_key: change_me
+  request:
+    time_limit: 30

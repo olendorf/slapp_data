@@ -4,10 +4,10 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.1]
   def change
     create_table :users do |t|
       ## Database authenticatable
-      t.string  :avatar_name,              null: false, default: ""
-      t.string  :avatar_key,               null: false, default: "00000000-0000-0000-0000-000000000000"
+      t.string  :avatar_name,              null: false, default: ''
+      t.string  :avatar_key,               null: false, default: '00000000-0000-0000-0000-000000000000'
       t.integer :role,                     null: false, default: 0
-      t.string  :encrypted_password,       null: false, default: ""
+      t.string  :encrypted_password,       null: false, default: ''
 
       ## Recoverable
       t.string   :reset_password_token
@@ -22,7 +22,6 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.1]
       t.datetime :last_sign_in_at
       t.string   :current_sign_in_ip
       t.string   :last_sign_in_ip
-
 
       t.timestamps null: false
     end
