@@ -25,6 +25,8 @@ SimpleCov.start do
   add_filter 'spec/support'
   add_filter 'spec/factories'
   add_filter 'app/models/rezzable'
+  add_filter 'app/controllers/concerns/api/exception_handler.rb'
+  add_filter 'config'
 end
 
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
