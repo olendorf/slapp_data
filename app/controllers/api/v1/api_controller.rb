@@ -12,47 +12,7 @@ module Api
       before_action :load_requesting_object, except: [:create]
       before_action :validate_request
 
-      def create
-        raise(
-          ActionController::MethodNotAllowed,
-          I18n.t('errors.method_not_allowed')
-        )
-      end
-
-      def index
-        raise(
-          ActionController::MethodNotAllowed,
-          I18n.t('errors.method_not_allowed')
-        )
-      end
-
-      def show
-        raise(
-          ActionController::MethodNotAllowed,
-          I18n.t('errors.method_not_allowed')
-        )
-      end
-
-      def update
-        raise(
-          ActionController::MethodNotAllowed,
-          I18n.t('errors.method_not_allowed')
-        )
-      end
-
-      def destroy
-        raise(
-          ActionController::MethodNotAllowed,
-          I18n.t('errors.method_not_allowed')
-        )
-      end
-
-      def delete
-        raise(
-          ActionController::MethodNotAllowed,
-          I18n.t('errors.method_not_allowed')
-        )
-      end
+  
 
       private
 

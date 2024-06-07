@@ -106,6 +106,18 @@ RSpec.describe 'Api::V1::Users', type: :request do
           expect(response).to have_http_status(:not_found)
         end
       end
+      
+
+    end
+    
+    context 'object does not exist in database' do 
+      let(:path) { api_user_path(user.avatar_key) }
+      let(:user) { FactoryBot.create :user }
+      let(:bad_object) { FactoryBot.build :web_object, user_id: user.id }
+      it 'should return not found status' do 
+        get path, headers: headers(bad_object)
+        expect(response).to have_http_status(:not_found)
+      end
     end
 
     context 'without a valid api-key' do
