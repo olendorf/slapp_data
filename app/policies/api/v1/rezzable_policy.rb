@@ -13,11 +13,11 @@ module Api
       def create?
         return true if @user.can_be_owner?
 
-        begin
+        # begin
           object_weight = @record.class::OBJECT_WEIGHT
-        rescue StandardError
-          object_weight = @record::OBJECT_WEIGHT
-        end
+        # rescue StandardError
+        #   object_weight = @record::OBJECT_WEIGHT
+        # end
         @user.check_object_weight?(object_weight)
       end
 
