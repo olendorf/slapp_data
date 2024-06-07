@@ -9,8 +9,8 @@ class User < ApplicationRecord
 
   validate :password_complexity
 
-  has_many :web_objects, class_name: 'AbstractWebObject', 
-                         dependent: :destroy, 
+  has_many :web_objects, class_name: 'AbstractWebObject',
+                         dependent: :destroy,
                          after_add: :increment_caches
 
   def email_required?
@@ -30,7 +30,7 @@ class User < ApplicationRecord
     admin: 1,
     owner: 2
   }
-  
+
   # Creates methods to test of a user is allowed to act as a role.
   # Given ROLES = [:user, :prime, :admin, :owner], will create the methods
   # #can_be_guest?, #can_be_user?, #can_be_admin? and #can_be_owner?.
@@ -45,24 +45,25 @@ class User < ApplicationRecord
       value <= self.class.roles[role]
     end
   end
-  
+
   # Determines is a user has an active account.
   def active?
     return true if can_be_owner?
+
     expiration_date >= Time.now
   end
-  
+
   def check_object_weight?(object_weight)
-    web_object_weight + object_weight <= 
-                        Settings.default.account.weight_limit
+    web_object_weight + object_weight <=
+      Settings.default.account.weight_limit
   end
 
   private
-  
+
   def increment_caches(web_object)
     self.web_object_count += 1
     self.web_object_weight += web_object.object_weight
-  end 
+  end
 
   def password_complexity
     # Regexp extracted from https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a

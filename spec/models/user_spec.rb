@@ -6,7 +6,7 @@ RSpec.describe User, type: :model do
   let(:user) { FactoryBot.create :user }
   let(:admin) { FactoryBot.create :admin }
   let(:owner) { FactoryBot.create :owner }
-  
+
   it { should respond_to :avatar_name }
 
   it {
@@ -26,10 +26,10 @@ RSpec.describe User, type: :model do
     bad_user = FactoryBot.build :user, password: 'foobar123', password_confirmation: 'foobar123'
     expect(bad_user.valid?).to be_falsey
   end
-  
+
   describe 'can be' do
-    User.roles.each do |role, _value|
-      it { should respond_to "can_be_#{role}?".to_sym }
+    User.roles.each_key do |role|
+      it { should respond_to :"can_be_#{role}?" }
     end
     it 'should properly test can_be_<role>?' do
       expect(admin.can_be_owner?).to be_falsey
@@ -39,7 +39,7 @@ RSpec.describe User, type: :model do
       expect(user.can_be_user?).to be_truthy
     end
   end
-  
+
   describe 'is_active?' do
     it 'should return true for owners' do
       owner.expiration_date = 1.month.ago
@@ -57,56 +57,55 @@ RSpec.describe User, type: :model do
       user.account_level = 1
       expect(user.active?).to be_falsey
     end
-
   end
-  
+
   describe 'check_weight?' do
-    it 'should return true if the user has sufficient reserve weight' do 
-      expect(user.check_object_weight?(FactoryBot.build(:web_object).object_weight)).
-                to be_truthy
+    it 'should return true if the user has sufficient reserve weight' do
+      expect(user.check_object_weight?(FactoryBot.build(:web_object).object_weight))
+        .to be_truthy
     end
-    
+
     it 'should return false if the user lacks sufficient researve weight' do
       web_object = FactoryBot.build(:web_object)
       user.web_objects << web_object
-      expect(user.check_object_weight?(FactoryBot.build(:web_object).object_weight)).
-              to be_falsey
-    end 
+      expect(user.check_object_weight?(FactoryBot.build(:web_object).object_weight))
+        .to be_falsey
+    end
   end
-  
-  describe 'adding web_objects' do 
-    let(:web_object) {
+
+  describe 'adding web_objects' do
+    let(:web_object) do
       FactoryBot.build :web_object
-    }
-    it 'should increment the object count' do 
+    end
+    it 'should increment the object count' do
       old_count = user.web_object_count
       user.web_objects << web_object
       expect(user.web_object_count).to eq old_count + 1
     end
-    
-    it 'should increment the object weight' do 
+
+    it 'should increment the object weight' do
       old_weight = user.web_object_weight
       user.web_objects << web_object
-      expect(user.web_object_weight).to eq old_weight + 
-                  web_object.object_weight
+      expect(user.web_object_weight).to eq old_weight +
+                                           web_object.object_weight
     end
   end
-  
-  describe 'removing web_objects' do 
-    it 'should decrement the count' do 
+
+  describe 'removing web_objects' do
+    it 'should decrement the count' do
       user.web_objects << FactoryBot.build(:web_object)
       old_count = user.web_object_count
       user.web_objects.last.destroy
       expect(user.web_object_count).to eq old_count - 1
     end
-    
-    it 'should decrement the object weight' do 
+
+    it 'should decrement the object weight' do
       web_object = FactoryBot.build :web_object
       user.web_objects << FactoryBot.build(:web_object)
       old_weight = user.web_object_weight
       user.web_objects.last.destroy
-      expect(user.web_object_weight).
-            to eq old_weight - web_object.object_weight
+      expect(user.web_object_weight)
+        .to eq old_weight - web_object.object_weight
     end
   end
 end
