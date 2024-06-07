@@ -60,6 +60,20 @@ RSpec.describe User, type: :model do
 
   end
   
+  describe 'check_weight?' do
+    it 'should return true if the user has sufficient reserve weight' do 
+      expect(user.check_object_weight?(FactoryBot.build(:web_object).object_weight)).
+                to be_truthy
+    end
+    
+    it 'should return false if the user lacks sufficient researve weight' do
+      web_object = FactoryBot.build(:web_object)
+      user.web_objects << web_object
+      expect(user.check_object_weight?(FactoryBot.build(:web_object).object_weight)).
+              to be_falsey
+    end 
+  end
+  
   describe 'adding web_objects' do 
     let(:web_object) {
       FactoryBot.build :web_object

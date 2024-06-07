@@ -51,17 +51,17 @@ class User < ApplicationRecord
     return true if can_be_owner?
     expiration_date >= Time.now
   end
+  
+  def check_object_weight?(object_weight)
+    web_object_weight + object_weight <= 
+                        Settings.default.account.weight_limit
+  end
 
   private
   
   def increment_caches(web_object)
     self.web_object_count += 1
     self.web_object_weight += web_object.object_weight
-  end 
-  
-  def decrement_caches(web_object)
-    web_object_count -= 1
-    web_object_weight -= web_object.object_weight
   end 
 
   def password_complexity
