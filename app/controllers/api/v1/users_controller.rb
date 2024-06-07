@@ -54,9 +54,9 @@ module Api
 
       private
 
-      def user_params
-        params.require(:user).permit(:avatar_name, :avatar_key)
-      end
+      # def user_params
+      #   params.require(:user).permit(:avatar_name, :avatar_key)
+      # end
 
       def load_user
         @user = User.find_by_avatar_key(params['avatar_key'])

@@ -2,8 +2,8 @@
 
 module Api
   module V1
-    # Permissions for User API requests.
-    class UserPolicy < ApplicationPolicy
+    # Base Policy for all rezzable objects. They should inherit from this.
+    class RezzablePolicy < ApplicationPolicy
       # NOTE: Up to Pundit v2.3.1, the inheritance was declared as
       # `Scope < Scope` rather than `Scope < ApplicationPolicy::Scope`.
       # In most cases the behavior will be identical, but if updating existing
@@ -11,27 +11,27 @@ module Api
       # https://gist.github.com/Burgestrand/4b4bc22f31c8a95c425fc0e30d7ef1f5
 
       def create?
-        true
+        return true if @user.can_be_owner?
+
+        # begin
+          object_weight = @record.class::OBJECT_WEIGHT
+        # rescue StandardError
+        #   object_weight = @record::OBJECT_WEIGHT
+        # end
+        @user.check_object_weight?(object_weight)
       end
 
       def show?
-        @user.can_be_owner?
+        true
       end
 
       def update?
-        show?
+        @user.active?
       end
 
       def destroy?
         show?
       end
-
-      # class Scope < ApplicationPolicy::Scope
-      #   # NOTE: Be explicit about which records you allow access to!
-      #   def resolve
-      #     scope.all
-      #   end
-      # end
     end
   end
 end

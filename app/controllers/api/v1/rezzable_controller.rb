@@ -65,10 +65,6 @@ module Api
         @web_object.actable
       end
 
-      def filter_attributes
-        @web_object.attributes
-      end
-
       def requesting_class
         "::Rezzable::#{controller_name.classify}".constantize
       end
