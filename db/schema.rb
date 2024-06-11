@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_06_183421) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_10_174608) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -37,6 +37,20 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_06_183421) do
     t.index ["owner_name"], name: "index_abstract_web_objects_on_owner_name"
     t.index ["region"], name: "index_abstract_web_objects_on_region"
     t.index ["user_id"], name: "index_abstract_web_objects_on_user_id"
+  end
+
+  create_table "active_admin_comments", force: :cascade do |t|
+    t.string "namespace"
+    t.text "body"
+    t.string "resource_type"
+    t.bigint "resource_id"
+    t.string "author_type"
+    t.bigint "author_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author"
+    t.index ["namespace"], name: "index_active_admin_comments_on_namespace"
+    t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource"
   end
 
   create_table "rezzable_web_objects", force: :cascade do |t|
