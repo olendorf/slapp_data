@@ -9,7 +9,7 @@ RSpec.shared_examples 'it has a web object API' do |model_name|
   end
   describe 'GET' do
     context 'valid request' do
-      let(:path) { send("api_rezzable_#{model_name.to_s}_path", web_object.object_key) }
+      let(:path) { send("api_rezzable_#{model_name}_path", web_object.object_key) }
 
       it 'should return ok status' do
         get path, headers: headers(web_object)
@@ -34,7 +34,7 @@ RSpec.shared_examples 'it has a web object API' do |model_name|
     end
 
     context 'object does not exist' do
-      let(:path) { send("api_rezzable_#{model_name.to_s}_path", SecureRandom.uuid) }
+      let(:path) { send("api_rezzable_#{model_name}_path", SecureRandom.uuid) }
 
       it 'should return not_found status' do
         get path, headers: headers(web_object)
@@ -44,7 +44,7 @@ RSpec.shared_examples 'it has a web object API' do |model_name|
   end
 
   describe 'CREATE' do
-    let(:path) { send("api_rezzable_#{model_name.to_s}s_path") }
+    let(:path) { send("api_rezzable_#{model_name}s_path") }
 
     it 'should return created status' do
       new_object = FactoryBot.build model_name.to_sym,
@@ -67,7 +67,7 @@ RSpec.shared_examples 'it has a web object API' do |model_name|
   end
 
   describe 'UPDATE' do
-    let(:path) { send("api_rezzable_#{model_name.to_s}_path", web_object.object_key) }
+    let(:path) { send("api_rezzable_#{model_name}_path", web_object.object_key) }
 
     it 'should return OK status' do
       object_params = { url: 'https//anotherexample.com', object_name: 'new name' }
@@ -83,7 +83,7 @@ RSpec.shared_examples 'it has a web object API' do |model_name|
   end
 
   describe 'DESTROY' do
-    let(:path) { send("api_rezzable_#{model_name.to_s}_path", web_object.object_key) }
+    let(:path) { send("api_rezzable_#{model_name}_path", web_object.object_key) }
 
     it 'should return ok status' do
       delete path, headers: headers(web_object)
