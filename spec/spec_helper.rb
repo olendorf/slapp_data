@@ -29,6 +29,8 @@ SimpleCov.start do
   add_filter 'config'
   add_filter 'app/policies/application_policy.rb'
   add_filter 'app/views'
+  add_filter 'app/admin'
+  add_filter 'app/my'
 end
 
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
