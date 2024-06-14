@@ -49,16 +49,16 @@ RSpec.describe 'Api::V1::Rezzable::WebObjects', type: :request do
     let(:path) { api_rezzable_web_objects_path }
 
     it 'should return created status' do
-      new_object = FactoryBot.build :web_object, 
-              api_key: Settings.default.api_key, user_id: user.id
+      new_object = FactoryBot.build :web_object,
+                                    api_key: Settings.default.api_key, user_id: user.id
       object_params = { url: 'https://example.com/' }
       post path, params: object_params.to_json, headers: headers(new_object)
       expect(response).to have_http_status(:created)
     end
 
     it 'should create the web_object' do
-      new_object = FactoryBot.build :web_object, 
-              api_key: Settings.default.api_key, user_id: user.id
+      new_object = FactoryBot.build :web_object,
+                                    api_key: Settings.default.api_key, user_id: user.id
       object_params = { url: 'https://example.com/' }
       expect do
         post path,

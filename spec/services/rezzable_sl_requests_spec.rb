@@ -4,11 +4,11 @@ require 'rails_helper'
 
 RSpec.describe RezzableSlRequest do
   let(:owner) { FactoryBot.create :owner }
-  let(:web_object) {
+  let(:web_object) do
     web_object = FactoryBot.build :web_object, user_id: owner.id
     web_object.save
     web_object
-  }
+  end
   let(:uri_regex) do
     %r{\Ahttps://simhost-062cce4bc972fc71a.agni.secondlife.io:12043/cap/[-a-f0-9]{36}\?
        auth_digest=[a-f0-9]+&auth_time=[0-9]+\z}x

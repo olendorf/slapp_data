@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 ActiveAdmin.register Rezzable::WebObject, as: 'Web Object' do
-  
+  include ActiveAdmin::RezzableBehavior
   decorate_with Rezzable::WebObjectDecorator
-  
+
   actions :all, except: %i[new create]
-  
-  index title: 'Web Objects' do 
+
+  index title: 'Web Objects' do
     selectable_column
     column 'Object Name', sortable: :object_name do |web_object|
       link_to web_object.object_name, admin_web_object_path(web_object)
@@ -19,17 +21,16 @@ ActiveAdmin.register Rezzable::WebObject, as: 'Web Object' do
     column :created_at, sortable: :created_at
     column :updated_at, sortable: :updated_at
     actions
-    
   end
-  
+
   filter :abstract_web_object_object_name, as: :string, label: 'Object Name'
   filter :abstract_web_object_description, as: :string, label: 'Description'
   filter :abstract_web_object_user_avatar_name, as: :string, label: 'Owner'
   filter :abstract_web_object_region, as: :string, label: 'Region'
   filter :abstract_web_object_created_at, as: :date_range, label: 'Created At'
-  
+
   show title: :object_name do
-    attributes_table do 
+    attributes_table do
       row :object_name
       row :object_key
       row :description
@@ -46,19 +47,17 @@ ActiveAdmin.register Rezzable::WebObject, as: 'Web Object' do
     end
   end
 
-  # See permitted parameters documentation:
-  # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
-  #
   # Uncomment all parameters which should be permitted for assignment
   #
-  # permit_params :object_name, :object_key, :owner_name, :owner_key, :region, :position, :shard, :url, :user_id, :api_key
+  # permit_params :object_name, :object_key, :owner_name, :owner_key, :region,
+  # :position, :shard, :url, :user_id, :api_key
   #
   # or
   #
   # permit_params do
-  #   permitted = [:object_name, :object_key, :owner_name, :owner_key, :region, :position, :shard, :url, :user_id, :api_key]
+  #   permitted = [:object_name, :object_key, :owner_name, :owner_key, :region,
+  # .          :position, :shard, :url, :user_id, :api_key]
   #   permitted << :other if params[:action] == 'create' && current_user.admin?
   #   permitted
   # end
-  
 end

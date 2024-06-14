@@ -34,7 +34,7 @@ RSpec.describe 'Api::V1::Users', type: :request do
           post path, params: user_params.to_json, headers: headers(
             sending_object, api_key: Settings.default.web_object.api_key
           )
-        # Changed by two because an owner has to be created too.
+          # Changed by two because an owner has to be created too.
         end.to change { User.count }.by(2)
       end
     end
@@ -108,15 +108,13 @@ RSpec.describe 'Api::V1::Users', type: :request do
           expect(response).to have_http_status(:not_found)
         end
       end
-      
-
     end
-    
-    context 'object does not exist in database' do 
+
+    context 'object does not exist in database' do
       let(:path) { api_user_path(user.avatar_key) }
       let(:user) { FactoryBot.create :user }
       let(:bad_object) { FactoryBot.build :web_object, user_id: user.id }
-      it 'should return not found status' do 
+      it 'should return not found status' do
         get path, headers: headers(bad_object)
         expect(response).to have_http_status(:not_found)
       end
@@ -157,9 +155,9 @@ RSpec.describe 'Api::V1::Users', type: :request do
   describe 'UPDATE' do
     let(:user) { FactoryBot.create :user }
     let(:path) { api_user_path(user.avatar_key) }
-    before(:each) { 
-      put path, params: user_params.to_json, headers: headers(sending_object) 
-    }
+    before(:each) do
+      put path, params: user_params.to_json, headers: headers(sending_object)
+    end
 
     context 'changing the password' do
       context 'valid password' do

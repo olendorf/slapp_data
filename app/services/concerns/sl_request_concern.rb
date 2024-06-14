@@ -17,7 +17,7 @@ module SlRequestConcern
         verify_ssl: false,
         params: {
           auth_digest: auth_digest(resource, auth_time),
-          auth_time: auth_time
+          auth_time:
         }
       }
     end

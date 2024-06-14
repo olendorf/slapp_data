@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
+# Base decorator for all rezzable decorators. They should inherit form this.
 class AbstractWebObjectDecorator < Draper::Decorator
   delegate_all
-  
+
   def slurl
     position = JSON.parse(self.position)
     href = "https://maps.secondlife.com/secondlife/#{region}/#{position['x'].round}/" \
@@ -18,5 +21,4 @@ class AbstractWebObjectDecorator < Draper::Decorator
   #       object.created_at.strftime("%a %m/%d/%y")
   #     end
   #   end
-
 end

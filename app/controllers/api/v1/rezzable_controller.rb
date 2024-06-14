@@ -5,7 +5,6 @@ module Api
     # Controller for all API web object requests. Almost everythign is handled here.
     class RezzableController < Api::V1::ApiController
       before_action :load_requested_object, except: [:create]
-      before_action :load_object_owner
 
       def create
         @web_object = requesting_class.new(object_attributes)
