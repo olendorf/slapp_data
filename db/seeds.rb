@@ -19,5 +19,13 @@ FactoryBot.create(:owner, avatar_name: 'Random Citizen')
 end
 
 100.times do |i|
-  FactoryBot.create(:user, avatar_name: "User_#{i} Resident")
+  user = FactoryBot.create(:user, avatar_name: "User_#{i} Resident", 
+            account_level: rand(1..4))
+  objects = rand(0..user.account_level)
+  objects.times do |i|
+    web_object = FactoryBot.build :web_object
+    user.web_objects << web_object
+    puts user.web_object_weight
+  end
+  puts "acount level: #{user.account_level}: objects: #{objects} - object_weight: #{user.web_object_weight}"
 end

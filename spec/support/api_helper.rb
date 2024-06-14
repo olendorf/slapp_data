@@ -23,8 +23,8 @@ def headers(sending_object = nil, opts = {})
     'x-secondlife-local-velocity': '(0.000000, 0.000000, 0.000000)',
     'x-secondlife-object-key': sending_object.object_key,
     'x-secondlife-object-name': sending_object.object_name,
-    'x-secondlife-owner-key': sending_object.owner_key,
-    'x-secondlife-owner-name': sending_object.owner_name,
+    'x-secondlife-owner-key': sending_object.user.avatar_key,
+    'x-secondlife-owner-name': sending_object.user.avatar_name,
     'x-secondlife-region': "#{sending_object.region}(258816, 350976)",
     'x-secondlife-shard': 'Production'
   }

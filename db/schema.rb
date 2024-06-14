@@ -10,15 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_10_174608) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_13_172324) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "abstract_web_objects", force: :cascade do |t|
     t.string "object_name", null: false
     t.string "object_key", null: false
-    t.string "owner_name", null: false
-    t.string "owner_key", null: false
     t.string "region", null: false
     t.string "position", null: false
     t.string "shard", default: "Production", null: false
@@ -29,12 +27,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_10_174608) do
     t.string "actable_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "description"
     t.index ["actable_id"], name: "index_abstract_web_objects_on_actable_id"
     t.index ["actable_type"], name: "index_abstract_web_objects_on_actable_type"
     t.index ["object_key"], name: "index_abstract_web_objects_on_object_key", unique: true
     t.index ["object_name"], name: "index_abstract_web_objects_on_object_name"
-    t.index ["owner_key"], name: "index_abstract_web_objects_on_owner_key"
-    t.index ["owner_name"], name: "index_abstract_web_objects_on_owner_name"
     t.index ["region"], name: "index_abstract_web_objects_on_region"
     t.index ["user_id"], name: "index_abstract_web_objects_on_user_id"
   end
@@ -75,8 +72,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_10_174608) do
     t.integer "web_object_count", default: 0
     t.integer "web_object_weight", default: 0
     t.integer "account_level", default: 1
+    t.index ["account_level"], name: "index_users_on_account_level"
     t.index ["avatar_key"], name: "index_users_on_avatar_key", unique: true
     t.index ["avatar_name"], name: "index_users_on_avatar_name", unique: true
+    t.index ["expiration_date"], name: "index_users_on_expiration_date"
+    t.index ["web_object_count"], name: "index_users_on_web_object_count"
+    t.index ["web_object_weight"], name: "index_users_on_web_object_weight"
   end
 
 end

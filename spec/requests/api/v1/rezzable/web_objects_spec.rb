@@ -6,7 +6,6 @@ RSpec.describe 'Api::V1::Rezzable::WebObjects', type: :request do
   let(:user) { FactoryBot.create :user }
   let(:web_object) do
     web_object = FactoryBot.build(:web_object)
-    web_object.save
     user.web_objects << web_object
     web_object
   end
@@ -21,18 +20,15 @@ RSpec.describe 'Api::V1::Rezzable::WebObjects', type: :request do
 
       it 'should return the correct data' do
         get path, headers: headers(web_object)
-        # puts JSON.parse(response.body)['data']
         expect(JSON.parse(response.body).with_indifferent_access['data']).to include(
           object_key: web_object.object_key,
           object_name: web_object.object_name,
-          owner_name: web_object.owner_name,
-          owner_key: web_object.owner_key
+          description: web_object.description
         )
       end
 
       it 'should not return secret data' do
         get path, headers: headers(web_object)
-        # puts JSON.parse(response.body)['data']
         expect(JSON.parse(response.body).with_indifferent_access['data']).to_not include(
           :id, :url, :user_id, :created_at, :updated_at
         )
@@ -53,14 +49,16 @@ RSpec.describe 'Api::V1::Rezzable::WebObjects', type: :request do
     let(:path) { api_rezzable_web_objects_path }
 
     it 'should return created status' do
-      new_object = FactoryBot.build :web_object, api_key: Settings.default.api_key
+      new_object = FactoryBot.build :web_object, 
+              api_key: Settings.default.api_key, user_id: user.id
       object_params = { url: 'https://example.com/' }
       post path, params: object_params.to_json, headers: headers(new_object)
       expect(response).to have_http_status(:created)
     end
 
     it 'should create the web_object' do
-      new_object = FactoryBot.build :web_object, api_key: Settings.default.api_key
+      new_object = FactoryBot.build :web_object, 
+              api_key: Settings.default.api_key, user_id: user.id
       object_params = { url: 'https://example.com/' }
       expect do
         post path,

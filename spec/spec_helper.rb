@@ -28,6 +28,7 @@ SimpleCov.start do
   add_filter 'app/controllers/concerns/api/exception_handler.rb'
   add_filter 'config'
   add_filter 'app/policies/application_policy.rb'
+  add_filter 'app/views'
 end
 
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration

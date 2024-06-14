@@ -4,8 +4,7 @@ FactoryBot.define do
   factory :abstract_web_object do
     object_name { Faker::Hipster.words(number: rand(1..3)).join(' ') }
     object_key { SecureRandom.uuid }
-    owner_name { 'Random Citizen' }
-    owner_key { SecureRandom.uuid }
+    description { Faker::ChuckNorris.fact }
     region { Faker::Lorem.words(number: rand(1..3)).join(' ') }
     position do
       { x: rand(0.0000..256.000),

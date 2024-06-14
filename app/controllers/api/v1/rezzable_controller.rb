@@ -5,10 +5,12 @@ module Api
     # Controller for all API web object requests. Almost everythign is handled here.
     class RezzableController < Api::V1::ApiController
       before_action :load_requested_object, except: [:create]
+      before_action :load_object_owner
 
       def create
         @web_object = requesting_class.new(object_attributes)
-        @web_object.save!
+        # @web_object.save!
+        @object_owner.web_objects << @web_object
 
         render json: {
           data: {
@@ -73,8 +75,8 @@ module Api
         {
           object_name: request.headers['HTTP_X_SECONDLIFE_OBJECT_NAME'],
           object_key: request.headers['HTTP_X_SECONDLIFE_OBJECT_KEY'],
-          owner_name: request.headers['HTTP_X_SECONDLIFE_OWNER_NAME'],
-          owner_key: request.headers['HTTP_X_SECONDLIFE_OWNER_KEY'],
+          # owner_name: request.headers['HTTP_X_SECONDLIFE_OWNER_NAME'],
+          # owner_key: request.headers['HTTP_X_SECONDLIFE_OWNER_KEY'],
           region: extract_region_name,
           position: extract_position,
           shard: request.headers['HTTP_X_SECONDLIFE_SHARD'],

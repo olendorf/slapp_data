@@ -32,6 +32,7 @@ gem 'jbuilder'
 
 # User authentication
 gem 'devise'
+
 # Authorization
 gem 'pundit'
 
@@ -44,13 +45,18 @@ gem 'activeadmin'
 # Configuration for application
 gem 'config'
 
+# A simple HTTP and REST client for Ruby, inspired by the Sinatra's 
+# microframework style of specifying actions: get, put, post, delete.
+gem 'rest-client'
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
 
-# Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
+# Use Active Model has_secure_password
+# [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -98,3 +104,6 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read     more:         https://github.com/rails/spring
   gem 'spring'
 end
+
+
+#content > div.img > img
