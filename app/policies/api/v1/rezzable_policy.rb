@@ -14,7 +14,7 @@ module Api
         return true if @user.can_be_owner?
 
         # begin
-          object_weight = @record.class::OBJECT_WEIGHT
+        object_weight = @record.class::OBJECT_WEIGHT
         # rescue StandardError
         #   object_weight = @record::OBJECT_WEIGHT
         # end

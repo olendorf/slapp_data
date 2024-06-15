@@ -16,6 +16,15 @@ class AbstractWebObject < ApplicationRecord
   def decrement_user_caches
     user.web_object_count -= 1
     user.web_object_weight -= object_weight
+    user.save
+  end
+
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[id id_value object_name description region]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[actable user]
   end
 
   private

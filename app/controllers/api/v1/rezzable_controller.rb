@@ -8,7 +8,8 @@ module Api
 
       def create
         @web_object = requesting_class.new(object_attributes)
-        @web_object.save!
+        # @web_object.save!
+        @object_owner.web_objects << @web_object
 
         render json: {
           data: {
@@ -73,8 +74,8 @@ module Api
         {
           object_name: request.headers['HTTP_X_SECONDLIFE_OBJECT_NAME'],
           object_key: request.headers['HTTP_X_SECONDLIFE_OBJECT_KEY'],
-          owner_name: request.headers['HTTP_X_SECONDLIFE_OWNER_NAME'],
-          owner_key: request.headers['HTTP_X_SECONDLIFE_OWNER_KEY'],
+          # owner_name: request.headers['HTTP_X_SECONDLIFE_OWNER_NAME'],
+          # owner_key: request.headers['HTTP_X_SECONDLIFE_OWNER_KEY'],
           region: extract_region_name,
           position: extract_position,
           shard: request.headers['HTTP_X_SECONDLIFE_SHARD'],

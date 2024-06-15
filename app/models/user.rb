@@ -3,9 +3,10 @@
 # User model class
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :rememberable, :validatable,
-         :trackable, :timeoutable
+  # :confirmable, :lockable,  and :omniauthable
+  devise :database_authenticatable,
+         :recoverable, :rememberable, :validatable,
+         :timeoutable, :trackable
 
   validate :password_complexity
 
@@ -30,6 +31,20 @@ class User < ApplicationRecord
     admin: 1,
     owner: 2
   }
+
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[
+      account_level avatar_key avatar_name created_at
+      current_sign_in_at current_sign_in_ip expiration_date id
+      id_value last_sign_in_at last_sign_in_ip remember_created_at
+      role sign_in_count updated_at web_object_count
+      web_object_weight
+    ]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    ['web_objects']
+  end
 
   # Creates methods to test of a user is allowed to act as a role.
   # Given ROLES = [:user, :prime, :admin, :owner], will create the methods
@@ -63,6 +78,7 @@ class User < ApplicationRecord
   def increment_caches(web_object)
     self.web_object_count += 1
     self.web_object_weight += web_object.object_weight
+    save
   end
 
   def password_complexity

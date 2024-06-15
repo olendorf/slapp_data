@@ -3,9 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe 'Api::V1::Users', type: :request do
+  let(:owner) { FactoryBot.create :owner }
   let(:sending_object) do
     sending_object = FactoryBot.build(:web_object)
-    sending_object.save
+    owner.web_objects << sending_object
     sending_object
   end
 
@@ -33,7 +34,8 @@ RSpec.describe 'Api::V1::Users', type: :request do
           post path, params: user_params.to_json, headers: headers(
             sending_object, api_key: Settings.default.web_object.api_key
           )
-        end.to change { User.count }.by(1)
+          # Changed by two because an owner has to be created too.
+        end.to change { User.count }.by(2)
       end
     end
 
@@ -52,8 +54,8 @@ RSpec.describe 'Api::V1::Users', type: :request do
           sending_object, api_key: Settings.default.web_object.api_key
         )
       end
-      it 'should return a status' do
-        expect(response).to have_http_status(:unprocessable_entity)
+      it 'should return unprocessable content status' do
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
 
@@ -72,8 +74,8 @@ RSpec.describe 'Api::V1::Users', type: :request do
           sending_object, api_key: Settings.default.web_object.api_key
         )
       end
-      it 'should return a status' do
-        expect(response).to have_http_status(:unprocessable_entity)
+      it 'should return unprocessable_content status' do
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end
@@ -106,15 +108,13 @@ RSpec.describe 'Api::V1::Users', type: :request do
           expect(response).to have_http_status(:not_found)
         end
       end
-      
-
     end
-    
-    context 'object does not exist in database' do 
+
+    context 'object does not exist in database' do
       let(:path) { api_user_path(user.avatar_key) }
       let(:user) { FactoryBot.create :user }
       let(:bad_object) { FactoryBot.build :web_object, user_id: user.id }
-      it 'should return not found status' do 
+      it 'should return not found status' do
         get path, headers: headers(bad_object)
         expect(response).to have_http_status(:not_found)
       end
@@ -155,7 +155,9 @@ RSpec.describe 'Api::V1::Users', type: :request do
   describe 'UPDATE' do
     let(:user) { FactoryBot.create :user }
     let(:path) { api_user_path(user.avatar_key) }
-    before(:each) { put path, params: user_params.to_json, headers: headers(sending_object) }
+    before(:each) do
+      put path, params: user_params.to_json, headers: headers(sending_object)
+    end
 
     context 'changing the password' do
       context 'valid password' do
@@ -192,8 +194,8 @@ RSpec.describe 'Api::V1::Users', type: :request do
           }
         end
 
-        it 'should return OK status' do
-          expect(response).to have_http_status(:unprocessable_entity)
+        it 'should return unprocessable_content status' do
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it 'should return a nice message' do

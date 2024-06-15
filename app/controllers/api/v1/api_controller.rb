@@ -10,9 +10,8 @@ module Api
       skip_before_action :verify_authenticity_token
 
       before_action :load_requesting_object, except: [:create]
+      before_action :load_object_owner
       before_action :validate_request
-
-  
 
       private
 
@@ -27,6 +26,12 @@ module Api
         end
 
         @requesting_object.actable
+      end
+
+      def load_object_owner
+        @object_owner = User.find_by_avatar_key(
+          request.headers['HTTP_X_SECONDLIFE_OWNER_KEY']
+        )
       end
 
       def hash_time

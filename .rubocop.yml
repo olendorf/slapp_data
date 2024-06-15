@@ -16,6 +16,10 @@ Layout/LineLength:
     - db/**/*
     - config/**/*
     
+Lint/NestedMethodDefinition:
+  Exclude:
+    - app/controllers/concerns/**/*
+    
 Metrics/BlockLength:
   Exclude:
     - spec/**/*
@@ -29,6 +33,8 @@ Metrics/BlockLength:
     
 Metrics/MethodLength:
   Max: 20
+  Exclude:
+    - app/controllers/concerns/**/*
   
 Metrics/AbcSize:
   Max: 30

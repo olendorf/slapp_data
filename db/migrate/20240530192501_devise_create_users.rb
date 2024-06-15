@@ -8,10 +8,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.1]
       t.string  :avatar_key,               null: false, default: '00000000-0000-0000-0000-000000000000'
       t.integer :role,                     null: false, default: 0
       t.string  :encrypted_password,       null: false, default: ''
-
-      ## Recoverable
-      t.string   :reset_password_token
-      t.datetime :reset_password_sent_at
+      
 
       ## Rememberable
       t.datetime :remember_created_at
@@ -28,5 +25,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.1]
 
     add_index :users, :avatar_name,                unique: true
     add_index :users, :avatar_key,                 unique: true
+    add_index :users, :role
+    add_index
   end
 end
