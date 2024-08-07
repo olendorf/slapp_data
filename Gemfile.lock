@@ -385,7 +385,7 @@ GEM
     rspec-support (3.13.1)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
-    sassc (2.4.0)
+    sassc (2.1.0-x86_64-linux)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
       railties (>= 4.0.0)
@@ -483,6 +483,7 @@ DEPENDENCIES
   rails (~> 7.1)
   rest-client
   rspec-rails
+  sassc (~> 2.1.0)
   sassc-rails
   selenium-webdriver
   shoulda-matchers
