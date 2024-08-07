@@ -72,6 +72,8 @@ gem 'bootsnap', require: false
 # Use Sass to process CSS
 gem 'sassc-rails'
 
+gem 'bootstrap'
+
 # Multi-table Inheritance
 gem 'active_record-acts_as'
 

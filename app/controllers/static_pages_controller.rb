@@ -3,8 +3,10 @@
 # Controller for static-ish pages.
 class StaticPagesController < ApplicationController
   def home; end
+    
+  def products; end
 
-  def admin; end
+  def docs; end
 
-  def user; end
+  def help; end
 end

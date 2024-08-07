@@ -11,7 +11,7 @@ ActiveAdmin.setup do |config|
   # Set the link url for the title. For example, to take
   # users to your main site. Defaults to no link.
   #
-  # config.site_title_link = "/"
+  config.site_title_link = "/"
 
   # Set an optional image to be displayed for the header
   # instead of a string (overrides :site_title)
@@ -36,6 +36,10 @@ ActiveAdmin.setup do |config|
   #     File.join(Rails.root, 'app', 'admin'),
   #     File.join(Rails.root, 'app', 'cashier')
   #   ]
+  config.load_paths = [
+    File.expand_path('app/admin', Rails.root),
+    File.expand_path('app/my', Rails.root)
+  ]
 
   # == Default Namespace
   #
@@ -61,6 +65,10 @@ ActiveAdmin.setup do |config|
   #   config.namespace :admin do |admin|
   #     admin.site_title = "Custom Admin Title"
   #   end
+  
+  config.namespace :admin do |admin|
+    admin.site_title = 'Slapp Data Admin'
+  end
   #
   # This will ONLY change the title for the admin section. Other
   # namespaces will continue to use the main "site_title" configuration.
@@ -263,6 +271,37 @@ ActiveAdmin.setup do |config|
   #       menu.add label: "My Great Website", url: "http://www.mygreatwebsite.com", html_options: { target: "_blank" }
   #     end
   #   end
+  
+  config.namespace :admin do |admin|
+    admin.authentication_method = :authenticate_user!
+    admin.build_menu :utility_navigation do |menu|
+      menu.add label: -> { current_user.avatar_name },
+               url: -> { my_dashboard_path },
+               # html_options: ->{ :style => 'float:left;' },
+               id: 'current_user'
+      admin.add_logout_button_to_menu menu
+    end
+    admin.build_menu do |menu|
+      menu.add label: 'Objects', priority: 3
+      menu.add label: 'Data', priority: 4
+    end
+  end
+
+  config.namespace :my do |my|
+    my.authentication_method = :authenticate_user!
+    my.build_menu :utility_navigation do |menu|
+      menu.add label: -> { current_user.avatar_name },
+               url: -> { my_dashboard_path },
+               # html_options: ->{ :style => 'float:left;' },
+               id: 'current_user'
+      my.add_logout_button_to_menu menu
+    end
+    my.build_menu do |menu|
+      menu.add label: 'Objects', priority: 3
+      menu.add label: 'Data', priority: 4
+    end
+    my.comments = false
+  end
 
   # == Download Links
   #
