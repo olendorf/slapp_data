@@ -4,6 +4,6 @@ cd /var/www/html/slapp_data
 
 sudo apt install libpq-dev -y
 
-gem install bundler
+sudo gem install bundler
 
 bundle install
