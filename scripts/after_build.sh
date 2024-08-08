@@ -1,6 +1,7 @@
 sudo chown -R ubuntu:ubuntu /var/www/html/slapp_data
 
-
+sudo apt -y install nodejs npm libreadline-dev zlib1g-dev
+sudo npm install -g n
 
 curl -fsSL https://github.com/rbenv/rbenv-installer/raw/HEAD/bin/rbenv-installer | bash
 
