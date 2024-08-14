@@ -43,7 +43,7 @@ module Api
       end
 
       def validate_request
-        unless (Time.now.to_i - hash_time).abs < Settings.default.request.time_limit
+        unless (Time.now.to_i - hash_time.to_i).abs < Settings.default.request.time_limit
           raise(
             ActionController::BadRequest, I18n.t('errors.auth_time')
           )
