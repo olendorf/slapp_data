@@ -91,9 +91,12 @@ module Api
       end
 
       def extract_position
+        position_regex = /\((?<x>[0-9]+.[0-9]+), *(?<y>[0-9]+.[0-9]+), *(?<z>[0-9]+.[0-9]+)\)/
+        
         puts request.headers['HTTP_X_SECONDLIFE_LOCAL_POSITION']
-        pos = JSON.parse(request.headers['HTTP_X_SECONDLIFE_LOCAL_POSITION'])
-        { x: pos[0], y: pos[1], z: pos[2] }.to_json
+        pos = request.headers['HTTP_X_SECONDLIFE_LOCAL_POSITION'].match(position_regex)
+        # puts pos
+        { x: pos[:x], y: pos[:y], z: pos[:z] }.to_json
       end
     end
   end

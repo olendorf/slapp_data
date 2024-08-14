@@ -18,7 +18,7 @@ def headers(sending_object = nil, opts = {})
     'content-type': 'application/json',
     'x-auth-time': opts[:auth_time].nil? ? Time.now.to_i : opts[:auth_time],
     'x-auth-digest': api_hash(api_key(sending_object, opts), hash_time),
-    'x-secondlife-local-position': sending_object.position,
+    'x-secondlife-local-position': pos_to_sl_pos(sending_object.position),
     'x-secondlife-local-rotation': '(0.000000, 0.000000, 0.000000, 1.000000)',
     'x-secondlife-local-velocity': '(0.000000, 0.000000, 0.000000)',
     'x-secondlife-object-key': sending_object.object_key,
@@ -28,4 +28,9 @@ def headers(sending_object = nil, opts = {})
     'x-secondlife-region': "#{sending_object.region}(258816, 350976)",
     'x-secondlife-shard': 'Production'
   }
+end
+
+def pos_to_sl_pos(pos_json)
+  pos_hash = JSON.parse(pos_json).with_indifferent_access
+  "(#{pos_hash[:x]}, #{pos_hash[:y]}, #{pos_hash[:z]})"
 end
