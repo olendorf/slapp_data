@@ -91,6 +91,7 @@ module Api
       end
 
       def extract_position
+        puts request.headers['HTTP_X_SECONDLIFE_LOCAL_POSITION']
         pos = JSON.parse(request.headers['HTTP_X_SECONDLIFE_LOCAL_POSITION'])
         { x: pos[0], y: pos[1], z: pos[2] }.to_json
       end
