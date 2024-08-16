@@ -7,7 +7,7 @@ class AbstractWebObjectDecorator < Draper::Decorator
   def slurl
     position = JSON.parse(self.position)
     href = "https://maps.secondlife.com/secondlife/#{region}/#{position['x'].to_i.round}/" \
-           "#{position['y'].to_.round}/#{position['z'].to_i.round}/"
+           "#{position['y'].to_i.round}/#{position['z'].to_i.round}/"
     text = "#{region} (#{position['x'].to_i.round}, " \
            "#{position['y'].to_i.round}, #{position['z'].to_i.round})"
     h.link_to(text, href)
