@@ -80,6 +80,7 @@ module Api
       end
 
       def object_attributes
+        sent_params = params[controller_name.singularize]
         {
           object_name: request.headers['HTTP_X_SECONDLIFE_OBJECT_NAME'],
           object_key: request.headers['HTTP_X_SECONDLIFE_OBJECT_KEY'],
@@ -90,7 +91,7 @@ module Api
           shard: request.headers['HTTP_X_SECONDLIFE_SHARD'],
           url: params[:url]
 
-        }.merge(params[controller_name.singularize])
+        }.merge(sent_params)
       end
 
       def extract_region_name
