@@ -36,7 +36,7 @@ module Api
 
       def update
         params.permit!
-        puts params[controller_name.singularize]
+        puts object_attributes
         @requesting_object.update! params[controller_name.singularize]
 
         render json: {
@@ -75,6 +75,9 @@ module Api
       def requesting_class
         "::Rezzable::#{controller_name.classify}".constantize
       end
+      
+      def object_params
+      end
 
       def object_attributes
         {
@@ -87,7 +90,7 @@ module Api
           shard: request.headers['HTTP_X_SECONDLIFE_SHARD'],
           url: params[:url]
 
-        }
+        }.merge(params[controller_name.singularize])
       end
 
       def extract_region_name
