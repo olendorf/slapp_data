@@ -14,7 +14,7 @@ module Api
           @web_object = requesting_class.new(object_attributes)
           # @web_object.save!
           @object_owner.web_objects << @web_object
-  
+
           render json: {
             data: {
               api_key: @web_object.api_key,
@@ -97,7 +97,7 @@ module Api
 
       def extract_position
         position_regex = /\((?<x>[0-9]+.[0-9]+), *(?<y>[0-9]+.[0-9]+), *(?<z>[0-9]+.[0-9]+)\)/
-        
+
         pos = request.headers['HTTP_X_SECONDLIFE_LOCAL_POSITION'].match(position_regex)
         { x: pos[:x], y: pos[:y], z: pos[:z] }.to_json
       end

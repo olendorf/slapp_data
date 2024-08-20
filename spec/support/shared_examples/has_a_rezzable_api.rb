@@ -45,9 +45,8 @@ RSpec.shared_examples 'it has a web object API' do |model_name|
 
   describe 'CREATE' do
     let(:path) { send("api_rezzable_#{model_name}s_path") }
-    
+
     context 'object does not exist' do
-  
       it 'should return created status' do
         new_object = FactoryBot.build model_name.to_sym,
                                       api_key: Settings.default.api_key, user_id: user.id
@@ -55,7 +54,7 @@ RSpec.shared_examples 'it has a web object API' do |model_name|
         post path, params: object_params.to_json, headers: headers(new_object)
         expect(response).to have_http_status(:created)
       end
-  
+
       it 'should create the web_object' do
         new_object = FactoryBot.build model_name.to_sym,
                                       api_key: Settings.default.api_key, user_id: user.id
@@ -67,15 +66,15 @@ RSpec.shared_examples 'it has a web object API' do |model_name|
         end.to change { Rezzable::WebObject.count }.by(1)
       end
     end
-    
-    context 'object already exists' do 
-      before(:each) do 
+
+    context 'object already exists' do
+      before(:each) do
         @existing_object = FactoryBot.build model_name.to_sym,
-                                      api_key: Settings.default.api_key, user_id: user.id
+                                            api_key: Settings.default.api_key, user_id: user.id
         @existing_object.save
         @existing_object
       end
-        
+
       it 'should return OK  status' do
         object_params = { url: 'https://example.com/' }
         post path, params: object_params.to_json, headers: headers(@existing_object)

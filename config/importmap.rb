@@ -1,6 +1,8 @@
-# Pin npm packages by running ./bin/importmap
-pin "popper", to: 'popper.js', preload: true
-pin "bootstrap", to: 'bootstrap.min.js', preload: true
+# frozen_string_literal: true
 
-pin "application"
-pin "main"
+# Pin npm packages by running ./bin/importmap
+pin 'popper', to: 'popper.js', preload: true
+pin 'bootstrap', to: 'bootstrap.min.js', preload: true
+
+pin 'application'
+pin 'main'
