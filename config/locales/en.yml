@@ -22,3 +22,5 @@ en:
     web_object:
       destroy:
         failure: "Failed to destroy the object: %{message}"
+      update:
+        failure: "Failed to update the object in world: %{message}"
