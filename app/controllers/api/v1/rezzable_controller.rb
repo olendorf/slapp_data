@@ -37,7 +37,7 @@ module Api
       def update
         params.permit!
         puts object_attributes
-        @requesting_object.update! params[controller_name.singularize]
+        @requesting_object.update! params[object_attributes]
 
         render json: {
           data: {
