@@ -4,25 +4,30 @@ module Api
   module V1
     # Controller for all API web object requests. Almost everythign is handled here.
     class RezzableController < Api::V1::ApiController
-      before_action :load_requested_object, except: [:create]
+      # before_action :load_requested_object, except: [:create]
 
       def create
-        @web_object = requesting_class.new(object_attributes)
-        # @web_object.save!
-        @object_owner.web_objects << @web_object
-
-        render json: {
-          data: {
-            api_key: @web_object.api_key,
-            message: I18n.t('api.web_object.create.success'),
-            http_status: 'CREATED'
-          }
-        }, status: :created
+        if AbstractWebObject.find_by_object_key(object_attributes[:object_key])
+          load_requesting_object
+          update
+        else
+          @web_object = requesting_class.new(object_attributes)
+          # @web_object.save!
+          @object_owner.web_objects << @web_object
+  
+          render json: {
+            data: {
+              api_key: @web_object.api_key,
+              message: I18n.t('api.web_object.create.success'),
+              http_status: 'CREATED'
+            }
+          }, status: :created
+        end
       end
 
       def show
         render json: {
-          data: @web_object.attributes.with_indifferent_access.except(
+          data: @requesting_object.attributes.with_indifferent_access.except(
             'id', 'url', 'user_id', 'created_at', 'updated_at'
           ),
           http_status: 'OK'
@@ -31,7 +36,7 @@ module Api
 
       def update
         params.permit!
-        @web_object.update! params[controller_name.singularize]
+        @requesting_object.update! params[controller_name.singularize]
 
         render json: {
           data: {
@@ -42,7 +47,7 @@ module Api
       end
 
       def destroy
-        @web_object.destroy!
+        @requesting_object.destroy!
         render json: {
           data: {
             message: I18n.t('api.web_object.destroy.success'),
@@ -93,9 +98,7 @@ module Api
       def extract_position
         position_regex = /\((?<x>[0-9]+.[0-9]+), *(?<y>[0-9]+.[0-9]+), *(?<z>[0-9]+.[0-9]+)\)/
         
-        puts request.headers['HTTP_X_SECONDLIFE_LOCAL_POSITION']
         pos = request.headers['HTTP_X_SECONDLIFE_LOCAL_POSITION'].match(position_regex)
-        # puts pos
         { x: pos[:x], y: pos[:y], z: pos[:z] }.to_json
       end
     end
