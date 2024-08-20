@@ -88,10 +88,9 @@ module Api
           # owner_key: request.headers['HTTP_X_SECONDLIFE_OWNER_KEY'],
           region: extract_region_name,
           position: extract_position,
-          shard: request.headers['HTTP_X_SECONDLIFE_SHARD'],
-          url: params[:url]
+          shard: request.headers['HTTP_X_SECONDLIFE_SHARD']
 
-        }.merge(sent_params)
+        }.merge(params[controller_name.singularize].to_unsafe_hash).with_indifferent_access
       end
 
       def extract_region_name
