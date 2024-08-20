@@ -49,8 +49,21 @@ ActiveAdmin.register Rezzable::WebObject, as: 'Web Object' do
 
   # Uncomment all parameters which should be permitted for assignment
   #
-  # permit_params :object_name, :object_key, :owner_name, :owner_key, :region,
-  # :position, :shard, :url, :user_id, :api_key
+  permit_params :object_name, :description
+  
+  form title: proc { "Edit #{resource.object_name}" } do |f|
+    f.inputs do
+      f.input :object_name, label: 'Server name'
+      f.input :description
+    end
+    # f.has_many :splits, heading: 'Splits',
+    #                     allow_destroy: true do |s|
+    #   s.input :target_name, label: 'Avatar Name'
+    #   s.input :target_key, label: 'Avatar Key'
+    #   s.input :percent
+    # end
+    f.actions
+  end
   #
   # or
   #
