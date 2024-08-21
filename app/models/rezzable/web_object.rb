@@ -12,12 +12,12 @@ module Rezzable
     def self.ransackable_attributes(_auth_object = nil)
       %w[id id_value]
     end
-    
+
     def response_data
       {
-        api_key: self.api_key,
-        object_name: self.object_name,
-        description: self.description
+        api_key:,
+        object_name:,
+        description:
       }
     end
 

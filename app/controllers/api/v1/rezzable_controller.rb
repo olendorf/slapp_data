@@ -75,12 +75,11 @@ module Api
       def requesting_class
         "::Rezzable::#{controller_name.classify}".constantize
       end
-      
-      def object_params
-      end
+
+      def object_params; end
 
       def object_attributes
-        sent_params = params[controller_name.singularize]
+        params[controller_name.singularize]
         {
           object_name: request.headers['HTTP_X_SECONDLIFE_OBJECT_NAME'],
           object_key: request.headers['HTTP_X_SECONDLIFE_OBJECT_KEY'],
@@ -89,7 +88,6 @@ module Api
           region: extract_region_name,
           position: extract_position,
           shard: request.headers['HTTP_X_SECONDLIFE_SHARD']
-
         }.merge(params[controller_name.singularize].to_unsafe_hash).with_indifferent_access
       end
 

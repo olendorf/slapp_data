@@ -50,7 +50,7 @@ ActiveAdmin.register Rezzable::WebObject, as: 'Web Object' do
   # Uncomment all parameters which should be permitted for assignment
   #
   permit_params :object_name, :description
-  
+
   form title: proc { "Edit #{resource.object_name}" } do |f|
     f.inputs do
       f.input :object_name, label: 'Server name'
