@@ -12,6 +12,10 @@ module Api
       before_action :load_requesting_object, except: [:create]
       before_action :load_object_owner
       before_action :validate_request
+      
+      include Pundit::Authorization
+
+      after_action :verify_authorized
 
       private
 
@@ -32,6 +36,10 @@ module Api
         @object_owner = User.find_by_avatar_key(
           request.headers['HTTP_X_SECONDLIFE_OWNER_KEY']
         )
+      end
+      
+      def pundit_user
+        User.find_by_avatar_key!(request.headers['HTTP_X_SECONDLIFE_OWNER_KEY'])
       end
 
       def hash_time
