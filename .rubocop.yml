@@ -8,6 +8,7 @@ AllCops:
     - Gemfile.lock
     - db/schema.rb
     - db/migrate/**/*
+    # - config/**/*
     
 Layout/LineLength:
   Max: 99

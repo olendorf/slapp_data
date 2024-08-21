@@ -5,11 +5,9 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
 
   get 'static_pages/home'
-  get 'static_pages/admin'
-  get 'static_pages/user'
-
-  get 'static_pages/home'
-  get 'static_pages/about'
+  get 'static_pages/products'
+  get 'static_pages/docs'
+  get 'static_pages/help'
   require 'api_constraints'
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

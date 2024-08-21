@@ -11,18 +11,19 @@ Bundler.require(*Rails.groups)
 module SlappData
   # The main config for the application
   class Application < Rails::Application
+    # rubocop:disable Metrics/MethodLength, Lint/DuplicateBranch, Lint/UselessRescue
     def set_aws_managed_secrets
       # secret name created in aws secret manager
-      if ENV['RAISL_ENV']
-        secret_name = "#{ENV['RAILS_ENV']}/database-1/postgres/postgres"
-      else
-        secret_name = 'development/database-1/postgres/postgres'
-      end
+      secret_name = if ENV['RAISL_ENV']
+                      "#{ENV.fetch('RAILS_ENV', nil)}/database-1/postgres/postgres"
+                    else
+                      'development/database-1/postgres/postgres'
+                    end
       # region name
       region_name = 'us-east-2'
-    
+
       client = Aws::SecretsManager::Client.new(region: region_name)
-    
+
       begin
         secret_value = client.get_secret_value(secret_id: secret_name)
       rescue Aws::SecretsManager::Errors::DecryptionFailure => e
@@ -44,11 +45,11 @@ module SlappData
         end
       end
     end
-    
-    
-    
+
+    # rubocop:enable Metrics/MethodLength, Lint/DuplicateBranch, Lint/UselessRescue
+
     set_aws_managed_secrets
-    
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.1
 

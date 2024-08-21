@@ -37,7 +37,7 @@ RSpec.shared_examples 'it has a web object API' do |model_name|
       let(:path) { send("api_rezzable_#{model_name}_path", SecureRandom.uuid) }
 
       it 'should return not_found status' do
-        get path, headers: headers(web_object)
+        get path, headers: headers(web_object, object_key: 'wrong_key')
         expect(response).to have_http_status(:not_found)
       end
     end
@@ -46,23 +46,40 @@ RSpec.shared_examples 'it has a web object API' do |model_name|
   describe 'CREATE' do
     let(:path) { send("api_rezzable_#{model_name}s_path") }
 
-    it 'should return created status' do
-      new_object = FactoryBot.build model_name.to_sym,
-                                    api_key: Settings.default.api_key, user_id: user.id
-      object_params = { url: 'https://example.com/' }
-      post path, params: object_params.to_json, headers: headers(new_object)
-      expect(response).to have_http_status(:created)
+    context 'object does not exist' do
+      it 'should return created status' do
+        new_object = FactoryBot.build model_name.to_sym,
+                                      api_key: Settings.default.api_key, user_id: user.id
+        object_params = { url: 'https://example.com/' }
+        post path, params: object_params.to_json, headers: headers(new_object)
+        expect(response).to have_http_status(:created)
+      end
+
+      it 'should create the web_object' do
+        new_object = FactoryBot.build model_name.to_sym,
+                                      api_key: Settings.default.api_key, user_id: user.id
+        object_params = { url: 'https://example.com/' }
+        expect do
+          post path,
+               params: object_params.to_json,
+               headers: headers(new_object)
+        end.to change { Rezzable::WebObject.count }.by(1)
+      end
     end
 
-    it 'should create the web_object' do
-      new_object = FactoryBot.build model_name.to_sym,
-                                    api_key: Settings.default.api_key, user_id: user.id
-      object_params = { url: 'https://example.com/' }
-      expect do
-        post path,
-             params: object_params.to_json,
-             headers: headers(new_object)
-      end.to change { Rezzable::WebObject.count }.by(1)
+    context 'object already exists' do
+      before(:each) do
+        @existing_object = FactoryBot.build model_name.to_sym,
+                                            api_key: Settings.default.api_key, user_id: user.id
+        @existing_object.save
+        @existing_object
+      end
+
+      it 'should return OK  status' do
+        object_params = { url: 'https://example.com/' }
+        post path, params: object_params.to_json, headers: headers(@existing_object)
+        expect(response).to have_http_status(:ok)
+      end
     end
   end
 

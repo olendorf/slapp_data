@@ -11,15 +11,17 @@ module ActiveAdmin
         def update
           super
           resource.reload
-          RezzableSlRequest.update_web_object!(
-            resource,
-            resource.response_data
-          )
-        rescue RestClient::ExceptionWithResponse => e
-          flash[:error] = t('active_admin.web_object.update.failure',
-                            message: e.response)
-          # parts = request.url.split('/')[3, 2]
-          # redirect_back(fallback_location: send("#{parts.first}_#{parts.last}_path"))
+          begin
+            RezzableSlRequest.update_web_object!(
+              resource,
+              resource.response_data
+            )
+          rescue RestClient::ExceptionWithResponse => e
+            flash[:error] = t('active_admin.web_object.update.failure',
+                              message: e.response)
+            # parts = request.url.split('/')[3, 2]
+            # redirect_back(fallback_location: send("#{parts.first}_#{parts.last}_path"))
+          end
         end
 
         def destroy

@@ -14,7 +14,7 @@ test:
   <<: *default
   database: slapp_data_test
   
-sl-development:
+sl_development:
   <<: *default
   database: slapp_data_sl_development
 

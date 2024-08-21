@@ -18,3 +18,9 @@ en:
         success: "The object has been updated."
       destroy:
         success: "The object has been destroyed."
+  active_admin:
+    web_object:
+      destroy:
+        failure: "Failed to destroy the object: %{message}"
+      update:
+        failure: "Failed to update the object in world: %{message}"

@@ -10,16 +10,23 @@ RSpec.describe 'StaticPages', type: :request do
     end
   end
 
-  describe 'GET /admin' do
+  describe 'GET /products' do
     it 'returns http success' do
-      get '/static_pages/admin'
+      get '/static_pages/products'
       expect(response).to have_http_status(:success)
     end
   end
 
-  describe 'GET /user' do
+  describe 'GET /docs' do
     it 'returns http success' do
-      get '/static_pages/user'
+      get '/static_pages/docs'
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe 'GET /help' do
+    it 'returns http success' do
+      get '/static_pages/help'
       expect(response).to have_http_status(:success)
     end
   end

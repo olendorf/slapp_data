@@ -7,7 +7,7 @@ class AbstractWebObject < ApplicationRecord
 
   actable
 
-  belongs_to :user, dependent: :destroy, touch: true, required: false
+  belongs_to :user, touch: true, required: false
 
   def object_weight
     actable.class::OBJECT_WEIGHT

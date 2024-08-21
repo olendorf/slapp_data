@@ -13,6 +13,14 @@ module Rezzable
       %w[id id_value]
     end
 
+    def response_data
+      {
+        api_key:,
+        object_name:,
+        description:
+      }
+    end
+
     OBJECT_WEIGHT = 100
   end
 end

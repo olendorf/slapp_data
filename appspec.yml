@@ -3,6 +3,7 @@ os: linux
 files:
   - source: /
     destination: /var/www/html/slapp_data
+file_exists_behavior: OVERWRITE
 permissions:
   - object: /var/www/slapp_data
     owner: ubuntu

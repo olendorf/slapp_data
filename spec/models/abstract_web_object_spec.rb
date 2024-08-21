@@ -8,7 +8,6 @@ RSpec.describe AbstractWebObject, type: :model do
   it { expect(AbstractWebObject).to be_actable }
   it {
     should belong_to(:user)
-      .dependent(:destroy)
       .touch(true)
       .required(false)
   }
@@ -16,5 +15,4 @@ RSpec.describe AbstractWebObject, type: :model do
   it 'should set the api_key upon creation' do
     expect(web_object.api_key).to_not be_nil
   end
-  
 end
