@@ -26,7 +26,7 @@ class User < ApplicationRecord
     false
   end
 
-  enum role: {
+  enum :role, {
     user: 0,
     admin: 1,
     owner: 2

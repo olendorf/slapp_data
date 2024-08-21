@@ -41,7 +41,7 @@ module Api
 
         render json: {
           data: {
-            api_key: @web_object.api_key,
+            api_key: @requesting_object.api_key,
             message: I18n.t('api.web_object.update.success'),
             http_status: 'OK'
           }
