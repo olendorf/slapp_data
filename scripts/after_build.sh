@@ -21,3 +21,6 @@ echo "gem: --no-document" > ~/.gemrc
 cd /var/www/html/slapp_data
 
 bundle install
+
+rails db:migrate RAILS_ENV=sl_development
+
