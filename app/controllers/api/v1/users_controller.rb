@@ -9,6 +9,7 @@ module Api
       before_action :load_user, except: [:create]
 
       def create
+        authorize [:api, :v1, User]
         @user = User.new(parsed_params)
         @user.save!
 
@@ -19,6 +20,7 @@ module Api
       end
 
       def show
+        authorize [:api, :v1, User]
         data = {
           avatar_name: @user.avatar_name,
           avatar_key: @user.avatar_key,
@@ -29,6 +31,7 @@ module Api
       end
 
       def update
+        authorize [:api, :v1, User]
         @user.update! parsed_params
         data = {
           avatar_name: @user.avatar_name,
@@ -44,6 +47,7 @@ module Api
       end
 
       def destroy
+        authorize [:api, :v1, User]
         @user.destroy!
 
         render json: {

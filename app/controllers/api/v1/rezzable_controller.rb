@@ -11,6 +11,7 @@ module Api
           load_requesting_object
           update
         else
+          authorize [:api, :v1, requesting_class]
           @web_object = requesting_class.new(object_attributes)
           # @web_object.save!
           @object_owner.web_objects << @web_object
@@ -26,6 +27,7 @@ module Api
       end
 
       def show
+        authorize [:api, :v1, @requesting_object.actable]
         render json: {
           data: @requesting_object.attributes.with_indifferent_access.except(
             'id', 'url', 'user_id', 'created_at', 'updated_at'
@@ -35,6 +37,7 @@ module Api
       end
 
       def update
+        authorize [:api, :v1, @requesting_object.actable]
         params.permit!
         @requesting_object.update! object_attributes
 
@@ -48,6 +51,7 @@ module Api
       end
 
       def destroy
+        authorize [:api, :v1, @requesting_object.actable]
         @requesting_object.destroy!
         render json: {
           data: {

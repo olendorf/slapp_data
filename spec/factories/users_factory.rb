@@ -11,6 +11,7 @@ FactoryBot.define do
     password { 'Pa$$word123' }
     password_confirmation { 'Pa$$word123' }
     role { 0 }
+    expiration_date { 1.week.from_now }
 
     factory :admin do
       role { 1 }

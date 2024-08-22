@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples 'it has a rezzable policy' do |model_name|
+RSpec.shared_examples 'it has an owner policy' do |model_name|
   model_name = model_name.to_sym
 
   let(:active_user) { FactoryBot.create :user, expiration_date: 1.day.from_now }
@@ -32,8 +32,8 @@ RSpec.shared_examples 'it has a rezzable policy' do |model_name|
   subject { described_class }
 
   permissions :show?, :destroy? do
-    it 'should permit any user' do
-      expect(subject).to permit(inactive_user, inactive_object)
+    it 'should not permit any user' do
+      expect(subject).to_not permit(inactive_user, inactive_object)
     end
 
     it 'should permit owners' do
@@ -42,18 +42,22 @@ RSpec.shared_examples 'it has a rezzable policy' do |model_name|
   end
 
   permissions :create? do
-    it 'should permit an active user with enough object weight' do
-      expect(subject).to permit(underweight_user, new_object)
+    it 'should not permit an active user with enough object weight' do
+      expect(subject).to_not permit(underweight_user, new_object)
     end
 
     it 'should not permit when the user would go overweight' do
       expect(subject).to_not permit(active_user, active_object)
     end
+
+    it 'should permit owners' do
+      expect(subject).to permit(owner, owner_object)
+    end
   end
 
   permissions :update? do
-    it 'should permit an active user' do
-      expect(subject).to permit(active_user, active_object)
+    it 'should not permit an active user' do
+      expect(subject).to_not permit(active_user, active_object)
     end
 
     it 'should not permit an inactive user' do
