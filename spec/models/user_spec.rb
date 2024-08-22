@@ -14,7 +14,8 @@ RSpec.describe User, type: :model do
       .with_values(user: 0, admin: 1, owner: 2)
   }
 
-  it { should have_many(:web_objects).class_name('AbstractWebObject').dependent(:destroy) }
+  it { should have_many(
+          :web_objects).class_name('AbstractWebObject').dependent(:destroy) }
 
   it 'should override devise' do
     expect(user.email_required?).to be_falsey
@@ -23,7 +24,8 @@ RSpec.describe User, type: :model do
   end
 
   it 'should validate password complexity' do
-    bad_user = FactoryBot.build :user, password: 'foobar123', password_confirmation: 'foobar123'
+    bad_user = FactoryBot.build :user, password: 'foobar123', 
+                  password_confirmation: 'foobar123'
     expect(bad_user.valid?).to be_falsey
   end
 

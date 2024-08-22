@@ -11,6 +11,7 @@ RSpec.describe AbstractWebObject, type: :model do
       .touch(true)
       .required(false)
   }
+  
 
   it 'should set the api_key upon creation' do
     expect(web_object.api_key).to_not be_nil
