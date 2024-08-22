@@ -5,8 +5,7 @@ RSpec.shared_examples 'it has an owner API' do |model_name|
   let(:owner) { FactoryBot.create :owner }
   let(:user) { FactoryBot.create :user }
   let(:klass) { "Rezzable::#{model_name.to_s.classify}".constantize }
-  
-  
+
   describe "creating a new #{model_name}" do
     let(:path) { send("api_rezzable_#{model_name.to_s.pluralize}_path") }
 
@@ -23,7 +22,7 @@ RSpec.shared_examples 'it has an owner API' do |model_name|
                    )
         expect(response.status).to eq 201
       end
-      
+
       it "should create a #{model_name}" do
         expect do
           post path, params: atts.to_json,
@@ -53,7 +52,7 @@ RSpec.shared_examples 'it has an owner API' do |model_name|
         ).to match(@uuid_regex)
       end
     end
-    
+
     context 'as active user' do
       let(:web_object) do
         FactoryBot.build model_name, user_id: user.id
@@ -74,11 +73,11 @@ RSpec.shared_examples 'it has an owner API' do |model_name|
                      headers: headers(
                        web_object, api_key: Settings.default.web_object.api_key
                      )
-        end.to_not change { AbstractWebObject.count }
+        end.to_not(change { AbstractWebObject.count })
       end
     end
   end
-  
+
   describe "updating a #{model_name}" do
     let(:path) { send("api_rezzable_#{model_name.to_s.pluralize}_path") }
     let(:web_object) do
@@ -105,7 +104,7 @@ RSpec.shared_examples 'it has an owner API' do |model_name|
                      headers: headers(
                        existing_object, api_key: Settings.default.web_object.api_key
                      )
-        end.to_not change { AbstractWebObject.count }
+        end.to_not(change { AbstractWebObject.count })
       end
 
       it 'should return a nice message' do
@@ -212,9 +211,9 @@ RSpec.shared_examples 'it has an owner API' do |model_name|
         web_object.user_id = user.id
         web_object.save
 
-        expect {
+        expect do
           delete path, headers: headers(web_object)
-        }.to_not change { AbstractWebObject.count }
+        end.to_not(change { AbstractWebObject.count })
       end
     end
   end

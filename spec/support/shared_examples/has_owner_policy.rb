@@ -49,8 +49,8 @@ RSpec.shared_examples 'it has an owner policy' do |model_name|
     it 'should not permit when the user would go overweight' do
       expect(subject).to_not permit(active_user, active_object)
     end
-    
-    it 'should permit owners' do 
+
+    it 'should permit owners' do
       expect(subject).to permit(owner, owner_object)
     end
   end

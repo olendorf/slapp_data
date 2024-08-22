@@ -9,7 +9,6 @@ module Api
       before_action :load_user, except: [:create]
 
       def create
-        
         authorize [:api, :v1, User]
         @user = User.new(parsed_params)
         @user.save!
