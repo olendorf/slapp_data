@@ -28,6 +28,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_23_120838) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "description"
+    t.integer "server_id"
     t.index ["actable_id"], name: "index_abstract_web_objects_on_actable_id"
     t.index ["actable_type"], name: "index_abstract_web_objects_on_actable_type"
     t.index ["object_key"], name: "index_abstract_web_objects_on_object_key", unique: true
