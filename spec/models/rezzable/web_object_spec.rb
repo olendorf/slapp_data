@@ -3,6 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Rezzable::WebObject, type: :model do
+  it_behaves_like 'a rezzable object', :web_object, 100
   let(:user) { FactoryBot.create :user }
   let(:web_object) do
     web_object = FactoryBot.build :web_object, user_id: user.id
