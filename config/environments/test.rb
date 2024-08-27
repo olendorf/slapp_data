@@ -45,7 +45,7 @@ Rails.application.configure do
 
   # # rubocop:enable Lint/UselessRescue, Lint/DuplicateBranch, Metrics/MethodLength
 
-  set_aws_managed_secrets
+  # set_aws_managed_secrets
   # Settings specified here will take precedence over those in config/application.rb.
 
   # While tests run files are not watched, reloading is not necessary.
