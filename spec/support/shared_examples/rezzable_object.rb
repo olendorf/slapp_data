@@ -31,11 +31,11 @@ RSpec.shared_examples 'a rezzable object' do |model_name, object_weight|
   end
   
   it 'should cover ransackable_attributes method ' do 
-    expect(subject.class).to respond_to(:ransackable_attributes)
+    expect(subject.class.ransackable_attributes).to include('id', 'id_value')
   end
   
   it 'should cover ransackable_associations method ' do 
-    expect(subject.class).to respond_to(:ransackable_associations)
+    expect(subject.class.ransackable_associations).to include('actable', 'user')
   end
 
   context "destroying a #{model_name}" do
