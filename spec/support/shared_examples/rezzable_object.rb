@@ -29,6 +29,14 @@ RSpec.shared_examples 'a rezzable object' do |model_name, object_weight|
       end
     end
   end
+  
+  it 'should cover ransackable_attributes method ' do 
+    expect(subject.class).to respond_to(:ransackable_attributes)
+  end
+  
+  it 'should cover ransackable_associations method ' do 
+    expect(subject.class).to respond_to(:ransackable_associations)
+  end
 
   context "destroying a #{model_name}" do
     before(:each) do
