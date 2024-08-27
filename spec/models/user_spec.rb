@@ -14,7 +14,39 @@ RSpec.describe User, type: :model do
       .with_values(user: 0, admin: 1, owner: 2)
   }
 
-  it { should have_many(:web_objects).class_name('AbstractWebObject').dependent(:destroy) }
+  it {
+    should have_many(
+      :web_objects
+    ).class_name('AbstractWebObject').dependent(:destroy)
+  }
+
+  describe '.servers' do
+    it 'should return the correct number of servers' do
+      3.times do
+        server = FactoryBot.build :server
+        user.web_objects << server
+      end
+      server = FactoryBot.build :server
+      server.save
+      web_object = FactoryBot.build :web_object
+      user.web_objects << web_object
+      expect(user.servers.count).to eq 3
+    end
+  end
+
+  describe '.terminals' do
+    it 'should return the correct number of servers' do
+      3.times do
+        terminal = FactoryBot.build :terminal
+        user.web_objects << terminal
+      end
+      terminal = FactoryBot.build :terminal
+      terminal.save
+      web_object = FactoryBot.build :web_object
+      user.web_objects << web_object
+      expect(user.terminals.count).to eq 3
+    end
+  end
 
   it 'should override devise' do
     expect(user.email_required?).to be_falsey
@@ -23,7 +55,8 @@ RSpec.describe User, type: :model do
   end
 
   it 'should validate password complexity' do
-    bad_user = FactoryBot.build :user, password: 'foobar123', password_confirmation: 'foobar123'
+    bad_user = FactoryBot.build :user, password: 'foobar123',
+                                       password_confirmation: 'foobar123'
     expect(bad_user.valid?).to be_falsey
   end
 

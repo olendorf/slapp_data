@@ -12,6 +12,13 @@ RSpec.describe AbstractWebObject, type: :model do
       .required(false)
   }
 
+  it {
+    should belong_to(:server)
+      .class_name('Rezzable::Server')
+      .required(false)
+      .touch(true)
+  }
+
   it 'should set the api_key upon creation' do
     expect(web_object.api_key).to_not be_nil
   end

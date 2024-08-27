@@ -63,18 +63,18 @@ module Api
 
       private
 
-      def load_requested_object
-        @web_object = AbstractWebObject.find_by_object_key(
-          params['object_key']
-        )
+      # def load_requested_object
+      #   @web_object = AbstractWebObject.find_by_object_key(
+      #     params['object_key']
+      #   )
 
-        if @web_object.nil?
-          raise ActionController::RoutingError,
-                'User not found. Please try again.'
-        end
+      #   if @web_object.nil?
+      #     raise ActionController::RoutingError,
+      #           'User not found. Please try again.'
+      #   end
 
-        @web_object.actable
-      end
+      #   @web_object.actable
+      # end
 
       def requesting_class
         "::Rezzable::#{controller_name.classify}".constantize

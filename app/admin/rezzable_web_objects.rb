@@ -17,6 +17,12 @@ ActiveAdmin.register Rezzable::WebObject, as: 'Web Object' do
     column 'Description' do |web_object|
       truncate(web_object.description, length: 10, separator: ' ')
     end
+    column 'Server', sortable: 'server.object_name' do |web_object|
+      if web_object.server
+        link_to web_object.server.object_name,
+                admin_server_path(web_object.server)
+      end
+    end
     column 'Location', sortable: :region, &:slurl
     column :created_at, sortable: :created_at
     column :updated_at, sortable: :updated_at
@@ -41,6 +47,9 @@ ActiveAdmin.register Rezzable::WebObject, as: 'Web Object' do
           'Orphan'
         end
       end
+      row 'Server' do |web_object|
+        link_to web_object.server.object_name, admin_server_path(web_object.server)
+      end
       row :location, &:slurl
       row :created_at
       row :updated_at
@@ -49,12 +58,16 @@ ActiveAdmin.register Rezzable::WebObject, as: 'Web Object' do
 
   # Uncomment all parameters which should be permitted for assignment
   #
-  permit_params :object_name, :description
+  permit_params :object_name, :description, :server_id
 
   form title: proc { "Edit #{resource.object_name}" } do |f|
     f.inputs do
-      f.input :object_name, label: 'Server name'
+      f.input :object_name, label: 'Object name'
       f.input :description
+      f.input :server_id, label: 'Server',
+                          as: :select, collection: resource.user.servers.map { |server|
+                                                     [server.object_name, server.id]
+                                                   }
     end
     # f.has_many :splits, heading: 'Splits',
     #                     allow_destroy: true do |s|

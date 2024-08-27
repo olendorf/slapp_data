@@ -11,9 +11,6 @@ Bundler.require(*Rails.groups)
 module SlappData
   # The main config for the application
   class Application < Rails::Application
-    # rubocop:disable Metrics/MethodLength, Lint/DuplicateBranch, Lint/UselessRescue
-
-
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.1
 
