@@ -14,12 +14,15 @@ RSpec.describe User, type: :model do
       .with_values(user: 0, admin: 1, owner: 2)
   }
 
-  it { should have_many(
-          :web_objects).class_name('AbstractWebObject').dependent(:destroy) }
-          
-  describe '.servers' do 
-    it 'should return the correct number of servers' do 
-      3.times do 
+  it {
+    should have_many(
+      :web_objects
+    ).class_name('AbstractWebObject').dependent(:destroy)
+  }
+
+  describe '.servers' do
+    it 'should return the correct number of servers' do
+      3.times do
         server = FactoryBot.build :server
         user.web_objects << server
       end
@@ -29,11 +32,11 @@ RSpec.describe User, type: :model do
       user.web_objects << web_object
       expect(user.servers.count).to eq 3
     end
-  end  
-  
-  describe '.terminals' do 
-    it 'should return the correct number of servers' do 
-      3.times do 
+  end
+
+  describe '.terminals' do
+    it 'should return the correct number of servers' do
+      3.times do
         terminal = FactoryBot.build :terminal
         user.web_objects << terminal
       end
@@ -52,8 +55,8 @@ RSpec.describe User, type: :model do
   end
 
   it 'should validate password complexity' do
-    bad_user = FactoryBot.build :user, password: 'foobar123', 
-                  password_confirmation: 'foobar123'
+    bad_user = FactoryBot.build :user, password: 'foobar123',
+                                       password_confirmation: 'foobar123'
     expect(bad_user.valid?).to be_falsey
   end
 

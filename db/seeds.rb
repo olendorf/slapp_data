@@ -18,7 +18,7 @@ owner = FactoryBot.create(:owner, avatar_name: 'Random Citizen')
   owner.web_objects << server
 end
 
-5.times do |i|
+5.times do |_i|
   server = owner.servers.sample
   terminal = FactoryBot.build :terminal, user_id: owner.id, server_id: server.id
   terminal.save
@@ -31,7 +31,7 @@ end
 100.times do |i|
   user = FactoryBot.create(:user, avatar_name: "User_#{i} Resident",
                                   account_level: rand(1..5))
-  objects = rand(0..user.account_level-1)
+  objects = rand(0..user.account_level - 1)
   rand(1..4).times do
     server = FactoryBot.build :server
     user.web_objects << server

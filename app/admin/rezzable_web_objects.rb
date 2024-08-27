@@ -18,7 +18,10 @@ ActiveAdmin.register Rezzable::WebObject, as: 'Web Object' do
       truncate(web_object.description, length: 10, separator: ' ')
     end
     column 'Server', sortable: 'server.object_name' do |web_object|
-      link_to web_object.server.object_name, admin_server_path(web_object.server) if web_object.server
+      if web_object.server
+        link_to web_object.server.object_name,
+                admin_server_path(web_object.server)
+      end
     end
     column 'Location', sortable: :region, &:slurl
     column :created_at, sortable: :created_at
@@ -61,7 +64,10 @@ ActiveAdmin.register Rezzable::WebObject, as: 'Web Object' do
     f.inputs do
       f.input :object_name, label: 'Object name'
       f.input :description
-      f.input :server_id, label: 'Server', as: :select, collection: resource.user.servers.map { |server| [server.object_name, server.id] }
+      f.input :server_id, label: 'Server',
+                          as: :select, collection: resource.user.servers.map { |server|
+                                                     [server.object_name, server.id]
+                                                   }
     end
     # f.has_many :splits, heading: 'Splits',
     #                     allow_destroy: true do |s|

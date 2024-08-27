@@ -1,13 +1,14 @@
+# frozen_string_literal: true
+
 ActiveAdmin.register Rezzable::Server, as: 'Server' do
   include ActiveAdmin::RezzableBehavior
-  
-  
+
   decorate_with Rezzable::ServerDecorator
-  
+
   menu label: 'Servers'
 
   actions :all, except: %i[new create]
-  
+
   index title: 'Servers' do
     selectable_column
     column 'Object Name', sortable: :object_name do |server|
@@ -39,15 +40,14 @@ ActiveAdmin.register Rezzable::Server, as: 'Server' do
     column :created_at, sortable: :created_at
     actions
   end
-  
+
   filter :abstract_web_object_object_name, as: :string, label: 'Object Name'
   filter :abstract_web_object_description, as: :string, label: 'Description'
   filter :abstract_web_object_user_avatar_name, as: :string, label: 'Owner'
   filter :abstract_web_object_region, as: :string, label: 'Region'
   # filter :web_object_pinged_at, as: :date_range, label: 'Last Ping'
   filter :abstract_web_object_create_at, as: :date_range, label: 'Created At'
-  
-  
+
   show title: :object_name do
     attributes_table do
       row :object_name
@@ -64,7 +64,7 @@ ActiveAdmin.register Rezzable::Server, as: 'Server' do
       row :created_at
       row :updated_at
     end
-    
+
     panel 'Clients' do
       paginated_collection(
         resource.clients.page(
@@ -87,7 +87,7 @@ ActiveAdmin.register Rezzable::Server, as: 'Server' do
       end
     end
   end
-  
+
   permit_params :object_name, :description
 
   form title: proc { "Edit #{resource.object_name}" } do |f|
@@ -103,5 +103,4 @@ ActiveAdmin.register Rezzable::Server, as: 'Server' do
     # end
     f.actions
   end
-
 end

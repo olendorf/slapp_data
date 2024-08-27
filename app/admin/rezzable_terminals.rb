@@ -6,7 +6,7 @@ ActiveAdmin.register Rezzable::Terminal, as: 'Terminal' do
   menu label: 'Terminals'
 
   actions :all, except: %i[new create]
-  
+
   index title: 'Terminals' do
     selectable_column
     column 'Object Name', sortable: :object_name do |terminal|
@@ -38,14 +38,14 @@ ActiveAdmin.register Rezzable::Terminal, as: 'Terminal' do
     column :created_at, sortable: :created_at
     actions
   end
-  
+
   filter :abstract_terminal_object_name, as: :string, label: 'Object Name'
   filter :abstract_terminal_description, as: :string, label: 'Description'
   filter :abstract_terminal_user_avatar_name, as: :string, label: 'Owner'
   filter :abstract_terminal_region, as: :string, label: 'Region'
   # filter :terminal_pinged_at, as: :date_range, label: 'Last Ping'
   filter :abstract_terminal_create_at, as: :date_range
-  
+
   show title: :object_name do
     attributes_table do
       row :object_name
@@ -66,14 +66,17 @@ ActiveAdmin.register Rezzable::Terminal, as: 'Terminal' do
       row :updated_at
     end
   end
-  
+
   permit_params :object_name, :description, :server_id
 
   form title: proc { "Edit #{resource.object_name}" } do |f|
     f.inputs do
       f.input :object_name, label: 'Object name'
       f.input :description
-      f.input :server_id, label: 'Server', as: :select, collection: resource.user.servers.map { |server| [server.object_name, server.id] }
+      f.input :server_id, label: 'Server',
+                          as: :select, collection: resource.user.servers.map { |server|
+                                                     [server.object_name, server.id]
+                                                   }
     end
     # f.has_many :splits, heading: 'Splits',
     #                     allow_destroy: true do |s|
@@ -83,21 +86,4 @@ ActiveAdmin.register Rezzable::Terminal, as: 'Terminal' do
     # end
     f.actions
   end
-  #
-
-  # See permitted parameters documentation:
-  # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
-  #
-  # Uncomment all parameters which should be permitted for assignment
-  #
-  # permit_params :object_name, :object_key, :region, :position, :shard, :url, :user_id, :api_key, :description
-  #
-  # or
-  #
-  # permit_params do
-  #   permitted = [:object_name, :object_key, :region, :position, :shard, :url, :user_id, :api_key, :description]
-  #   permitted << :other if params[:action] == 'create' && current_user.admin?
-  #   permitted
-  # end
-  
 end

@@ -30,11 +30,11 @@ class User < ApplicationRecord
     admin: 1,
     owner: 2
   }
-  
+
   def servers
     Rezzable::Server.where(user_id: id)
   end
-  
+
   def terminals
     Rezzable::Terminal.where(user_id: id)
   end

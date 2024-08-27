@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Rezzable::Server, type: :model do
@@ -7,10 +9,11 @@ RSpec.describe Rezzable::Server, type: :model do
     server.save
     server
   end
-  
-  it { should have_many(:clients)
-              .class_name('AbstractWebObject')
-              .dependent(:nullify)
+
+  it {
+    should have_many(:clients)
+      .class_name('AbstractWebObject')
+      .dependent(:nullify)
   }
 
   it { expect(Rezzable::Server).to act_as(AbstractWebObject) }

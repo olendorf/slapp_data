@@ -47,29 +47,33 @@ ActiveAdmin.register User do
       row :updated_at
     end
 
-    panel 'Terminals' do
-      paginated_collection(
-        resource.terminals.page(
-          params[:terminal_page]
-        ).per(20), param_name: 'terminal_page'
-      ) do
-        table_for collection.decorate do
-          column :object_name
-        end
-      end 
-    end if resource.terminals.count > 0
-    
-    panel 'Servers' do
-      paginated_collection(
-        resource.servers.page(
-          params[:server_page]
-        ).per(20), param_name: 'server_page'
-      ) do
-        table_for collection.decorate do
-          column :object_name
+    if resource.terminals.count.positive?
+      panel 'Terminals' do
+        paginated_collection(
+          resource.terminals.page(
+            params[:terminal_page]
+          ).per(20), param_name: 'terminal_page'
+        ) do
+          table_for collection.decorate do
+            column :object_name
+          end
         end
       end
-    end if resource.servers.count > 0
+    end
+
+    if resource.servers.count.positive?
+      panel 'Servers' do
+        paginated_collection(
+          resource.servers.page(
+            params[:server_page]
+          ).per(20), param_name: 'server_page'
+        ) do
+          table_for collection.decorate do
+            column :object_name
+          end
+        end
+      end
+    end
   end
 
   sidebar :profile_pic, only: %i[show edit] do

@@ -3,9 +3,9 @@
 RSpec.shared_examples 'a rezzable object' do |model_name, object_weight|
   let(:user) { FactoryBot.create :user }
   let(:web_object) do
-    web_object = FactoryBot.build model_name.to_sym 
+    web_object = FactoryBot.build model_name.to_sym
     web_object
-  end 
+  end
   describe '#object_weight' do
     it 'should return the correct weight' do
       expect(web_object.object_weight).to eq object_weight
