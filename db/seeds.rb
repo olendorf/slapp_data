@@ -13,9 +13,14 @@ DatabaseCleaner.clean_with :truncation if Rails.env.development?
 
 # Create an owner
 owner = FactoryBot.create(:owner, avatar_name: 'Random Citizen')
+3.times do
+  server = FactoryBot.build :server
+  owner.web_objects << server
+end
 
 5.times do |i|
-  terminal = FactoryBot.build :terminal, user_id: owner.id
+  server = owner.servers.sample
+  terminal = FactoryBot.build :terminal, user_id: owner.id, server_id: server.id
   terminal.save
 end
 
@@ -25,10 +30,15 @@ end
 
 100.times do |i|
   user = FactoryBot.create(:user, avatar_name: "User_#{i} Resident",
-                                  account_level: rand(1..4))
-  objects = rand(0..user.account_level)
-  objects.times do |_i|
-    web_object = FactoryBot.build :web_object
+                                  account_level: rand(1..5))
+  objects = rand(0..user.account_level-1)
+  rand(1..4).times do
+    server = FactoryBot.build :server
+    user.web_objects << server
+  end
+  objects.times do
+    server = user.servers.sample
+    web_object = FactoryBot.build :web_object, server_id: server.id
     user.web_objects << web_object
     puts user.web_object_weight
   end

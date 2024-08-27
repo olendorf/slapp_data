@@ -16,6 +16,34 @@ RSpec.describe User, type: :model do
 
   it { should have_many(
           :web_objects).class_name('AbstractWebObject').dependent(:destroy) }
+          
+  describe '.servers' do 
+    it 'should return the correct number of servers' do 
+      3.times do 
+        server = FactoryBot.build :server
+        user.web_objects << server
+      end
+      server = FactoryBot.build :server
+      server.save
+      web_object = FactoryBot.build :web_object
+      user.web_objects << web_object
+      expect(user.servers.count).to eq 3
+    end
+  end  
+  
+  describe '.terminals' do 
+    it 'should return the correct number of servers' do 
+      3.times do 
+        terminal = FactoryBot.build :terminal
+        user.web_objects << terminal
+      end
+      terminal = FactoryBot.build :terminal
+      terminal.save
+      web_object = FactoryBot.build :web_object
+      user.web_objects << web_object
+      expect(user.terminals.count).to eq 3
+    end
+  end
 
   it 'should override devise' do
     expect(user.email_required?).to be_falsey

@@ -4,8 +4,7 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable,  and :omniauthable
-  devise :database_authenticatable,
-         :recoverable, :rememberable, :validatable,
+  devise :database_authenticatable, :rememberable, :validatable,
          :timeoutable, :trackable
 
   validate :password_complexity
@@ -31,6 +30,14 @@ class User < ApplicationRecord
     admin: 1,
     owner: 2
   }
+  
+  def servers
+    Rezzable::Server.where(user_id: id)
+  end
+  
+  def terminals
+    Rezzable::Terminal.where(user_id: id)
+  end
 
   def self.ransackable_attributes(_auth_object = nil)
     %w[

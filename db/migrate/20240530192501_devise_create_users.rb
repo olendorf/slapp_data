@@ -26,6 +26,5 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.1]
     add_index :users, :avatar_name,                unique: true
     add_index :users, :avatar_key,                 unique: true
     add_index :users, :role
-    add_index
   end
 end

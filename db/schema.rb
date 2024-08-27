@@ -69,8 +69,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_23_120838) do
     t.string "avatar_key", default: "00000000-0000-0000-0000-000000000000", null: false
     t.integer "role", default: 0, null: false
     t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.integer "sign_in_count", default: 0, null: false
     t.datetime "current_sign_in_at"
@@ -89,6 +87,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_23_120838) do
     t.index ["avatar_key"], name: "index_users_on_avatar_key", unique: true
     t.index ["avatar_name"], name: "index_users_on_avatar_name", unique: true
     t.index ["expiration_date"], name: "index_users_on_expiration_date"
+    t.index ["role"], name: "index_users_on_role"
     t.index ["web_object_count"], name: "index_users_on_web_object_count"
     t.index ["web_object_weight"], name: "index_users_on_web_object_weight"
   end
