@@ -29,6 +29,7 @@ Rails.application.routes.draw do
       namespace :rezzable do
         resources :web_objects, except: %i[index new edit], param: :object_key
         resources :terminals, except: %i[index new edit], param: :object_key
+        resources :servers, except: %i[index new edit], param: :object_key
       end
     end
   end
