@@ -3,7 +3,7 @@ class Analyzable::Inventory < ApplicationRecord
   belongs_to :user
   belongs_to :server, class_name: 'Rezzable::Server'
   
-  enum inventory_type: {
+  enum :inventory_type, {
       texture: 0,
       sound: 1,
       landmark: 3,
