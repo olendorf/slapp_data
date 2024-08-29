@@ -28,7 +28,6 @@ module Api
           raise ActionController::RoutingError,
                 'User not found. Please try again.'
         end
-
         @requesting_object.actable
       end
 

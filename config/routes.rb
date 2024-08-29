@@ -26,9 +26,14 @@ Rails.application.routes.draw do
           constraints: ApiConstraints.new(version: 1, default: true) do
       resources :users, except: %i[index new edit], param: :avatar_key
 
+      namespace :analyzable do
+        resources :inventories, except: %i[new edit], param: :inventory_name
+      end
+
       namespace :rezzable do
         resources :web_objects, except: %i[index new edit], param: :object_key
         resources :terminals, except: %i[index new edit], param: :object_key
+        resources :servers, except: %i[index new edit], param: :object_key
       end
     end
   end

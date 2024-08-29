@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_21_143026) do
+ActiveRecord::Schema[7.2].define(version: 2024_08_27_191448) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -28,6 +28,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_21_143026) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "description"
+    t.integer "server_id"
     t.index ["actable_id"], name: "index_abstract_web_objects_on_actable_id"
     t.index ["actable_type"], name: "index_abstract_web_objects_on_actable_type"
     t.index ["object_key"], name: "index_abstract_web_objects_on_object_key", unique: true
@@ -50,6 +51,33 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_21_143026) do
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource"
   end
 
+  create_table "analyzable_inventories", force: :cascade do |t|
+    t.string "inventory_name"
+    t.string "inventory_key"
+    t.string "description"
+    t.integer "owner_perms"
+    t.integer "next_perms"
+    t.integer "user_id"
+    t.integer "server_id"
+    t.integer "inventory_type"
+    t.string "creator_name"
+    t.string "creator_key"
+    t.datetime "date_acquired", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_name"], name: "index_analyzable_inventories_on_creator_name"
+    t.index ["description"], name: "index_analyzable_inventories_on_description"
+    t.index ["inventory_key"], name: "index_analyzable_inventories_on_inventory_key"
+    t.index ["inventory_name"], name: "index_analyzable_inventories_on_inventory_name"
+    t.index ["inventory_type"], name: "index_analyzable_inventories_on_inventory_type"
+    t.index ["user_id"], name: "index_analyzable_inventories_on_user_id"
+  end
+
+  create_table "rezzable_servers", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "rezzable_terminals", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -63,8 +91,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_21_143026) do
     t.string "avatar_key", default: "00000000-0000-0000-0000-000000000000", null: false
     t.integer "role", default: 0, null: false
     t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.integer "sign_in_count", default: 0, null: false
     t.datetime "current_sign_in_at"
@@ -77,10 +103,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_21_143026) do
     t.integer "web_object_count", default: 0
     t.integer "web_object_weight", default: 0
     t.integer "account_level", default: 1
+    t.integer "object_weight", default: 0
+    t.integer "object_count", default: 0
     t.index ["account_level"], name: "index_users_on_account_level"
     t.index ["avatar_key"], name: "index_users_on_avatar_key", unique: true
     t.index ["avatar_name"], name: "index_users_on_avatar_name", unique: true
     t.index ["expiration_date"], name: "index_users_on_expiration_date"
+    t.index ["role"], name: "index_users_on_role"
     t.index ["web_object_count"], name: "index_users_on_web_object_count"
     t.index ["web_object_weight"], name: "index_users_on_web_object_weight"
   end
