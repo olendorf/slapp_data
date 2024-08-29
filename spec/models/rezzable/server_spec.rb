@@ -16,6 +16,12 @@ RSpec.describe Rezzable::Server, type: :model do
       .dependent(:nullify)
   }
 
+  it {
+    should have_many(:inventories)
+      .class_name('Analyzable::Inventory')
+      .dependent(:destroy)
+  }
+
   it { expect(Rezzable::Server).to act_as(AbstractWebObject) }
 
   describe '.response_data' do

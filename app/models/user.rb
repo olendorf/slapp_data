@@ -12,6 +12,8 @@ class User < ApplicationRecord
   has_many :web_objects, class_name: 'AbstractWebObject',
                          dependent: :destroy,
                          after_add: :increment_caches
+  has_many :inventories, class_name: 'Analyzable::Inventory',
+                         dependent: :destroy
 
   def email_required?
     false

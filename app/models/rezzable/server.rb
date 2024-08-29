@@ -7,6 +7,10 @@ module Rezzable
 
     has_many :clients, class_name: 'AbstractWebObject', dependent: :nullify
 
+    has_many :inventories, class_name: 'Analyzable::Inventory',
+                           dependent: :destroy,
+                           before_add: :assign_user_to_inventory
+
     def self.ransackable_associations(_auth_object = nil)
       %w[abstract_web_object actable user created_at]
     end
@@ -24,5 +28,11 @@ module Rezzable
     end
 
     OBJECT_WEIGHT = 1
+
+    private
+
+    def assign_user_to_inventory(inventory)
+      inventory.user_id = user.id
+    end
   end
 end

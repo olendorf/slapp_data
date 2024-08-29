@@ -7,6 +7,8 @@ RSpec.shared_examples 'it has a web object API' do |model_name|
     user.web_objects << web_object
     web_object
   end
+
+  let(:klass) { "Rezzable::#{model_name.to_s.classify}".constantize }
   describe 'GET' do
     context 'valid request' do
       let(:path) { send("api_rezzable_#{model_name}_path", web_object.object_key) }
@@ -63,7 +65,7 @@ RSpec.shared_examples 'it has a web object API' do |model_name|
           post path,
                params: object_params.to_json,
                headers: headers(new_object)
-        end.to change { Rezzable::WebObject.count }.by(1)
+        end.to change(klass, :count).by(1)
       end
     end
 
@@ -115,7 +117,7 @@ RSpec.shared_examples 'it has a web object API' do |model_name|
     it 'should delete the object' do
       web_object
       expect { delete path, headers: headers(web_object) }
-        .to change { Rezzable::WebObject.count }.by(-1)
+        .to change(klass, :count).by(-1)
     end
   end
 end

@@ -20,6 +20,12 @@ RSpec.describe User, type: :model do
     ).class_name('AbstractWebObject').dependent(:destroy)
   }
 
+  it {
+    should have_many(
+      :inventories
+    ).class_name('Analyzable::Inventory').dependent(:destroy)
+  }
+
   describe '.servers' do
     it 'should return the correct number of servers' do
       3.times do
