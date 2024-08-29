@@ -15,7 +15,7 @@ RSpec.describe Rezzable::Server, type: :model do
       .class_name('AbstractWebObject')
       .dependent(:nullify)
   }
-  
+
   it {
     should have_many(:inventories)
       .class_name('Analyzable::Inventory')

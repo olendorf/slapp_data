@@ -20,7 +20,7 @@ module Api
         end
         @user.check_object_weight?(object_weight)
       end
-      
+
       def index?
         show?
       end

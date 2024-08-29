@@ -4,11 +4,11 @@ require 'rails_helper'
 
 RSpec.describe 'Api::V1::Analyzable::Inventories', type: :request do
   let(:user) { FactoryBot.create :user }
-  let(:server) {
+  let(:server) do
     server = FactoryBot.build :server, user_id: user.id
     server.save
     server
-  }
+  end
 
   describe 'index' do
     let(:path) { api_analyzable_inventories_path }
@@ -92,7 +92,7 @@ RSpec.describe 'Api::V1::Analyzable::Inventories', type: :request do
       end
     end
   end
-  
+
   describe 'show' do
     before(:each) { server.inventories << FactoryBot.build(:inventory) }
     let(:path) { api_analyzable_inventory_path(server.inventories.last.inventory_name) }
@@ -110,7 +110,7 @@ RSpec.describe 'Api::V1::Analyzable::Inventories', type: :request do
       )
     end
   end
-  
+
   describe 'create' do
     let(:path) { api_analyzable_inventories_path }
 
@@ -123,9 +123,9 @@ RSpec.describe 'Api::V1::Analyzable::Inventories', type: :request do
       end
 
       it 'should create the inventory' do
-        expect {
+        expect do
           post path, params: atts.to_json, headers: headers(server)
-        }.to change(server.inventories, :count).by(1)
+        end.to change(server.inventories, :count).by(1)
       end
     end
 
@@ -143,9 +143,9 @@ RSpec.describe 'Api::V1::Analyzable::Inventories', type: :request do
 
       it 'should not create an inventory' do
         atts[:owner_perms] = 32_768
-        expect {
+        expect do
           post path, params: atts.to_json, headers: headers(server)
-        }.to_not change(server.inventories, :count)
+        end.to_not change(server.inventories, :count)
       end
 
       it 'should update the inventory' do
@@ -155,7 +155,7 @@ RSpec.describe 'Api::V1::Analyzable::Inventories', type: :request do
       end
     end
   end
-  
+
   describe 'destroy' do
     before(:each) do
       10.times do |i|
@@ -182,6 +182,4 @@ RSpec.describe 'Api::V1::Analyzable::Inventories', type: :request do
       end
     end
   end
-  
-  
 end

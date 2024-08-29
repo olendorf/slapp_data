@@ -1,18 +1,20 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe Analyzable::Inventory, type: :model do  
+RSpec.describe Analyzable::Inventory, type: :model do
   let(:user) { FactoryBot.create :user }
-  let(:server) {
+  let(:server) do
     server = FactoryBot.build :server, user_id: user.id
     server.save
     server
-  }
-  
+  end
+
   let(:inventory) { FactoryBot.create :inventory, server_id: server.id, user_id: user.id }
-  
+
   it { should belong_to(:user) }
   it { should belong_to(:server).class_name('Rezzable::Server') }
-  
+
   it {
     should define_enum_for(:inventory_type).with_values(
       texture: 0,
@@ -28,7 +30,7 @@ RSpec.describe Analyzable::Inventory, type: :model do
       setting: 56
     )
   }
-  
+
   describe 'perm masks' do
     %w[owner next].each do |who|
       Analyzable::Inventory::PERMS.each do |perm, value|

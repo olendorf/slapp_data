@@ -7,7 +7,7 @@ RSpec.shared_examples 'it has a web object API' do |model_name|
     user.web_objects << web_object
     web_object
   end
-  
+
   let(:klass) { "Rezzable::#{model_name.to_s.classify}".constantize }
   describe 'GET' do
     context 'valid request' do
