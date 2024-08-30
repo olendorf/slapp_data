@@ -8,7 +8,7 @@ require 'active_support/core_ext/integer/time'
 # and recreated between test runs. Don't rely on the data there!
 
 Rails.application.configure do
-  # # rubocop:disable Lint/UselessRescue, Lint/DuplicateBranch, Metrics/MethodLength
+  # rubocop:disable Lint/UselessRescue, Lint/DuplicateBranch, Metrics/MethodLength
   # def set_aws_managed_secrets
   #   # secret name created in aws secret manager
   #   secret_name = if ENV['RAISL_ENV']
