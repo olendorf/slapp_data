@@ -39,12 +39,12 @@ ActiveAdmin.register Rezzable::Terminal, as: 'Terminal' do
     actions
   end
 
-  filter :abstract_terminal_object_name, as: :string, label: 'Object Name'
-  filter :abstract_terminal_description, as: :string, label: 'Description'
-  filter :abstract_terminal_user_avatar_name, as: :string, label: 'Owner'
-  filter :abstract_terminal_region, as: :string, label: 'Region'
+  filter :abstract_web_object_object_name, as: :string, label: 'Object Name'
+  filter :abstract_web_object_description, as: :string, label: 'Description'
+  filter :abstract_web_object_user_avatar_name, as: :string, label: 'Owner'
+  filter :abstract_web_object_region, as: :string, label: 'Region'
   # filter :terminal_pinged_at, as: :date_range, label: 'Last Ping'
-  filter :abstract_terminal_create_at, as: :date_range
+  filter :abstract_web_object_create_at, as: :date_range
 
   show title: :object_name do
     attributes_table do
