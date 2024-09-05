@@ -2,7 +2,7 @@
 
 ActiveAdmin.register Rezzable::Server, as: 'Server' do
   include ActiveAdmin::RezzableBehavior
-
+  include ActiveAdmin::ServerBehavior
   decorate_with Rezzable::ServerDecorator
 
   menu label: 'Servers'
@@ -47,6 +47,9 @@ ActiveAdmin.register Rezzable::Server, as: 'Server' do
   filter :abstract_web_object_region, as: :string, label: 'Region'
   # filter :web_object_pinged_at, as: :date_range, label: 'Last Ping'
   filter :abstract_web_object_create_at, as: :date_range, label: 'Created At'
+  
+  
+  sidebar :give_inventory, partial: 'give_inventory_form', only: %i[show edit]
 
   show title: :object_name do
     attributes_table do
@@ -86,14 +89,53 @@ ActiveAdmin.register Rezzable::Server, as: 'Server' do
         end
       end
     end
+    
+    panel 'Inventory' do
+      paginated_collection(
+        resource.inventories.page(
+          params[:inventory_page]
+        ).per(20), param_name: 'inventory_page'
+      ) do
+        table_for collection.decorate do
+          column 'Name' do |inventory|
+            link_to inventory.inventory_name, admin_inventory_path(inventory)
+          end
+          column 'Type', :inventory_type
+          column 'Owner Perms' do |inventory|
+            inventory.pretty_perms(:owner)
+          end
+          column 'Next Perms' do |inventory|
+            inventory.pretty_perms(:next)
+          end
+          column '' do |inventory|
+            span class: 'table_actions' do
+              "#{link_to('View', admin_inventory_path(inventory),
+                         class: 'view_link member_link')}
+              #{link_to('Edit', edit_admin_inventory_path(inventory),
+                        class: 'edit_link member_link')}
+              #{link_to('Delete', admin_inventory_path(inventory),
+                        class: 'delete_link member_link',
+                        method: :delete,
+                        confirm: 'Are you sure you want to delete this?')}".html_safe
+            end
+          end
+        end
+      end
+    end
   end
 
-  permit_params :object_name, :description
+  permit_params :object_name, :description,
+                inventories_attributes: %i[id _destroy]
 
   form title: proc { "Edit #{resource.object_name}" } do |f|
     f.inputs do
-      f.input :object_name, label: 'Object name'
+      f.input :object_name, label: 'Server name'
       f.input :description
+      f.has_many :inventories, heading: 'Inventory',
+                               new_record: false,
+                               allow_destroy: true do |i|
+        i.input :inventory_name, input_html: { disabled: true }
+      end
     end
     # f.has_many :splits, heading: 'Splits',
     #                     allow_destroy: true do |s|

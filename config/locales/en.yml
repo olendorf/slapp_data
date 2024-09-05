@@ -24,3 +24,10 @@ en:
         failure: "Failed to destroy the object: %{message}"
       update:
         failure: "Failed to update the object in world: %{message}"
+    inventory:
+      destroy:
+        failure: "There was an error deleting the inventory: %{message}"
+      move:
+        failure: "There was an error moving the inventory: %{message}"
+      give:
+        failure: "Unable to give inventory: %{message}"

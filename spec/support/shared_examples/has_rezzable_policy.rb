@@ -47,6 +47,8 @@ RSpec.shared_examples 'it has a rezzable policy' do |model_name|
     end
 
     it 'should not permit when the user would go overweight' do
+      web_object = FactoryBot.build :web_object
+      active_user.web_objects << web_object
       expect(subject).to_not permit(active_user, active_object)
     end
   end
