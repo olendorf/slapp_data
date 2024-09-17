@@ -8,7 +8,7 @@ class InventorySlRequest
     server = inventory.server
 
     RestClient::Request.execute(
-      url: "#{server.url}/services/inventories/#{
+      url: "#{server.url}/inventory/inventories/#{
                 ERB::Util.url_encode(inventory.inventory_name)}",
       method: :delete,
       content_type: :json,
@@ -29,7 +29,7 @@ class InventorySlRequest
     target_server = Rezzable::Server.find(server_id)
 
     RestClient::Request.execute(
-      url: "#{server.url}/services/move_inventory/#{
+      url: "#{server.url}/inventory/move_inventory/#{
                 ERB::Util.url_encode(inventory.inventory_name)}",
       method: :put,
       content_type: :json,
@@ -45,7 +45,7 @@ class InventorySlRequest
     server = inventory.server
 
     RestClient::Request.execute(
-      url: "#{server.url}/services/give_inventory",
+      url: "#{server.url}/inventory/give_inventory",
       method: :post,
       content_type: :json,
       accept: :json,

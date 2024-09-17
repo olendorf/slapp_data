@@ -17,14 +17,14 @@ RSpec.describe InventorySlRequest do
 
   let(:uri_regex) do
     %r{https://simhost-062cce4bc972fc71a.agni.secondlife.io:12043/cap/[-a-f0-9]{36}/
-    services/inventories/[a-zA-Z\s%0-9]+\?auth_digest=[-a-f0-9]+&auth_time=[0-9]+}x
+    inventory/inventories/[a-zA-Z\s%0-9]+\?auth_digest=[-a-f0-9]+&auth_time=[0-9]+}x
   end
   let(:give_regex) do
-    %r{https://simhost-062cce4bc972fc71a.agni.secondlife.io:12043/cap/[-a-f0-9]{36}/services/
+    %r{https://simhost-062cce4bc972fc71a.agni.secondlife.io:12043/cap/[-a-f0-9]{36}/inventory/
     give_inventory\?auth_digest=[-a-f0-9]+&auth_time=[0-9]+}x
   end
   let(:move_regex) do
-    %r{https://simhost-062cce4bc972fc71a.agni.secondlife.io:12043/cap/[-a-f0-9]{36}/services/
+    %r{https://simhost-062cce4bc972fc71a.agni.secondlife.io:12043/cap/[-a-f0-9]{36}/inventory/
     move_inventory/[a-zA-Z\s%0-9]+\?auth_digest=[-a-f0-9]+&auth_time=[0-9]+}x
   end
 

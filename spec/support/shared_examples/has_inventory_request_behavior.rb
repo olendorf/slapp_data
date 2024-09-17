@@ -25,7 +25,7 @@ RSpec.shared_examples 'it has inventory request behavior' do |namespace|
   # end
   let(:uri_regex) do
     %r{https://simhost-062cce4bc972fc71a.agni.secondlife.io:12043/cap/[-a-f0-9]{36}/
-    services/inventories/[a-zA-Z\s%0-9]+\?auth_digest=[a-f0-9]+&auth_time=[0-9]+}x
+    inventory/inventories/[a-zA-Z\s%0-9]+\?auth_digest=[a-f0-9]+&auth_time=[0-9]+}x
   end
 
   let(:server_regex) do
@@ -35,12 +35,12 @@ RSpec.shared_examples 'it has inventory request behavior' do |namespace|
 
   let(:give_regex) do
     %r{https://simhost-062cce4bc972fc71a.agni.secondlife.io:12043/cap/[-a-f0-9]{36}/
-    services/give_inventory\?auth_digest=[a-f0-9]+&auth_time=[0-9]+}x
+    inventory/give_inventory\?auth_digest=[a-f0-9]+&auth_time=[0-9]+}x
   end
 
   let(:move_regex) do
     %r{https://simhost-062cce4bc972fc71a.agni.secondlife.io:12043/cap/[-a-f0-9]{36}/
-    services/move_inventory/[a-zA-Z\s%0-9]+\?auth_digest=[a-f0-9]+&auth_time=[0-9]+}x
+    inventory/move_inventory/[a-zA-Z\s%0-9]+\?auth_digest=[a-f0-9]+&auth_time=[0-9]+}x
   end
 
   before(:each) do
