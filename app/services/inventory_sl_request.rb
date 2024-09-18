@@ -35,7 +35,7 @@ class InventorySlRequest
       content_type: :json,
       accept: :json,
       payload: { 
-        server_key: target_server.object_key, 
+        target_key: target_server.object_key, 
         inventory_name: inventory.inventory_name 
       }.to_json,
       verify_ssl: false,

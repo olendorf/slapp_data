@@ -71,7 +71,7 @@ RSpec.shared_examples 'it has inventory request behavior' do |namespace|
     server
 
     stub = stub_request(:put, move_regex).with(
-      body: "{\"server_key\":\"#{server_two.object_key}\"," + 
+      body: "{\"target_key\":\"#{server_two.object_key}\"," + 
              "\"inventory_name\":\"#{server.inventories.first.inventory_name}\"}" 
     )
 
@@ -85,7 +85,7 @@ RSpec.shared_examples 'it has inventory request behavior' do |namespace|
     server
 
     stub_request(:put, move_regex).with(
-      body: "{\"server_key\":\"#{server_two.object_key}\"," + 
+      body: "{\"target_key\":\"#{server_two.object_key}\"," + 
              "\"inventory_name\":\"#{server.inventories.first.inventory_name}\"}"
     ).to_return(body: 'foo', status: 400)
 

@@ -64,7 +64,7 @@ RSpec.describe InventorySlRequest do
     end
     it 'should send the request ' do
       # body_regex = /{"server_key":"[-a-f0-9]+"}/
-      body_regex = /{"server_key":"[-a-f-0-9]+","inventory_name":"[\s|\S]+"}/
+      body_regex = /{"target_key":"[-a-f-0-9]+","inventory_name":"[\s|\S]+"}/
       stub = stub_request(:put, move_regex).with(body: body_regex)
       InventorySlRequest.move_inventory(server.inventories.sample, server_two.id)
       expect(stub).to have_been_requested
