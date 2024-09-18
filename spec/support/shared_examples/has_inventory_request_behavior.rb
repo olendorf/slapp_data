@@ -35,12 +35,12 @@ RSpec.shared_examples 'it has inventory request behavior' do |namespace|
 
   let(:give_regex) do
     %r{https://simhost-062cce4bc972fc71a.agni.secondlife.io:12043/cap/[-a-f0-9]{36}/
-    inventory/give_inventory\?auth_digest=[a-f0-9]+&auth_time=[0-9]+}x
+    inventory/give\?auth_digest=[a-f0-9]+&auth_time=[0-9]+}x
   end
 
   let(:move_regex) do
     %r{https://simhost-062cce4bc972fc71a.agni.secondlife.io:12043/cap/[-a-f0-9]{36}/
-    inventory/move_inventory/[a-zA-Z\s%0-9]+\?auth_digest=[a-f0-9]+&auth_time=[0-9]+}x
+    inventory/move/[a-zA-Z\s%0-9]+\?auth_digest=[a-f0-9]+&auth_time=[0-9]+}x
   end
 
   before(:each) do
@@ -71,7 +71,8 @@ RSpec.shared_examples 'it has inventory request behavior' do |namespace|
     server
 
     stub = stub_request(:put, move_regex).with(
-      body: "{\"server_key\":\"#{server_two.object_key}\"}"
+      body: "{\"server_key\":\"#{server_two.object_key}\"," + 
+             "\"inventory_name\":\"#{server.inventories.first.inventory_name}\"}" 
     )
 
     visit(send("edit_#{namespace}_inventory_path", server.inventories.first))
@@ -84,7 +85,8 @@ RSpec.shared_examples 'it has inventory request behavior' do |namespace|
     server
 
     stub_request(:put, move_regex).with(
-      body: "{\"server_key\":\"#{server_two.object_key}\"}"
+      body: "{\"server_key\":\"#{server_two.object_key}\"," + 
+             "\"inventory_name\":\"#{server.inventories.first.inventory_name}\"}"
     ).to_return(body: 'foo', status: 400)
 
     visit(send("edit_#{namespace}_inventory_path", server.inventories.first))

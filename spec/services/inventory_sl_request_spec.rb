@@ -21,11 +21,11 @@ RSpec.describe InventorySlRequest do
   end
   let(:give_regex) do
     %r{https://simhost-062cce4bc972fc71a.agni.secondlife.io:12043/cap/[-a-f0-9]{36}/inventory/
-    give_inventory\?auth_digest=[-a-f0-9]+&auth_time=[0-9]+}x
+    give\?auth_digest=[-a-f0-9]+&auth_time=[0-9]+}x
   end
   let(:move_regex) do
     %r{https://simhost-062cce4bc972fc71a.agni.secondlife.io:12043/cap/[-a-f0-9]{36}/inventory/
-    move_inventory/[a-zA-Z\s%0-9]+\?auth_digest=[-a-f0-9]+&auth_time=[0-9]+}x
+    move/[a-zA-Z\s%0-9]+\?auth_digest=[-a-f0-9]+&auth_time=[0-9]+}x
   end
 
   describe '.delete_inventory' do
@@ -63,7 +63,8 @@ RSpec.describe InventorySlRequest do
       server
     end
     it 'should send the request ' do
-      body_regex = /{"server_key":"[-a-f0-9]+"}/
+      # body_regex = /{"server_key":"[-a-f0-9]+"}/
+      body_regex = /{"server_key":"[-a-f-0-9]+","inventory_name":"[\s|\S]+"}/
       stub = stub_request(:put, move_regex).with(body: body_regex)
       InventorySlRequest.move_inventory(server.inventories.sample, server_two.id)
       expect(stub).to have_been_requested

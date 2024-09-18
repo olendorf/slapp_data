@@ -29,12 +29,15 @@ class InventorySlRequest
     target_server = Rezzable::Server.find(server_id)
 
     RestClient::Request.execute(
-      url: "#{server.url}/inventory/move_inventory/#{
+      url: "#{server.url}/inventory/move/#{
                 ERB::Util.url_encode(inventory.inventory_name)}",
       method: :put,
       content_type: :json,
       accept: :json,
-      payload: { server_key: target_server.object_key }.to_json,
+      payload: { 
+        server_key: target_server.object_key, 
+        inventory_name: inventory.inventory_name 
+      }.to_json,
       verify_ssl: false,
       headers: request_headers(server)
     ) unless Rails.env.development?
@@ -45,7 +48,7 @@ class InventorySlRequest
     server = inventory.server
 
     RestClient::Request.execute(
-      url: "#{server.url}/inventory/give_inventory",
+      url: "#{server.url}/inventory/give",
       method: :post,
       content_type: :json,
       accept: :json,
