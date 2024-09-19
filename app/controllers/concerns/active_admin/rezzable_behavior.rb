@@ -31,6 +31,7 @@ module ActiveAdmin
             flash[:error] = t('active_admin.web_object.destroy.failure',
                               message: e.response)
           ensure
+            puts "Ensuring object destruction"
             super # No matter what, destory the object from the database.
           end
         end
