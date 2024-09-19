@@ -25,12 +25,20 @@ module ActiveAdmin
         end
 
         def destroy
+          logger = Rails.logger
+          logger.info 'destroying'
           begin
+            
+            logger.info 'trying to destroy'
             RezzableSlRequest.derez_web_object!(resource)
           rescue RestClient::ExceptionWithResponse => e
+            
+            logger.info 'error trying to destroy'
             flash[:error] = t('active_admin.web_object.destroy.failure',
                               message: e.response)
           ensure
+            
+            logger.info 'ensuring destruction'
             puts "Ensuring object destruction"
             super # No matter what, destory the object from the database.
           end
