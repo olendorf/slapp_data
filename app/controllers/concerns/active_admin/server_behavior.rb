@@ -36,7 +36,6 @@ module ActiveAdmin
             flash[:error] = t('active_admin.web_object.destroy.failure',
                               message: e.response)
             parts = request.url.split('/')[3, 2]
-            redirect_back(fallback_location: send("#{parts.first}_servers_path"))
             super
           end
         end
