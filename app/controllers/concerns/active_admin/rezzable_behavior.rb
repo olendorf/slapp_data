@@ -25,12 +25,14 @@ module ActiveAdmin
         end
 
         def destroy
-          RezzableSlRequest.derez_web_object!(resource)
-        rescue RestClient::ExceptionWithResponse => e
-          flash[:error] = t('active_admin.web_object.destroy.failure',
-                            message: e.response)
-        ensure
-          super # No matter what, destory the object from the database.
+          begin
+            RezzableSlRequest.derez_web_object!(resource)
+          rescue RestClient::ExceptionWithResponse => e
+            flash[:error] = t('active_admin.web_object.destroy.failure',
+                              message: e.response)
+          ensure
+            super # No matter what, destory the object from the database.
+          end
         end
       end
     end

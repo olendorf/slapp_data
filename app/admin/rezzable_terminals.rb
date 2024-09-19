@@ -57,9 +57,13 @@ ActiveAdmin.register Rezzable::Terminal, as: 'Terminal' do
         else
           'Orphan'
         end
-      end
-      row 'Server' do |terminal|
-        link_to terminal.server.object_name, admin_server_path(terminal.server)
+      end      
+      row 'Server' do |web_object|
+        if(web_object.server)
+          link_to web_object.server.object_name, admin_server_path(web_object.server)
+        else
+          'No Server'
+        end
       end
       row :location, &:slurl
       row :created_at
