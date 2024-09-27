@@ -15,6 +15,8 @@ Rails.application.configure do
     region_name = 'us-east-2'
 
     client = Aws::SecretsManager::Client.new(region: region_name)
+    config.logger = Logger.new(STDOUT)
+    config.log_level = :debug
 
     begin
       secret_value = client.get_secret_value(secret_id: secret_name)

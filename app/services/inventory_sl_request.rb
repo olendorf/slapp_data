@@ -46,7 +46,9 @@ class InventorySlRequest
   def self.give_inventory(inventory_id, avatar_name)
     inventory = Analyzable::Inventory.find(inventory_id)
     server = inventory.server
-
+    
+    Rails.logger.debug "Giving inventory #{inventory.inventory_name}"
+    
     RestClient::Request.execute(
       url: "#{server.url}/inventory/give",
       method: :post,
