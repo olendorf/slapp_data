@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_08_27_191448) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_05_134300) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -53,7 +53,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_27_191448) do
 
   create_table "analyzable_inventories", force: :cascade do |t|
     t.string "inventory_name"
-    t.string "inventory_key"
     t.string "description"
     t.integer "owner_perms"
     t.integer "next_perms"
@@ -67,10 +66,18 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_27_191448) do
     t.datetime "updated_at", null: false
     t.index ["creator_name"], name: "index_analyzable_inventories_on_creator_name"
     t.index ["description"], name: "index_analyzable_inventories_on_description"
-    t.index ["inventory_key"], name: "index_analyzable_inventories_on_inventory_key"
     t.index ["inventory_name"], name: "index_analyzable_inventories_on_inventory_name"
     t.index ["inventory_type"], name: "index_analyzable_inventories_on_inventory_type"
     t.index ["user_id"], name: "index_analyzable_inventories_on_user_id"
+  end
+
+  create_table "avatars", force: :cascade do |t|
+    t.string "avatar_name"
+    t.string "avatar_key"
+    t.string "display_name"
+    t.datetime "rezday"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "rezzable_servers", force: :cascade do |t|
@@ -105,6 +112,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_08_27_191448) do
     t.integer "account_level", default: 1
     t.integer "object_weight", default: 0
     t.integer "object_count", default: 0
+    t.string "business_name"
     t.index ["account_level"], name: "index_users_on_account_level"
     t.index ["avatar_key"], name: "index_users_on_avatar_key", unique: true
     t.index ["avatar_name"], name: "index_users_on_avatar_name", unique: true

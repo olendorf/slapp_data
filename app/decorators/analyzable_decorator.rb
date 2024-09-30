@@ -1,12 +1,5 @@
-# frozen_string_literal: true
-
-# Decorator class for User models.
-class UserDecorator < Draper::Decorator
-  delegate_all  
-  
-  def business_display_name
-    business_name.nil? ? user.avatar_name : user.business_name
-  end
+class AnalyzableDecorator < Draper::Decorator
+  delegate_all
 
   # Define presentation-specific methods here. Helpers are accessed through
   # `helpers` (aka `h`). You can override attributes, for example:
@@ -16,4 +9,5 @@ class UserDecorator < Draper::Decorator
   #       object.created_at.strftime("%a %m/%d/%y")
   #     end
   #   end
+
 end
