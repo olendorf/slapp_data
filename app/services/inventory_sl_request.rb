@@ -45,19 +45,19 @@ class InventorySlRequest
 
   def self.give_inventory(inventory_id, avatar_name)
     inventory = Analyzable::Inventory.find(inventory_id)
-    server = inventory.server
+    target_server = inventory.server
     
-    Rails.logger.debug "Giving inventory #{inventory.inventory_name}"
+    # Rails.logger.debug "Giving inventory #{inventory.inventory_name}"
     
     RestClient::Request.execute(
-      url: "#{server.url}/inventory/give",
+      url: "#{target_server.url}/inventory/give",
       method: :post,
       content_type: :json,
       accept: :json,
       payload: { inventory_name: inventory.inventory_name,
                  avatar_name: avatar_name }.to_json,
       verify_ssl: false,
-      headers: request_headers(server)
+      headers: request_headers(target_server)
     ) unless Rails.env.development?
   end
 end

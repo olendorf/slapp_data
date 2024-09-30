@@ -15,8 +15,6 @@ Rails.application.configure do
     region_name = 'us-east-2'
 
     client = Aws::SecretsManager::Client.new(region: region_name)
-    # config.logger = Logger.new(STDOUT)
-    # config.log_level = :debug
 
     begin
       secret_value = client.get_secret_value(secret_id: secret_name)
@@ -49,6 +47,8 @@ Rails.application.configure do
   # it changes. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
   config.enable_reloading = true
+  
+  
 
   # Do not eager load code on boot.
   config.eager_load = false

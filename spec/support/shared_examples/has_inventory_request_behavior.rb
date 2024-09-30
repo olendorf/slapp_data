@@ -125,7 +125,8 @@ RSpec.shared_examples 'it has inventory request behavior' do |namespace|
                     avatar.avatar_name}\"}")
     server
 
-    visit(send("#{namespace}_inventory_path", inventory))
+    visit("#{namespace}/inventories/#{inventory.id}")
+    # visit(send("#{namespace}_inventories_path", inventory))
     fill_in('give_inventory-avatar_name', with: avatar.avatar_name)
     click_on 'Give Inventory'
     expect(page).to have_text("Inventory given to #{avatar.avatar_name}")
@@ -144,7 +145,8 @@ RSpec.shared_examples 'it has inventory request behavior' do |namespace|
                 inventory.inventory_name}\",\"avatar_name\":\"#{
                     avatar.avatar_name}\"}")
 
-    visit(send("#{namespace}_inventory_path", inventory))
+    visit("#{namespace}/inventories/#{inventory.id}")
+    # visit(send("#{namespace}_inventories_path", inventory))
     fill_in('give_inventory-avatar_name', with: avatar.avatar_name)
     click_on 'Give Inventory'
     expect(page).to have_text("Inventory given to #{avatar.avatar_name}")
@@ -164,7 +166,10 @@ RSpec.shared_examples 'it has inventory request behavior' do |namespace|
                 avatar.avatar_name}\"}")
       .to_return(body: 'foo', status: 400)
 
-    visit(send("#{namespace}_inventory_path", inventory))
+    visit("#{namespace}/inventories/#{inventory.id}")
+    # visit(send("#{namespace}_inventories_path", inventory))
+    # puts send("#{namespace}_inventories_path", inventory)
+    # puts body
     fill_in('give_inventory-avatar_name', with: avatar.avatar_name)
     click_on 'Give Inventory'
     expect(page).to have_text('Unable to give inventory: foo')
