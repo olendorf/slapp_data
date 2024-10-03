@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_05_134300) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_01_132904) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -69,6 +69,21 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_05_134300) do
     t.index ["inventory_name"], name: "index_analyzable_inventories_on_inventory_name"
     t.index ["inventory_type"], name: "index_analyzable_inventories_on_inventory_type"
     t.index ["user_id"], name: "index_analyzable_inventories_on_user_id"
+  end
+
+  create_table "analyzable_transactions", force: :cascade do |t|
+    t.integer "amount"
+    t.integer "balance"
+    t.integer "previous_balance"
+    t.integer "user_id"
+    t.string "target_key"
+    t.string "target_name"
+    t.string "description"
+    t.integer "transaction_type", default: 0
+    t.integer "abstract_web_object_id"
+    t.integer "web_object_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "avatars", force: :cascade do |t|

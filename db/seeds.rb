@@ -11,7 +11,6 @@
 #   end
 DatabaseCleaner.clean_with :truncation if Rails.env.development?
 
-
 avatars = FactoryBot.create_list(:avatar, 100)
 
 def give_servers_to_user(user)
@@ -24,7 +23,7 @@ def give_servers_to_user(user)
   end
 end
 
-def give_terminals_to_user(user, avatars)
+def give_terminals_to_user(user, _avatars)
   rand(3..10).times do
     terminal = FactoryBot.build(:terminal)
     user.web_objects << terminal
@@ -40,7 +39,7 @@ def give_terminals_to_user(user, avatars)
 end
 
 # Create an owner
-puts "Creating Owner"
+puts 'Creating Owner'
 owner = FactoryBot.create(:owner, avatar_name: 'Random Citizen')
 give_servers_to_user(owner)
 give_terminals_to_user(owner, avatars)
@@ -62,7 +61,7 @@ end
 100.times do |i|
   user = FactoryBot.create(:user, avatar_name: "User_#{i} Resident",
                                   account_level: rand(1..5))
-  puts "Creating user: #{user.avatar_name}" 
+  puts "Creating user: #{user.avatar_name}"
   objects = rand(0..user.account_level - 1)
   give_servers_to_user(user)
   objects.times do

@@ -14,6 +14,9 @@ class User < ApplicationRecord
                          after_add: :increment_caches
   has_many :inventories, class_name: 'Analyzable::Inventory',
                          dependent: :destroy
+  has_many :transactions, class_name: 'Analyzable::Transaction',
+                          dependent: :destroy,
+                          before_add: :update_balance
 
   def email_required?
     false
@@ -99,5 +102,16 @@ class User < ApplicationRecord
     errors.add :password,
                'Complexity requirement not met. Please use: " + "
                1 uppercase, 1 lowercase, 1 digit and 1 special character.'
+  end
+
+  def update_balance(transaction)
+    previous_transaction = transactions.last
+    if previous_transaction.nil?
+      transaction.previous_balance = 0
+      transaction.balance = transaction.amount
+    else
+      transaction.previous_balance = previous_transaction.balance
+      transaction.balance = previous_transaction.balance + transaction.amount
+    end
   end
 end

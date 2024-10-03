@@ -39,3 +39,5 @@ Metrics/MethodLength:
   
 Metrics/AbcSize:
   Max: 30
+  Exclude:
+    - app/controllers/concerns/**/*

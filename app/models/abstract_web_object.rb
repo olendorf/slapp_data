@@ -10,6 +10,8 @@ class AbstractWebObject < ApplicationRecord
   belongs_to :user, touch: true, required: false
   belongs_to :server, touch: true, required: false, class_name: 'Rezzable::Server'
 
+  has_many :transactions, class_name: 'Analyzable::Transaction', dependent: :nullify
+
   def object_weight
     actable.class::OBJECT_WEIGHT
   end

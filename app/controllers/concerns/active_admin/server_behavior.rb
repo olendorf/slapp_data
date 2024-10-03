@@ -9,35 +9,31 @@ module ActiveAdmin
     def self.included(base)
       base.controller do
         def update
-          begin
-            if params['rezzable_server']['inventories_attributes']
-              InventorySlRequest.batch_destroy(
-                extract_deleted_inventories(params.to_unsafe_h)
-              )
-            end
-            RezzableSlRequest.update_web_object!(
-              resource,
-              params[resource.class.name.underscore.gsub('/', '_')]
+          if params['rezzable_server']['inventories_attributes']
+            InventorySlRequest.batch_destroy(
+              extract_deleted_inventories(params.to_unsafe_h)
             )
-            super
-          rescue RestClient::ExceptionWithResponse => e
-            flash[:error] = t('active_admin.web_object.update.failure',
-                              message: e.response)
-            parts = request.url.split('/')[3, 2]
-            redirect_back(fallback_location: send("#{parts.first}_servers_path"))
           end
+          RezzableSlRequest.update_web_object!(
+            resource,
+            params[resource.class.name.underscore.gsub('/', '_')]
+          )
+          super
+        rescue RestClient::ExceptionWithResponse => e
+          flash[:error] = t('active_admin.web_object.update.failure',
+                            message: e.response)
+          parts = request.url.split('/')[3, 2]
+          redirect_back(fallback_location: send("#{parts.first}_servers_path"))
         end
 
         def destroy
-          begin
-            RezzableSlRequest.derez_web_object!(resource)
-            super
-          rescue RestClient::ExceptionWithResponse => e
-            flash[:error] = t('active_admin.web_object.destroy.failure',
-                              message: e.response)
-            parts = request.url.split('/')[3, 2]
-            super
-          end
+          RezzableSlRequest.derez_web_object!(resource)
+          super
+        rescue RestClient::ExceptionWithResponse => e
+          flash[:error] = t('active_admin.web_object.destroy.failure',
+                            message: e.response)
+          request.url.split('/')[3, 2]
+          super
         end
 
         def extract_deleted_inventories(params)

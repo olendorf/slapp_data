@@ -21,6 +21,12 @@ RSpec.describe User, type: :model do
   }
 
   it {
+    should have_many(:transactions)
+      .class_name('Analyzable::Transaction')
+      .dependent(:destroy)
+  }
+
+  it {
     should have_many(
       :inventories
     ).class_name('Analyzable::Inventory').dependent(:destroy)
