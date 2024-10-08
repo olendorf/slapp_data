@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_01_132904) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_03_134000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -106,6 +106,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_01_132904) do
   end
 
   create_table "rezzable_web_objects", force: :cascade do |t|
+  end
+
+  create_table "splits", force: :cascade do |t|
+    t.integer "percent"
+    t.string "target_key"
+    t.string "target_name"
+    t.integer "splittable_id"
+    t.string "splittable_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

@@ -40,5 +40,12 @@ RSpec.describe 'Api::V1::Analyzable::Inventories', type: :request do
         post path, params: attributes.to_json, headers: headers(web_object)
       end.to change(web_object.transactions, :count).by(1)
     end
+    
+    context 'when there are splits' do 
+      before(:each) do 
+        # split = FactoryBot.build :split, 
+      end
+    end
   end
+  
 end

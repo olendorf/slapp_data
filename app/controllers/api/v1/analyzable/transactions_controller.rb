@@ -13,7 +13,7 @@ module Api
             }
           )
           atts.permit!
-          transaction = Analyzable::Transaction.new(atts)
+          transaction = ::Analyzable::Transaction.new(atts)
           @object_owner.transactions << transaction
           render json: { message: 'CREATED' }, status: :created
         end
