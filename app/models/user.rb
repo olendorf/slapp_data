@@ -16,7 +16,8 @@ class User < ApplicationRecord
                          dependent: :destroy
   has_many :transactions, class_name: 'Analyzable::Transaction',
                           dependent: :destroy,
-                          before_add: :update_balance
+                          before_add: :update_balance,
+                          after_add: :handle_splits
   has_many :splits, dependent: :destroy, as: :splittable
 
   def email_required?
@@ -85,6 +86,14 @@ class User < ApplicationRecord
     web_object_weight + object_weight <=
       Settings.default.account.weight_limit
   end
+  
+  def current_balance
+    if transactions.count == 0
+      0
+    else
+      transactions.last.balance
+    end
+  end
 
   private
 
@@ -114,5 +123,35 @@ class User < ApplicationRecord
       transaction.previous_balance = previous_transaction.balance
       transaction.balance = previous_transaction.balance + transaction.amount
     end
+  end
+  
+  def handle_splits(transaction)
+    return if transaction.transaction_type == :share || transaction.amount <= 0
+
+    splits.each do |share|
+      handle_split(transaction, share)
+    end
+  end
+  
+  
+  def handle_split(transaction, share)
+    server = servers.sample
+    return unless server
+
+    amount = (share.percent / 100.0 * transaction.amount).round
+    # ServerSlRequest.send_money(server,
+    #                           share.target_name,
+    #                           amount)
+    # add_transaction_to_user(transaction, amount, share)
+    transaction = Analyzable::Transaction.new(
+      amount: amount * -1,
+      target_key: share.target_key,
+      target_name: share.target_name,
+      description: "Split paid to #{share.target_name}",
+      transaction_type: :share
+      )
+    self.transactions << transaction
+    # target = User.find_by_avatar_key(share.target_key)
+    # add_transaction_to_target(target, amount) if target
   end
 end

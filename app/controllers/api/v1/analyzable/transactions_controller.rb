@@ -9,12 +9,13 @@ module Api
           authorize [:api, :v1, @requesting_object.actable]
           atts = params['transaction'].merge(
             {
-              abstract_web_object_id: @requesting_object.id
+              # abstract_web_object_id: @requesting_object.id
             }
           )
           atts.permit!
           transaction = ::Analyzable::Transaction.new(atts)
           @object_owner.transactions << transaction
+          @requesting_object.transactions << transaction
           render json: { message: 'CREATED' }, status: :created
         end
       end

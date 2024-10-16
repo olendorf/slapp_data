@@ -5,11 +5,11 @@ require 'rails_helper'
 RSpec.describe Analyzable::Transaction, type: :model do
   it { should belong_to :user }
 
-  it { should belong_to :abstract_web_object }
+  it { should belong_to(:abstract_web_object).optional(:true) }
 
   it {
     should define_enum_for(:transaction_type)
-      .with_values(other: 0, account: 1)
+      .with_values(other: 0, account: 1, share: 2)
   }
 
   let(:user) { FactoryBot.create :user }

@@ -31,6 +31,8 @@ RSpec.describe User, type: :model do
       :inventories
     ).class_name('Analyzable::Inventory').dependent(:destroy)
   }
+  
+  it { should have_many(:splits).dependent(:destroy) }
 
   describe '.servers' do
     it 'should return the correct number of servers' do
@@ -151,6 +153,25 @@ RSpec.describe User, type: :model do
       user.web_objects.last.destroy
       expect(user.web_object_weight)
         .to eq old_weight - web_object.object_weight
+    end
+  end
+  
+  describe 'adding transactions with splits' do 
+    before(:each) do 
+      user.web_objects << FactoryBot.build(:server)
+      user.splits << FactoryBot.build(:split, percent: 10)
+      user.splits << FactoryBot.build(:split, percent: 15)
+    end
+    
+    it 'should add the splits' do
+      expect do 
+        user.transactions << FactoryBot.build(:transaction, amount: 100)
+      end.to change(user.transactions, :count).by(3)
+    end
+    
+    it 'should result in the correct balance' do 
+      user.transactions << FactoryBot.build(:transaction, amount: 100)
+      expect(user.current_balance).to eq 75
     end
   end
 end

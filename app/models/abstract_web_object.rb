@@ -10,7 +10,9 @@ class AbstractWebObject < ApplicationRecord
   belongs_to :user, touch: true, required: false
   belongs_to :server, touch: true, required: false, class_name: 'Rezzable::Server'
 
-  has_many :transactions, class_name: 'Analyzable::Transaction', dependent: :nullify
+  has_many :transactions, class_name: 'Analyzable::Transaction', 
+                          dependent: :nullify,
+                          after_add: :handle_splits
   has_many :splits, dependent: :destroy, as: :splittable
 
   def object_weight
@@ -35,5 +37,36 @@ class AbstractWebObject < ApplicationRecord
 
   def set_api_key
     self.api_key ||= SecureRandom.uuid
+  end
+  
+  def handle_splits(transaction)
+    return if transaction.transaction_type == :share || transaction.amount <= 0
+
+    splits.each do |share|
+      handle_split(transaction, share)
+    end
+  end
+  
+  
+  def handle_split(transaction, share)
+    server = self.user.servers.sample
+    return unless server
+
+    amount = (share.percent / 100.0 * transaction.amount).round
+    # ServerSlRequest.send_money(server,
+    #                           share.target_name,
+    #                           amount)
+    # add_transaction_to_user(transaction, amount, share)
+    transaction = Analyzable::Transaction.new(
+      amount: amount * -1,
+      target_key: share.target_key,
+      target_name: share.target_name,
+      description: "Split paid to #{share.target_name}",
+      transaction_type: :share
+      )
+    self.user.transactions << transaction
+    self.transactions << transaction
+    # target = User.find_by_avatar_key(share.target_key)
+    # add_transaction_to_target(target, amount) if target
   end
 end
