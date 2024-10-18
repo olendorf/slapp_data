@@ -8,6 +8,11 @@ class User < ApplicationRecord
          :timeoutable, :trackable
 
   validate :password_complexity
+  
+  attr_accessor :account_payment
+  
+  before_update :handle_account_payment!, if: :account_payment
+  before_update :adjust_expiration_date!, if: :will_save_change_to_account_level?
 
   has_many :web_objects, class_name: 'AbstractWebObject',
                          dependent: :destroy,
@@ -153,5 +158,24 @@ class User < ApplicationRecord
     self.transactions << transaction
     # target = User.find_by_avatar_key(share.target_key)
     # add_transaction_to_target(target, amount) if target
+  end
+  
+  def handle_account_payment!
+    update_column(:account_level, 1) if account_level.zero? && account_payment > 0
+    
+    added_time = (account_payment.to_f/(Settings.default.account.monthly_cost * self.account_level)) * 1.month.to_i
+    
+    self.expiration_date = self.expiration_date + added_time
+    self.account_payment = nil
+    self.save
+  end
+  
+  def adjust_expiration_date!
+    return if will_save_change_to_expiration_date?
+    update_column(:expiration_date, Time.now) and return if account_level.zero?
+
+    update_column(:expiration_date,
+                  Time.now + ((expiration_date - Time.now) *
+                  (account_level_was.to_f / account_level)))
   end
 end

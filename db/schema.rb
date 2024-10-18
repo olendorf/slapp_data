@@ -131,7 +131,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_03_134000) do
     t.string "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "expiration_date"
+    t.datetime "expiration_date"
     t.integer "web_object_count", default: 0
     t.integer "web_object_weight", default: 0
     t.integer "account_level", default: 1

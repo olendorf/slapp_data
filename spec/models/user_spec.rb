@@ -174,4 +174,102 @@ RSpec.describe User, type: :model do
       expect(user.current_balance).to eq 75
     end
   end
+  
+  describe 'account payments' do 
+    context 'new account' do 
+      let(:new_user) { FactoryBot.create :user, expiration_date: Time.now }
+      
+      let(:requesting_object) do 
+        requesting_object = FactoryBot.build :web_object
+        owner.web_objects << requesting_object
+        requesting_object
+      end
+      
+      it 'should set the account level to 1' do
+        
+        amount = Settings.default.account.monthly_cost
+        
+        user.update(account_payment: amount)
+        
+        expect(user.reload.account_level).to eq 1
+      end
+      
+      it 'should update the expiration_date' do 
+        amount = Settings.default.account.monthly_cost * 3
+        expected_date = new_user.expiration_date + (3.months.to_i)
+        new_user.update(account_payment: amount)
+        expect(new_user.expiration_date).to be_within(2.seconds).of(expected_date)
+      end
+    end
+    
+    context 'account level 1 ' do 
+      let(:existing_user) { FactoryBot.create :user, account_level: 1}
+      
+      let(:requesting_object) do 
+        requesting_object = FactoryBot.build :web_object
+        owner.web_objects << requesting_object
+        requesting_object
+      end
+      
+      it 'should update the expiration date' do 
+        amount = Settings.default.account.monthly_cost * 3
+        expected_date = existing_user.expiration_date + (3.months.to_i)
+        existing_user.update(account_payment: amount)
+        expect(existing_user.expiration_date).to be_within(2.seconds).of(expected_date)
+        
+      end
+      
+    end
+    
+    context 'account level 3' do 
+      let(:existing_user) { FactoryBot.create :user, account_level: 3}
+      
+      let(:requesting_object) do 
+        requesting_object = FactoryBot.build :web_object
+        owner.web_objects << requesting_object
+        requesting_object
+      end
+      
+      it 'should update the expiration date' do 
+        amount = Settings.default.account.monthly_cost * 3
+        expected_date = existing_user.expiration_date + (amount.to_f/(Settings.default.account.monthly_cost * existing_user.account_level)) * 1.month.to_i
+        existing_user.update(account_payment: amount)
+        expect(existing_user.expiration_date).to be_within(2.seconds).of(expected_date)
+        
+      end
+    end
+  end
+  
+  
+  
+  describe 'changing account level' do 
+    
+    context 'changing account level up' do
+      let(:current_user) { FactoryBot.create :user, account_level: 1, expiration_date: 3.months.from_now }
+      
+      it 'should change the expiration date correctly' do
+        expected_date = Time.now + (current_user.expiration_date - Time.now) * (current_user.account_level.to_f/2)
+        
+        current_user.account_level = 2
+        current_user.save
+      
+        
+        expect(current_user.expiration_date).to be_within(2).of(expected_date)
+      end
+    end
+    
+    context 'changing account level down' do 
+      let(:current_user) { FactoryBot.create :user, account_level: 3, expiration_date: 3.months.from_now }
+      it 'should change the expiration date correctly' do
+        expected_date = Time.now + (current_user.expiration_date - Time.now) * (current_user.account_level.to_f/1)
+        
+        current_user.account_level = 1
+        current_user.save
+      
+        
+        expect(current_user.expiration_date).to be_within(2).of(expected_date)
+      end
+    end
+    
+  end
 end

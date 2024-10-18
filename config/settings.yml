@@ -6,3 +6,10 @@ default:
     time_limit: 30
   account:
     weight_limit: 100
+    payment_schedule:    
+    monthly_cost: 300
+    discount_schedule: 
+      1: 0.0
+      3: 0.05
+      6: 0.1
+      12: 0.15

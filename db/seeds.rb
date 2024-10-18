@@ -68,7 +68,7 @@ end
     server = user.servers.sample
     web_object = FactoryBot.build :web_object, server_id: server.id
     user.web_objects << web_object
-    puts user.web_object_weight
+    # puts user.web_object_weight
   end
   # puts "acount level: #{user.account_level}: objects: #{objects} - object_weight: #{user.web_object_weight}"
 end
