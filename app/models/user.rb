@@ -9,7 +9,7 @@ class User < ApplicationRecord
 
   validate :password_complexity
   
-  attr_accessor :account_payment
+  attr_accessor :account_payment, :requesting_object
   
   before_update :handle_account_payment!, if: :account_payment
   before_update :adjust_expiration_date!, if: :will_save_change_to_account_level?
@@ -160,16 +160,32 @@ class User < ApplicationRecord
     # add_transaction_to_target(target, amount) if target
   end
   
+  # rubocop:disable Metrics/AbcSize
   def handle_account_payment!
-    update_column(:account_level, 1) if account_level.zero? && account_payment > 0
-    
-    added_time = (account_payment.to_f/(Settings.default.account.monthly_cost * self.account_level)) * 1.month.to_i
-    
-    self.expiration_date = self.expiration_date + added_time
-    self.account_payment = nil
-    self.save
+    update_column(:account_level, 1) if account_level.zero?
+    added_time = account_payment.to_f / (
+                        account_level * Settings.default.account.monthly_cost)
+    self.expiration_date = Time.now if
+      expiration_date.nil? || expiration_date < Time.now
+    self.expiration_date = expiration_date + (1.month.to_i * added_time)
+    add_account_transaction_to_target(self, requesting_object, account_payment * -1)
+    add_account_transaction_to_target(requesting_object.user, requesting_object, account_payment)
   end
-  
+  # rubocop:enable Metrics/AbcSize
+
+  def add_account_transaction_to_target(target, requesting_object, amount)
+    target.transactions << ::Analyzable::Transaction.new(
+      amount: amount,
+      target_key: requesting_object.user.avatar_key,
+      target_name: requesting_object.user.avatar_name,
+      abstract_web_object_id: requesting_object.id,
+      web_object_type: requesting_object.class.name,
+      # source_type: 'terminal',
+      transaction_type: :account,
+      description: "Account payment from #{self.avatar_name}."
+    )
+  end
+
   def adjust_expiration_date!
     return if will_save_change_to_expiration_date?
     update_column(:expiration_date, Time.now) and return if account_level.zero?

@@ -189,7 +189,7 @@ RSpec.describe User, type: :model do
         
         amount = Settings.default.account.monthly_cost
         
-        user.update(account_payment: amount)
+        user.update(account_payment: amount, requesting_object: requesting_object)
         
         expect(user.reload.account_level).to eq 1
       end
@@ -197,9 +197,24 @@ RSpec.describe User, type: :model do
       it 'should update the expiration_date' do 
         amount = Settings.default.account.monthly_cost * 3
         expected_date = new_user.expiration_date + (3.months.to_i)
-        new_user.update(account_payment: amount)
+        new_user.update(account_payment: amount, requesting_object: requesting_object)
         expect(new_user.expiration_date).to be_within(2.seconds).of(expected_date)
       end
+      
+      it 'should add the transaction to the owner' do 
+        amount = Settings.default.account.monthly_cost * 3
+        expect do
+          new_user.update(account_payment: amount, requesting_object: requesting_object)
+        end.to change(owner.transactions, :count).by(1)
+      end
+      
+      it 'should add the transaction to the user' do 
+        amount = Settings.default.account.monthly_cost * 3
+        expect  do 
+          new_user.update(account_payment: amount, requesting_object: requesting_object)
+        end.to change(new_user.transactions, :count).by(1)
+      end
+    
     end
     
     context 'account level 1 ' do 
@@ -214,9 +229,23 @@ RSpec.describe User, type: :model do
       it 'should update the expiration date' do 
         amount = Settings.default.account.monthly_cost * 3
         expected_date = existing_user.expiration_date + (3.months.to_i)
-        existing_user.update(account_payment: amount)
+        existing_user.update(account_payment: amount, requesting_object: requesting_object)
         expect(existing_user.expiration_date).to be_within(2.seconds).of(expected_date)
         
+      end      
+      
+      it 'should add the transaction to the owner' do 
+        amount = Settings.default.account.monthly_cost * 3
+        expect do
+          existing_user.update(account_payment: amount, requesting_object: requesting_object)
+        end.to change(owner.transactions, :count).by(1)
+      end
+      
+      it 'should add the transaction to the user' do 
+        amount = Settings.default.account.monthly_cost * 3
+        expect  do 
+          existing_user.update(account_payment: amount, requesting_object: requesting_object)
+        end.to change(existing_user.transactions, :count).by(1)
       end
       
     end
@@ -233,9 +262,24 @@ RSpec.describe User, type: :model do
       it 'should update the expiration date' do 
         amount = Settings.default.account.monthly_cost * 3
         expected_date = existing_user.expiration_date + (amount.to_f/(Settings.default.account.monthly_cost * existing_user.account_level)) * 1.month.to_i
-        existing_user.update(account_payment: amount)
+        existing_user.update(account_payment: amount, requesting_object: requesting_object)
         expect(existing_user.expiration_date).to be_within(2.seconds).of(expected_date)
         
+      end
+      
+            
+      it 'should add the transaction to the owner' do 
+        amount = Settings.default.account.monthly_cost * 3
+        expect do
+          existing_user.update(account_payment: amount, requesting_object: requesting_object)
+        end.to change(owner.transactions, :count).by(1)
+      end
+      
+      it 'should add the transaction to the user' do 
+        amount = Settings.default.account.monthly_cost * 3
+        expect  do 
+          existing_user.update(account_payment: amount, requesting_object: requesting_object)
+        end.to change(existing_user.transactions, :count).by(1)
       end
     end
   end
