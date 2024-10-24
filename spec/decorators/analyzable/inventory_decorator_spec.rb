@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Analyzable::InventoryDecorator do
-  
   describe :pretty_owner_perms do
     context 'copy trans' do
       it 'returns the right text' do

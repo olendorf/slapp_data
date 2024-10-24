@@ -1,5 +1,6 @@
-ActiveAdmin.register Analyzable::Inventory, as: 'Inventory' do
+# frozen_string_literal: true
 
+ActiveAdmin.register Analyzable::Inventory, as: 'Inventory' do
   include ActiveAdmin::InventoryBehavior
 
   menu label: 'Inventory'
@@ -7,7 +8,7 @@ ActiveAdmin.register Analyzable::Inventory, as: 'Inventory' do
   decorate_with Analyzable::InventoryDecorator
 
   actions :all, except: %i[new create]
-  
+
   index title: 'Inventory' do
     selectable_column
     column 'Name' do |inventory|
@@ -56,10 +57,9 @@ ActiveAdmin.register Analyzable::Inventory, as: 'Inventory' do
   filter :inventory_type, as: :select, collection: Analyzable::Inventory.inventory_types
   filter :created_at, as: :date_range
   filter :updated_at, as: :date_range
-  
-  
+
   sidebar :give_inventory, partial: 'give_inventory_form', only: %i[show edit]
-  
+
   show title: :inventory_name do
     attributes_table do
       row 'Name', &:inventory_name
@@ -109,21 +109,23 @@ ActiveAdmin.register Analyzable::Inventory, as: 'Inventory' do
     # end
   end
   # See permitted parameters documentation:
-  # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
   #
   # Uncomment all parameters which should be permitted for assignment
   #
-  # permit_params :inventory_name, :description, :owner_perms, :next_perms, :user_id, :server_id, :inventory_type, :creator_name, :creator_key, :date_acquired
+  # permit_params :inventory_name, :description, :owner_perms, :next_perms,
+  #               :user_id, :server_id, :inventory_type, :creator_name,
+  #               :creator_key, :date_acquired
   #
   # or
   #
   # permit_params do
-  #   permitted = [:inventory_name, :description, :owner_perms, :next_perms, :user_id, :server_id, :inventory_type, :creator_name, :creator_key, :date_acquired]
+  #   permitted = [:inventory_name, :description, :owner_perms, :next_perms,
+  #                 :user_id, :server_id, :inventory_type, :creator_name,
+  #                 :creator_key, :date_acquired]
   #   permitted << :other if params[:action] == 'create' && current_user.admin?
   #   permitted
   # end
-  
-  
+
   permit_params :server_id, :price, :inventory_description
 
   form title: proc { "Edit #{resource.inventory_name}" } do |f|
@@ -141,7 +143,7 @@ ActiveAdmin.register Analyzable::Inventory, as: 'Inventory' do
       f.cancel_link(action: 'show')
     end
   end
-  
+
   controller do
     def scoped_collection
       super.includes(%i[server user])
@@ -180,5 +182,4 @@ ActiveAdmin.register Analyzable::Inventory, as: 'Inventory' do
       super
     end
   end
-  
 end

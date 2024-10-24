@@ -3,8 +3,8 @@
 module Api
   module V1
     module Rezzable
+      # Controller for api requests from in world servers
       class ServersController < Api::V1::RezzableController
-        
         def index
           authorize [:api, :v1, @requesting_object.actable]
 
@@ -14,9 +14,9 @@ module Api
           data = paged_data(page)
           render json: { data: }, status: :ok
         end
-        
-        
-        private 
+
+        private
+
         def paged_data(page)
           {
             server_names: page.map(&:object_name),

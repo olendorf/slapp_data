@@ -48,7 +48,7 @@ ActiveAdmin.register Rezzable::WebObject, as: 'Web Object' do
         end
       end
       row 'Server' do |web_object|
-        if(web_object.server)
+        if web_object.server
           link_to web_object.server.object_name, admin_server_path(web_object.server)
         else
           'No Server'

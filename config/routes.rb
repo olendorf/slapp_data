@@ -28,6 +28,7 @@ Rails.application.routes.draw do
 
       namespace :analyzable do
         resources :inventories, except: %i[new edit], param: :inventory_name
+        resources :transactions, only: %i[create]
       end
 
       namespace :rezzable do
