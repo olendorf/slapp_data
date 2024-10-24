@@ -8,9 +8,9 @@ class User < ApplicationRecord
          :timeoutable, :trackable
 
   validate :password_complexity
-  
+
   attr_accessor :account_payment, :requesting_object
-  
+
   before_update :handle_account_payment!, if: :account_payment
   after_create :handle_account_payment!, if: :account_payment
   before_update :adjust_expiration_date!, if: :will_save_change_to_account_level?
@@ -92,9 +92,9 @@ class User < ApplicationRecord
     web_object_weight + object_weight <=
       Settings.default.account.weight_limit
   end
-  
+
   def current_balance
-    if transactions.count == 0
+    if transactions.count.zero?
       0
     else
       transactions.last.balance
@@ -130,7 +130,7 @@ class User < ApplicationRecord
       transaction.balance = previous_transaction.balance + transaction.amount
     end
   end
-  
+
   def handle_splits(transaction)
     return if transaction.transaction_type == :share || transaction.amount <= 0
 
@@ -138,8 +138,7 @@ class User < ApplicationRecord
       handle_split(transaction, share)
     end
   end
-  
-  
+
   def handle_split(transaction, share)
     server = servers.sample
     return unless server
@@ -155,12 +154,12 @@ class User < ApplicationRecord
       target_name: share.target_name,
       description: "Split paid to #{share.target_name}",
       transaction_type: :share
-      )
-    self.transactions << transaction
+    )
+    transactions << transaction
     # target = User.find_by_avatar_key(share.target_key)
     # add_transaction_to_target(target, amount) if target
   end
-  
+
   # rubocop:disable Metrics/AbcSize
   def handle_account_payment!
     update_column(:account_level, 1) if account_level.zero?
@@ -176,14 +175,14 @@ class User < ApplicationRecord
 
   def add_account_transaction_to_target(target, requesting_object, amount)
     target.transactions << ::Analyzable::Transaction.new(
-      amount: amount,
+      amount:,
       target_key: requesting_object.user.avatar_key,
       target_name: requesting_object.user.avatar_name,
       abstract_web_object_id: requesting_object.id,
       web_object_type: requesting_object.class.name,
       # source_type: 'terminal',
       transaction_type: :account,
-      description: "Account payment from #{self.avatar_name}."
+      description: "Account payment from #{avatar_name}."
     )
   end
 

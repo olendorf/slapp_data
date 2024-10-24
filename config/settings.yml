@@ -5,8 +5,7 @@ default:
   request:
     time_limit: 30
   account:
-    weight_limit: 100
-    payment_schedule:    
+    weight_limit: 100 
     monthly_cost: 300
     discount_schedule: 
       1: 0.0

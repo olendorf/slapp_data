@@ -79,7 +79,6 @@ RSpec.describe 'Api::V1::Users', type: :request do
         expect(response).to have_http_status(:unprocessable_content)
       end
     end
-    
   end
 
   describe 'GET' do

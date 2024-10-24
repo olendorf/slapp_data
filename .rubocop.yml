@@ -32,6 +32,11 @@ Metrics/BlockLength:
     - app/models/concerns/**/*
     - app/services/concerns/**/*
     
+Metrics/ClassLength:
+  Max: 150
+  Exclude:
+    - app/models/user.rb
+    
 Metrics/MethodLength:
   Max: 20
   Exclude:
