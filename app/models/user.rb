@@ -9,11 +9,22 @@ class User < ApplicationRecord
 
   validate :password_complexity
 
+  attr_accessor :account_payment, :requesting_object
+
+  before_update :handle_account_payment!, if: :account_payment
+  after_create :handle_account_payment!, if: :account_payment
+  before_update :adjust_expiration_date!, if: :will_save_change_to_account_level?
+
   has_many :web_objects, class_name: 'AbstractWebObject',
                          dependent: :destroy,
                          after_add: :increment_caches
   has_many :inventories, class_name: 'Analyzable::Inventory',
                          dependent: :destroy
+  has_many :transactions, class_name: 'Analyzable::Transaction',
+                          dependent: :destroy,
+                          before_add: :update_balance,
+                          after_add: :handle_splits
+  has_many :splits, dependent: :destroy, as: :splittable
 
   def email_required?
     false
@@ -82,6 +93,14 @@ class User < ApplicationRecord
       Settings.default.account.weight_limit
   end
 
+  def current_balance
+    if transactions.count.zero?
+      0
+    else
+      transactions.last.balance
+    end
+  end
+
   private
 
   def increment_caches(web_object)
@@ -99,5 +118,80 @@ class User < ApplicationRecord
     errors.add :password,
                'Complexity requirement not met. Please use: " + "
                1 uppercase, 1 lowercase, 1 digit and 1 special character.'
+  end
+
+  def update_balance(transaction)
+    previous_transaction = transactions.last
+    if previous_transaction.nil?
+      transaction.previous_balance = 0
+      transaction.balance = transaction.amount
+    else
+      transaction.previous_balance = previous_transaction.balance
+      transaction.balance = previous_transaction.balance + transaction.amount
+    end
+  end
+
+  def handle_splits(transaction)
+    return if transaction.transaction_type == :share || transaction.amount <= 0
+
+    splits.each do |share|
+      handle_split(transaction, share)
+    end
+  end
+
+  def handle_split(transaction, share)
+    server = servers.sample
+    return unless server
+
+    amount = (share.percent / 100.0 * transaction.amount).round
+    # ServerSlRequest.send_money(server,
+    #                           share.target_name,
+    #                           amount)
+    # add_transaction_to_user(transaction, amount, share)
+    transaction = Analyzable::Transaction.new(
+      amount: amount * -1,
+      target_key: share.target_key,
+      target_name: share.target_name,
+      description: "Split paid to #{share.target_name}",
+      transaction_type: :share
+    )
+    transactions << transaction
+    # target = User.find_by_avatar_key(share.target_key)
+    # add_transaction_to_target(target, amount) if target
+  end
+
+  # rubocop:disable Metrics/AbcSize
+  def handle_account_payment!
+    update_column(:account_level, 1) if account_level.zero?
+    added_time = account_payment.to_f / (
+                        account_level * Settings.default.account.monthly_cost)
+    self.expiration_date = Time.now if
+      expiration_date.nil? || expiration_date < Time.now
+    self.expiration_date = expiration_date + (1.month.to_i * added_time)
+    add_account_transaction_to_target(self, requesting_object, account_payment * -1)
+    add_account_transaction_to_target(requesting_object.user, requesting_object, account_payment)
+  end
+  # rubocop:enable Metrics/AbcSize
+
+  def add_account_transaction_to_target(target, requesting_object, amount)
+    target.transactions << ::Analyzable::Transaction.new(
+      amount:,
+      target_key: requesting_object.user.avatar_key,
+      target_name: requesting_object.user.avatar_name,
+      abstract_web_object_id: requesting_object.id,
+      web_object_type: requesting_object.class.name,
+      # source_type: 'terminal',
+      transaction_type: :account,
+      description: "Account payment from #{avatar_name}."
+    )
+  end
+
+  def adjust_expiration_date!
+    return if will_save_change_to_expiration_date?
+    update_column(:expiration_date, Time.now) and return if account_level.zero?
+
+    update_column(:expiration_date,
+                  Time.now + ((expiration_date - Time.now) *
+                  (account_level_was.to_f / account_level)))
   end
 end

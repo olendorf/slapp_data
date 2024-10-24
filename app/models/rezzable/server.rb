@@ -10,8 +10,7 @@ module Rezzable
     has_many :inventories, class_name: 'Analyzable::Inventory',
                            dependent: :destroy,
                            before_add: :assign_user_to_inventory
-                           
-                           
+
     accepts_nested_attributes_for :inventories, allow_destroy: true
 
     def self.ransackable_associations(_auth_object = nil)

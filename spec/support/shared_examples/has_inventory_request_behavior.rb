@@ -3,7 +3,7 @@
 RSpec.shared_examples 'it has inventory request behavior' do |namespace|
   let(:owner) { FactoryBot.create :owner }
   let(:user) { FactoryBot.create :user }
-  let(:server) {
+  let(:server) do
     server = FactoryBot.build :server, user_id: user.id
     server.save
     server.inventories << FactoryBot.build(:inventory)
@@ -11,12 +11,12 @@ RSpec.shared_examples 'it has inventory request behavior' do |namespace|
     server.inventories << FactoryBot.build(:inventory)
     server.inventories << FactoryBot.build(:inventory)
     server
-  }
-  let(:server_two) {
+  end
+  let(:server_two) do
     server = FactoryBot.build :server, user_id: user.id
     server.save
     server
-  }
+  end
 
   let(:avatar) { FactoryBot.create :avatar }
   # let(:uri_regex) do
@@ -71,8 +71,8 @@ RSpec.shared_examples 'it has inventory request behavior' do |namespace|
     server
 
     stub = stub_request(:put, move_regex).with(
-      body: "{\"target_key\":\"#{server_two.object_key}\"," + 
-             "\"inventory_name\":\"#{server.inventories.first.inventory_name}\"}" 
+      body: "{\"target_key\":\"#{server_two.object_key}\"," \
+            "\"inventory_name\":\"#{server.inventories.first.inventory_name}\"}"
     )
 
     visit(send("edit_#{namespace}_inventory_path", server.inventories.first))
@@ -85,8 +85,8 @@ RSpec.shared_examples 'it has inventory request behavior' do |namespace|
     server
 
     stub_request(:put, move_regex).with(
-      body: "{\"target_key\":\"#{server_two.object_key}\"," + 
-             "\"inventory_name\":\"#{server.inventories.first.inventory_name}\"}"
+      body: "{\"target_key\":\"#{server_two.object_key}\"," \
+            "\"inventory_name\":\"#{server.inventories.first.inventory_name}\"}"
     ).to_return(body: 'foo', status: 400)
 
     visit(send("edit_#{namespace}_inventory_path", server.inventories.first))

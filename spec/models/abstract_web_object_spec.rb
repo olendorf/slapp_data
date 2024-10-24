@@ -19,6 +19,10 @@ RSpec.describe AbstractWebObject, type: :model do
       .touch(true)
   }
 
+  it { should have_many(:transactions).class_name('Analyzable::Transaction').dependent(:nullify) }
+
+  it { should have_many(:splits).dependent(:destroy) }
+
   it 'should set the api_key upon creation' do
     expect(web_object.api_key).to_not be_nil
   end

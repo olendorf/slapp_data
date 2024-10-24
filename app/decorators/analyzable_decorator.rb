@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Base decorator for analyzables
 class AnalyzableDecorator < Draper::Decorator
   delegate_all
 
@@ -9,5 +12,4 @@ class AnalyzableDecorator < Draper::Decorator
   #       object.created_at.strftime("%a %m/%d/%y")
   #     end
   #   end
-
 end

@@ -19,18 +19,18 @@ module Analyzable
       gesture: 21,
       setting: 56
     }
-    
-  def self.ransackable_attributes(auth_object = nil)
-    [
-      "created_at", "creator_key", "creator_name", "date_acquired", 
-      "description", "id", "id_value", "inventory_name", "inventory_type", 
-      "next_perms", "owner_perms", "server_id", "updated_at", "user_id"
-    ]
-  end
-  
-  def self.ransackable_associations(auth_object = nil)
-    ["server", "user"]
-  end
+
+    def self.ransackable_attributes(_auth_object = nil)
+      %w[
+        created_at creator_key creator_name date_acquired
+        description id id_value inventory_name inventory_type
+        next_perms owner_perms server_id updated_at user_id
+      ]
+    end
+
+    def self.ransackable_associations(_auth_object = nil)
+      %w[server user]
+    end
 
     # Some metaprogramming here to generate methods to determine
     # the perms of an inventory along the lines of owner_can_modify? or

@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe InventorySlRequest do
   let(:user) { FactoryBot.create :user }
-  let(:server) do 
+  let(:server) do
     server = FactoryBot.build :server, user_id: user.id
     server.save
     server
@@ -40,9 +40,9 @@ RSpec.describe InventorySlRequest do
     context 'error occurs' do
       it 'should raise an error' do
         stub_request(:delete, uri_regex).to_return(body: 'abc', status: 400)
-        expect {
+        expect do
           InventorySlRequest.delete_inventory(server.inventories.sample)
-        }.to raise_error(RestClient::ExceptionWithResponse)
+        end.to raise_error(RestClient::ExceptionWithResponse)
       end
     end
   end
@@ -57,7 +57,7 @@ RSpec.describe InventorySlRequest do
   end
 
   describe '.move_inventory' do
-    let(:server_two) do 
+    let(:server_two) do
       server = FactoryBot.build :server, user_id: user.id
       server.save
       server
@@ -73,9 +73,9 @@ RSpec.describe InventorySlRequest do
     context 'error occurs' do
       it 'should raise an error' do
         stub_request(:put, move_regex).to_return(body: 'abc', status: 400)
-        expect {
+        expect do
           InventorySlRequest.move_inventory(server.inventories.sample, server_two.id)
-        }.to raise_error(RestClient::ExceptionWithResponse)
+        end.to raise_error(RestClient::ExceptionWithResponse)
       end
     end
   end
@@ -96,11 +96,11 @@ RSpec.describe InventorySlRequest do
     context 'error occurs' do
       it 'should raise an error' do
         stub_request(:post, give_regex).to_return(body: 'abc', status: 400)
-        expect {
+        expect do
           InventorySlRequest.give_inventory(
             server.inventories.sample.id, SecureRandom.uuid
           )
-        }.to raise_error(RestClient::ExceptionWithResponse)
+        end.to raise_error(RestClient::ExceptionWithResponse)
       end
     end
   end
