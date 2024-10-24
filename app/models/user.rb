@@ -12,6 +12,7 @@ class User < ApplicationRecord
   attr_accessor :account_payment, :requesting_object
   
   before_update :handle_account_payment!, if: :account_payment
+  after_create :handle_account_payment!, if: :account_payment
   before_update :adjust_expiration_date!, if: :will_save_change_to_account_level?
 
   has_many :web_objects, class_name: 'AbstractWebObject',

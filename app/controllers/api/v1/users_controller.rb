@@ -10,7 +10,8 @@ module Api
 
       def create
         authorize [:api, :v1, User]
-        @user = User.new(parsed_params)
+        load_requesting_object
+        @user = User.new(parsed_params.merge(requesting_object: @requesting_object))
         @user.save!
 
         render json: {

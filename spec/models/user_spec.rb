@@ -155,6 +155,7 @@ RSpec.describe User, type: :model do
         .to eq old_weight - web_object.object_weight
     end
   end
+
   
   describe 'adding transactions with splits' do 
     before(:each) do 
@@ -177,7 +178,14 @@ RSpec.describe User, type: :model do
   
   describe 'account payments' do 
     context 'new account' do 
-      let(:new_user) { FactoryBot.create :user, expiration_date: Time.now }
+      let(:atts) do
+        
+        amount = Settings.default.account.monthly_cost * 3
+        FactoryBot.attributes_for :user, 
+                      account_payment: amount, 
+                      requesting_object: requesting_object,
+                      expiration_date: nil
+      end
       
       let(:requesting_object) do 
         requesting_object = FactoryBot.build :web_object
@@ -186,33 +194,25 @@ RSpec.describe User, type: :model do
       end
       
       it 'should set the account level to 1' do
-        
-        amount = Settings.default.account.monthly_cost
-        
-        user.update(account_payment: amount, requesting_object: requesting_object)
-        
-        expect(user.reload.account_level).to eq 1
+        user = User.create(atts)
+        expect(user.account_level).to eq 1
       end
       
       it 'should update the expiration_date' do 
-        amount = Settings.default.account.monthly_cost * 3
-        expected_date = new_user.expiration_date + (3.months.to_i)
-        new_user.update(account_payment: amount, requesting_object: requesting_object)
+        expected_date = Time.now + (3.months.to_i)
+        new_user = User.create(atts)
         expect(new_user.expiration_date).to be_within(2.seconds).of(expected_date)
       end
       
       it 'should add the transaction to the owner' do 
-        amount = Settings.default.account.monthly_cost * 3
         expect do
-          new_user.update(account_payment: amount, requesting_object: requesting_object)
+          User.create(atts)
         end.to change(owner.transactions, :count).by(1)
       end
       
       it 'should add the transaction to the user' do 
-        amount = Settings.default.account.monthly_cost * 3
-        expect  do 
-          new_user.update(account_payment: amount, requesting_object: requesting_object)
-        end.to change(new_user.transactions, :count).by(1)
+          new_user = User.create(atts)
+          expect(new_user.transactions.count).to eq 1
       end
     
     end
