@@ -26,7 +26,8 @@ module Api
           avatar_name: @user.avatar_name,
           avatar_key: @user.avatar_key,
           role: @user.role,
-          http_status: 'OK'
+          http_status: 'OK',
+          payment_schedule: payment_schedule
         }
         render json: data, status: :ok
       end
@@ -55,6 +56,15 @@ module Api
           message: I18n.t('api.user.destroy.success'),
           http_status: 'OK'
         }, status: :ok
+      end
+      
+      def payment_schedule
+        payment_schedule = {}
+        Settings.default.account.discount_schedule.each do |k, v|
+          payment_schedule[
+            ((monthly_cost - (monthly_cost * v).round) * (k.to_s.to_i))] = k 
+        end
+        payment_schedule
       end
 
       private
