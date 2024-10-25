@@ -62,8 +62,6 @@ module Api
         payment_schedule = {}
         monthly_cost = Settings.default.account.monthly_cost
         Settings.default.account.discount_schedule.each do |k, v|
-          payment_schedule[k] = 
-              ((monthly_cost - (monthly_cost * v).round) * (k.to_s.to_i))
           payment_schedule[((monthly_cost - (monthly_cost * v).round) * (k.to_s.to_i))] = k
         end
         payment_schedule
