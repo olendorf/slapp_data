@@ -82,8 +82,8 @@ module Api
 
       def load_user
         @user = User.find_by_avatar_key(params['avatar_key'])
-        raise ActionController::RoutingError, 
-                'User not found. Please try again.' if @user.nil?
+        # raise ActionController::RoutingError, 
+        #         'User not found. Please try again.' if @user.nil?
       end
     end
   end
