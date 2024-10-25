@@ -22,13 +22,20 @@ module Api
 
       def show
         authorize [:api, :v1, User]
-        data = {
-          avatar_name: @user.avatar_name,
-          avatar_key: @user.avatar_key,
-          role: @user.role,
-          http_status: 'OK',
-          payment_schedule: payment_schedule
-        }
+        if @user
+          data = {
+            avatar_name: @user.avatar_name,
+            avatar_key: @user.avatar_key,
+            role: @user.role,
+            http_status: 'OK',
+            payment_schedule: payment_schedule
+          }
+        else
+          data = {
+            http_status: 'OK',
+            payment_schedule: payment_schedule
+          }
+        end
         render json: data, status: :ok
       end
 
