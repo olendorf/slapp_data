@@ -100,6 +100,15 @@ class User < ApplicationRecord
       transactions.last.balance
     end
   end
+  
+  def self.payment_schedule
+    schedule = {}
+    monthly_cost = Settings.default.account.monthly_cost
+    Settings.default.account.discount_schedule.each do |k, v|
+      schedule[((monthly_cost - (monthly_cost * v).round) * (k.to_s.to_i))] = k.to_s.to_i
+    end
+    schedule
+  end
 
   private
 
@@ -160,16 +169,27 @@ class User < ApplicationRecord
     # add_transaction_to_target(target, amount) if target
   end
 
+# 2629746
+
   # rubocop:disable Metrics/AbcSize
   def handle_account_payment!
+    begin
+      added_time = User.payment_schedule[account_payment].month.to_i
+      self.expiration_date = Time.now if
+        expiration_date.nil? || expiration_date < Time.now
+      self.expiration_date = expiration_date + added_time
+      add_account_transaction_to_target(self, requesting_object, account_payment * -1)
+      add_account_transaction_to_target(requesting_object.user, requesting_object, account_payment)
+    rescue
+      raise InvalidPaymentException.new(
+              "Invalid Payment Exception",
+              "The payment amount, #{account_payment}, is not allowed. " + 
+              "The payment amount must be one of the suggested values."
+              )
+      
+    end
+    
     update_column(:account_level, 1) if account_level.zero?
-    added_time = account_payment.to_f / (
-                        account_level * Settings.default.account.monthly_cost)
-    self.expiration_date = Time.now if
-      expiration_date.nil? || expiration_date < Time.now
-    self.expiration_date = expiration_date + (1.month.to_i * added_time)
-    add_account_transaction_to_target(self, requesting_object, account_payment * -1)
-    add_account_transaction_to_target(requesting_object.user, requesting_object, account_payment)
   end
   # rubocop:enable Metrics/AbcSize
 

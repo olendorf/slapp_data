@@ -19,7 +19,7 @@ RSpec.describe 'Api::V1::Users', type: :request do
           avatar_key: '01234567-89ab-cdef-0123456789ab',
           password: 'Pa$$word123',
           password_confirmation: 'Pa$$word123',
-          account_payment: 900
+          account_payment: User.payment_schedule.keys[2]
         }
       end
 
@@ -35,9 +35,32 @@ RSpec.describe 'Api::V1::Users', type: :request do
           post path, params: user_params.to_json, headers: headers(
             sending_object, api_key: Settings.default.web_object.api_key
           )
+          
           # Changed by two because an owner has to be created too.
         end.to change { User.count }.by(2)
       end
+    end
+    
+    context 'invalid payment amount' do
+      let(:path) { api_users_path }
+      let(:user_params) do
+        {
+          avatar_name: 'Random Citzen',
+          avatar_key: '01234567-89ab-cdef-0123456789ab',
+          password: 'Pa$$word123',
+          password_confirmation: 'Pa$$word123',
+          account_payment: 100
+        }
+      end
+      
+      it 'should return unprocessable entity status' do 
+        post path, params: user_params.to_json, headers: headers(
+          sending_object, api_key: Settings.default.web_object.api_key
+        )
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      
     end
 
     context 'passwords mismatch' do
@@ -105,8 +128,17 @@ RSpec.describe 'Api::V1::Users', type: :request do
         let(:path) { api_user_path(SecureRandom.uuid) }
         before(:each) { get path, headers: headers(sending_object) }
 
-        it 'should return NOT FOUND status' do
-          expect(response).to have_http_status(:not_found)
+        it 'should return OK status' do
+          expect(response).to have_http_status(:ok)
+        end
+        
+        it 'should return the payment schedule' do 
+          expect(JSON.parse(response.body)['payment_schedule']).to include(
+            "300" => 1,
+            "855" => 3,
+            "1620" => 6,
+            "3060" => 12
+          )
         end
       end
     end

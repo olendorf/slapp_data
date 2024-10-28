@@ -28,12 +28,12 @@ module Api
             avatar_key: @user.avatar_key,
             role: @user.role,
             http_status: 'OK',
-            payment_schedule: payment_schedule
+            payment_schedule: User.payment_schedule
           }
         else
           data = {
             http_status: 'OK',
-            payment_schedule: payment_schedule
+            payment_schedule: User.payment_schedule
           }
         end
         render json: data, status: :ok
@@ -65,14 +65,14 @@ module Api
         }, status: :ok
       end
       
-      def payment_schedule
-        payment_schedule = {}
-        monthly_cost = Settings.default.account.monthly_cost
-        Settings.default.account.discount_schedule.each do |k, v|
-          payment_schedule[((monthly_cost - (monthly_cost * v).round) * (k.to_s.to_i))] = k
-        end
-        payment_schedule
-      end
+      # def payment_schedule
+      #   payment_schedule = {}
+      #   monthly_cost = Settings.default.account.monthly_cost
+      #   Settings.default.account.discount_schedule.each do |k, v|
+      #     payment_schedule[((monthly_cost - (monthly_cost * v).round) * (k.to_s.to_i))] = k
+      #   end
+      #   payment_schedule
+      # end
 
       private
 

@@ -178,7 +178,7 @@ RSpec.describe User, type: :model do
   describe 'account payments' do
     context 'new account' do
       let(:atts) do
-        amount = Settings.default.account.monthly_cost * 3
+        amount = User.payment_schedule.keys[1]
         FactoryBot.attributes_for :user,
                                   account_payment: amount,
                                   requesting_object:,
@@ -212,6 +212,11 @@ RSpec.describe User, type: :model do
         new_user = User.create(atts)
         expect(new_user.transactions.count).to eq 1
       end
+      
+      it 'should raise an error for an invalid amount' do
+        atts[:account_payment] = 100
+        expect{User.create(atts)}.to raise_error(InvalidPaymentException)
+      end
     end
 
     context 'account level 1 ' do
@@ -224,21 +229,21 @@ RSpec.describe User, type: :model do
       end
 
       it 'should update the expiration date' do
-        amount = Settings.default.account.monthly_cost * 3
+        amount = User.payment_schedule.keys[1]
         expected_date = existing_user.expiration_date + 3.months.to_i
         existing_user.update(account_payment: amount, requesting_object:)
         expect(existing_user.expiration_date).to be_within(2.seconds).of(expected_date)
       end
 
       it 'should add the transaction to the owner' do
-        amount = Settings.default.account.monthly_cost * 3
+        amount = User.payment_schedule.keys[1]
         expect do
           existing_user.update(account_payment: amount, requesting_object:)
         end.to change(owner.transactions, :count).by(1)
       end
 
       it 'should add the transaction to the user' do
-        amount = Settings.default.account.monthly_cost * 3
+        amount = User.payment_schedule.keys[1]
         expect do
           existing_user.update(account_payment: amount, requesting_object:)
         end.to change(existing_user.transactions, :count).by(1)
@@ -255,27 +260,36 @@ RSpec.describe User, type: :model do
       end
 
       it 'should update the expiration date' do
-        amount = Settings.default.account.monthly_cost * 3
-        expected_date = existing_user.expiration_date +
-                        ((amount.to_f / (Settings.default.account.monthly_cost *
-                                  existing_user.account_level)) * 1.month.to_i)
+        amount = User.payment_schedule.keys[1]
+        expected_date = existing_user.expiration_date + 3.months.to_i
         existing_user.update(account_payment: amount, requesting_object:)
         expect(existing_user.expiration_date).to be_within(2.seconds).of(expected_date)
       end
 
       it 'should add the transaction to the owner' do
-        amount = Settings.default.account.monthly_cost * 3
+        amount = User.payment_schedule.keys[1]
         expect do
           existing_user.update(account_payment: amount, requesting_object:)
         end.to change(owner.transactions, :count).by(1)
       end
 
       it 'should add the transaction to the user' do
-        amount = Settings.default.account.monthly_cost * 3
+        amount = User.payment_schedule.keys[1]
         expect do
           existing_user.update(account_payment: amount, requesting_object:)
         end.to change(existing_user.transactions, :count).by(1)
       end
+    end
+  end
+  
+  describe '#payment_schedule' do 
+    it 'should return the correct schedule' do
+      expect(User.payment_schedule).to eq(
+        300 => 1,
+        855 => 3,
+        1620 => 6,
+        3060 => 12
+      )
     end
   end
 
