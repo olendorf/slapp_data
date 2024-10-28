@@ -15,7 +15,8 @@ module Api
         @user.save!
         
         response_data = @user.attributes
-        response_data[:expiration_date] = response_data[:expiration_date].strftime('%b %d, %Y %I:%M %p')
+        puts response_data
+        response_data[:expiration_date] = response_data["expiration_date"].strftime('%b %d, %Y %I:%M %p')
 
         render json: {
           message: I18n.t('api.user.create.success', url: Settings.site_url),
