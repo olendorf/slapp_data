@@ -199,6 +199,8 @@ RSpec.describe User, type: :model do
       it 'should update the expiration_date' do
         expected_date = Time.now + 3.months.to_i
         new_user = User.create(atts)
+        new_user.save
+        new_user.reload
         expect(new_user.expiration_date).to be_within(2.seconds).of(expected_date)
       end
 

@@ -11,7 +11,7 @@ class User < ApplicationRecord
 
   attr_accessor :account_payment, :requesting_object
 
-  before_update :handle_account_payment!, if: :account_payment
+  after_update :handle_account_payment!, if: :account_payment
   after_create :handle_account_payment!, if: :account_payment
   before_update :adjust_expiration_date!, if: :will_save_change_to_account_level?
 
@@ -174,12 +174,16 @@ class User < ApplicationRecord
   # rubocop:disable Metrics/AbcSize
   def handle_account_payment!
     begin
-      added_time = User.payment_schedule[account_payment].month.to_i
-      self.expiration_date = Time.now if
-        expiration_date.nil? || expiration_date < Time.now
-      self.expiration_date = expiration_date + added_time
-      add_account_transaction_to_target(self, requesting_object, account_payment * -1)
-      add_account_transaction_to_target(requesting_object.user, requesting_object, account_payment)
+      payment = self.account_payment
+      self.account_payment = nil
+      added_time = User.payment_schedule[payment].month.to_i
+      if self.expiration_date.nil?
+        update_column(:expiration_date, Time.now + added_time)
+      else
+        update_column(:expiration_date, self.expiration_date + added_time)
+      end
+      add_account_transaction_to_target(self, requesting_object, payment * -1)
+      add_account_transaction_to_target(requesting_object.user, requesting_object, payment)
     rescue
       raise InvalidPaymentException.new(
               "Invalid Payment Exception",
@@ -188,7 +192,6 @@ class User < ApplicationRecord
               )
       
     end
-    
     update_column(:account_level, 1) if account_level.zero?
   end
   # rubocop:enable Metrics/AbcSize

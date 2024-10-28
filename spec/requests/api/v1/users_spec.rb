@@ -19,7 +19,7 @@ RSpec.describe 'Api::V1::Users', type: :request do
           avatar_key: '01234567-89ab-cdef-0123456789ab',
           password: 'Pa$$word123',
           password_confirmation: 'Pa$$word123',
-          account_payment: User.payment_schedule.keys[2]
+          account_payment: User.payment_schedule.keys[1]
         }
       end
 
@@ -38,6 +38,15 @@ RSpec.describe 'Api::V1::Users', type: :request do
           
           # Changed by two because an owner has to be created too.
         end.to change { User.count }.by(2)
+      end
+      
+      it 'should have the correct expiration date' do 
+        
+        post path, params: user_params.to_json, headers: headers(
+          sending_object, api_key: Settings.default.web_object.api_key
+        )
+        expect(JSON.parse(response.body)['data']['expiration_date'].to_datetime)
+                    .to be_within(2).of(3.months.from_now.to_datetime)
       end
     end
     

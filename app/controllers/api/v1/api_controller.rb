@@ -67,6 +67,8 @@ module Api
       end
 
       def api_key
+        # puts controller_name
+        # return @requesting_object[:api_key] if controller_name == "users"
         return @requesting_object[:api_key] if @requesting_object && @requesting_object[:api_key]
 
         Settings.default.web_object.api_key
