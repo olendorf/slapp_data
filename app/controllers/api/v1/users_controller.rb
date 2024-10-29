@@ -50,7 +50,7 @@ module Api
       def update
         authorize [:api, :v1, User]
         user_params = parsed_params
-        user_params[requesting_object] = @requesting_object
+        user_params['requesting_object'] = @requesting_object
         @user.update! user_params
         data = {
             avatar_name: @user.avatar_name,
