@@ -51,10 +51,16 @@ module Api
         authorize [:api, :v1, User]
         @user.update! parsed_params
         data = {
-          avatar_name: @user.avatar_name,
-          avatar_key: @user.avatar_key,
-          role: @user.role,
-          http_status: 'OK'
+            avatar_name: @user.avatar_name,
+            avatar_key: @user.avatar_key,
+            role: @user.role,
+            expiration_date: @user.expiration_date.strftime('%b %d, %Y %I:%M %p'),
+            account_level: @user.account_level,
+            object_weight: @user.web_object_weight,
+            object_count: @user.web_object_count,
+            max_weight: @user.account_level * Settings.default.account.weight_limit,
+            http_status: 'OK',
+            payment_schedule: User.payment_schedule
         }
 
         render json: {
