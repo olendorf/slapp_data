@@ -178,7 +178,7 @@ RSpec.describe User, type: :model do
   describe 'account payments' do
     context 'new account' do
       let(:atts) do
-        amount = User.payment_schedule.keys[1]
+        amount = User.payment_schedule.keys[1] * user.account_level
         FactoryBot.attributes_for :user,
                                   account_payment: amount,
                                   requesting_object:,
@@ -262,21 +262,21 @@ RSpec.describe User, type: :model do
       end
 
       it 'should update the expiration date' do
-        amount = User.payment_schedule.keys[1]
+        amount = User.payment_schedule.keys[1] * existing_user.account_level
         expected_date = existing_user.expiration_date + 3.months.to_i
         existing_user.update(account_payment: amount, requesting_object:)
         expect(existing_user.expiration_date).to be_within(2.seconds).of(expected_date)
       end
 
       it 'should add the transaction to the owner' do
-        amount = User.payment_schedule.keys[1]
+        amount = User.payment_schedule.keys[1] * existing_user.account_level
         expect do
           existing_user.update(account_payment: amount, requesting_object:)
         end.to change(owner.transactions, :count).by(1)
       end
 
       it 'should add the transaction to the user' do
-        amount = User.payment_schedule.keys[1]
+        amount = User.payment_schedule.keys[1] * existing_user.account_level
         expect do
           existing_user.update(account_payment: amount, requesting_object:)
         end.to change(existing_user.transactions, :count).by(1)

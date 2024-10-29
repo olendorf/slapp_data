@@ -101,11 +101,11 @@ class User < ApplicationRecord
     end
   end
   
-  def self.payment_schedule
+  def self.payment_schedule(account_level = 1)
     schedule = {}
     monthly_cost = Settings.default.account.monthly_cost
     Settings.default.account.discount_schedule.each do |k, v|
-      schedule[((monthly_cost - (monthly_cost * v).round) * (k.to_s.to_i))] = k.to_s.to_i
+      schedule[((monthly_cost - (monthly_cost * v).round) * (k.to_s.to_i)) * account_level] = k.to_s.to_i
     end
     schedule
   end
@@ -176,7 +176,7 @@ class User < ApplicationRecord
     begin
       payment = self.account_payment
       self.account_payment = nil
-      added_time = User.payment_schedule[payment].month.to_i
+      added_time = User.payment_schedule(self.account_level)[payment].month.to_i
       if self.expiration_date.nil?
         update_column(:expiration_date, Time.now + added_time)
       else
