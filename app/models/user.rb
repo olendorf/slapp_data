@@ -173,7 +173,7 @@ class User < ApplicationRecord
 
   # rubocop:disable Metrics/AbcSize
   def handle_account_payment!
-    # begin
+    begin
       payment = self.account_payment
       self.account_payment = nil
       added_time = User.payment_schedule(self.account_level)[payment].month.to_i
@@ -184,14 +184,14 @@ class User < ApplicationRecord
       end
       add_account_transaction_to_target(self, requesting_object, payment * -1)
       add_account_transaction_to_target(requesting_object.user, requesting_object, payment)
-    # rescue
-    #   raise InvalidPaymentException.new(
-    #           "Invalid Payment Exception",
-    #           "The payment amount, #{account_payment}, is not allowed. " + 
-    #           "The payment amount must be one of the suggested values."
-    #           )
+    rescue
+      raise InvalidPaymentException.new(
+              "Invalid Payment Exception",
+              "The payment amount, #{account_payment}, is not allowed. " + 
+              "The payment amount must be one of the suggested values."
+              )
       
-    # end
+    end
     update_column(:account_level, 1) if account_level.zero?
   end
   # rubocop:enable Metrics/AbcSize

@@ -13,9 +13,6 @@ module Api
         load_requesting_object
         @user = User.new(parsed_params.merge(requesting_object: @requesting_object))
         @user.save!
-        
-        response_data = @user.attributes
-        response_data[:expiration_date] = response_data["expiration_date"].strftime('%b %d, %Y %I:%M %p')
 
         render json: {
           message: I18n.t('api.user.create.success', url: Settings.default.site_url),
@@ -26,18 +23,7 @@ module Api
       def show
         authorize [:api, :v1, User]
         if @user
-          data = {
-            avatar_name: @user.avatar_name,
-            avatar_key: @user.avatar_key,
-            role: @user.role,
-            expiration_date: @user.expiration_date.strftime('%b %d, %Y %I:%M %p'),
-            account_level: @user.account_level,
-            object_weight: @user.web_object_weight,
-            object_count: @user.web_object_count,
-            max_weight: @user.account_level * Settings.default.account.weight_limit,
-            http_status: 'OK',
-            payment_schedule: User.payment_schedule
-          }
+          data = response_data
         else
           data = {
             http_status: 'OK',
@@ -52,22 +38,10 @@ module Api
         user_params = parsed_params
         user_params['requesting_object'] = @requesting_object
         @user.update! user_params
-        data = {
-            avatar_name: @user.avatar_name,
-            avatar_key: @user.avatar_key,
-            role: @user.role,
-            expiration_date: @user.expiration_date.strftime('%b %d, %Y %I:%M %p'),
-            account_level: @user.account_level,
-            object_weight: @user.web_object_weight,
-            object_count: @user.web_object_count,
-            max_weight: @user.account_level * Settings.default.account.weight_limit,
-            http_status: 'OK',
-            payment_schedule: User.payment_schedule
-        }
 
         render json: {
           message: I18n.t('api.user.update.success'),
-          data:
+          data: response_data
         }, status: :ok
       end
 
@@ -91,6 +65,22 @@ module Api
       # end
 
       private
+      
+      def response_data
+        {
+          avatar_name: @user.avatar_name,
+          avatar_key: @user.avatar_key,
+          role: @user.role,
+          expiration_date: @user.expiration_date.strftime('%b %d, %Y %I:%M %p'),
+          account_level: @user.account_level,
+          object_weight: @user.web_object_weight,
+          object_count: @user.web_object_count,
+          max_weight: @user.account_level * Settings.default.account.weight_limit,
+          http_status: 'OK',
+          payment_schedule: User.payment_schedule(@user.account_level)
+        }
+        
+      end
 
       # def user_params
       #   params.require(:user).permit(:avatar_name, :avatar_key)
