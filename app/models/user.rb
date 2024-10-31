@@ -11,7 +11,7 @@ class User < ApplicationRecord
 
   attr_accessor :account_payment, :requesting_object
 
-  before_update :handle_account_payment!, if: :account_payment
+  after_update :handle_account_payment!, if: :account_payment
   after_create :handle_account_payment!, if: :account_payment
   before_update :adjust_expiration_date!, if: :will_save_change_to_account_level?
 
@@ -100,6 +100,15 @@ class User < ApplicationRecord
       transactions.last.balance
     end
   end
+  
+  def self.payment_schedule(account_level = 1)
+    schedule = {}
+    monthly_cost = Settings.default.account.monthly_cost
+    Settings.default.account.discount_schedule.each do |k, v|
+      schedule[((monthly_cost - (monthly_cost * v).round) * (k.to_s.to_i)) * account_level] = k.to_s.to_i
+    end
+    schedule
+  end
 
   private
 
@@ -116,8 +125,8 @@ class User < ApplicationRecord
     end
 
     errors.add :password,
-               'Complexity requirement not met. Please use: " + "
-               1 uppercase, 1 lowercase, 1 digit and 1 special character.'
+               'Complexity requirement not met. Please use: ' +
+               '1 uppercase, 1 lowercase, 1 digit and 1 special character.'
   end
 
   def update_balance(transaction)
@@ -160,16 +169,30 @@ class User < ApplicationRecord
     # add_transaction_to_target(target, amount) if target
   end
 
+# 2629746
+
   # rubocop:disable Metrics/AbcSize
   def handle_account_payment!
+    begin
+      payment = self.account_payment
+      self.account_payment = nil
+      added_time = User.payment_schedule(self.account_level)[payment].month.to_i
+      if self.expiration_date.nil?
+        update_column(:expiration_date, Time.now + added_time)
+      else
+        update_column(:expiration_date, self.expiration_date + added_time)
+      end
+      add_account_transaction_to_target(self, requesting_object, payment * -1)
+      add_account_transaction_to_target(requesting_object.user, requesting_object, payment)
+    rescue
+      raise InvalidPaymentException.new(
+              "Invalid Payment Exception",
+              "The payment amount, #{account_payment}, is not allowed. " + 
+              "The payment amount must be one of the suggested values."
+              )
+      
+    end
     update_column(:account_level, 1) if account_level.zero?
-    added_time = account_payment.to_f / (
-                        account_level * Settings.default.account.monthly_cost)
-    self.expiration_date = Time.now if
-      expiration_date.nil? || expiration_date < Time.now
-    self.expiration_date = expiration_date + (1.month.to_i * added_time)
-    add_account_transaction_to_target(self, requesting_object, account_payment * -1)
-    add_account_transaction_to_target(requesting_object.user, requesting_object, account_payment)
   end
   # rubocop:enable Metrics/AbcSize
 

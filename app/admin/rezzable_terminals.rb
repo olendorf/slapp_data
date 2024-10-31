@@ -2,6 +2,7 @@
 
 ActiveAdmin.register Rezzable::Terminal, as: 'Terminal' do
   include ActiveAdmin::RezzableBehavior
+  decorate_with Rezzable::TerminalDecorator
 
   menu label: 'Terminals'
 

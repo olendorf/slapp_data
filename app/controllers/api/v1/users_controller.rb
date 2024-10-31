@@ -15,36 +15,33 @@ module Api
         @user.save!
 
         render json: {
-          message: I18n.t('api.user.create.success', url: Settings.site_url),
-          data: @user.attributes
+          message: I18n.t('api.user.create.success', url: Settings.default.site_url),
+          data: response_data
         }, status: :created
       end
 
       def show
         authorize [:api, :v1, User]
-        data = {
-          avatar_name: @user.avatar_name,
-          avatar_key: @user.avatar_key,
-          role: @user.role,
-          http_status: 'OK',
-          payment_schedule: payment_schedule
-        }
+        if @user
+          data = response_data
+        else
+          data = {
+            http_status: 'OK',
+            payment_schedule: User.payment_schedule
+          }
+        end
         render json: data, status: :ok
       end
 
       def update
         authorize [:api, :v1, User]
-        @user.update! parsed_params
-        data = {
-          avatar_name: @user.avatar_name,
-          avatar_key: @user.avatar_key,
-          role: @user.role,
-          http_status: 'OK'
-        }
+        user_params = parsed_params
+        user_params['requesting_object'] = @requesting_object
+        @user.update! user_params
 
         render json: {
           message: I18n.t('api.user.update.success'),
-          data:
+          data: response_data
         }, status: :ok
       end
 
@@ -58,17 +55,32 @@ module Api
         }, status: :ok
       end
       
-      def payment_schedule
-        payment_schedule = {}
-        monthly_cost = Settings.default.account.monthly_cost
-        Settings.default.account.discount_schedule.each do |k, v|
-          payment_schedule[
-            ((monthly_cost - (monthly_cost * v).round) * (k.to_s.to_i))] = k 
-        end
-        payment_schedule
-      end
+      # def payment_schedule
+      #   payment_schedule = {}
+      #   monthly_cost = Settings.default.account.monthly_cost
+      #   Settings.default.account.discount_schedule.each do |k, v|
+      #     payment_schedule[((monthly_cost - (monthly_cost * v).round) * (k.to_s.to_i))] = k
+      #   end
+      #   payment_schedule
+      # end
 
       private
+      
+      def response_data
+        {
+          avatar_name: @user.avatar_name,
+          avatar_key: @user.avatar_key,
+          role: @user.role,
+          expiration_date: @user.expiration_date.strftime('%b %d, %Y %I:%M %p'),
+          account_level: @user.account_level,
+          object_weight: @user.web_object_weight,
+          object_count: @user.web_object_count,
+          max_weight: @user.account_level * Settings.default.account.weight_limit,
+          http_status: 'OK',
+          payment_schedule: User.payment_schedule(@user.account_level)
+        }
+        
+      end
 
       # def user_params
       #   params.require(:user).permit(:avatar_name, :avatar_key)
@@ -76,7 +88,8 @@ module Api
 
       def load_user
         @user = User.find_by_avatar_key(params['avatar_key'])
-        raise ActionController::RoutingError, 'User not found. Please try again.' if @user.nil?
+        # raise ActionController::RoutingError, 
+        #         'User not found. Please try again.' if @user.nil?
       end
     end
   end
