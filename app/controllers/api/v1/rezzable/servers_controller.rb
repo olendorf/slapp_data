@@ -20,7 +20,7 @@ module Api
         def paged_data(page)
           {
             server_names: page.map(&:object_name),
-            server_keys: page.map(&:id),
+            server_ids: page.map(&:id),
             current_page: page.current_page,
             next_page: page.next_page,
             prev_page: page.prev_page,
