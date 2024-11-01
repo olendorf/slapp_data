@@ -35,6 +35,7 @@ module Api
         @object_owner = User.find_by_avatar_key(
           request.headers['HTTP_X_SECONDLIFE_OWNER_KEY']
         )
+        logger.debug "object owner: #{@object_owner}"
       end
 
       def pundit_user
