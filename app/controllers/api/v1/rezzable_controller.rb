@@ -37,8 +37,9 @@ module Api
       end
 
       def update
+        logger.debug object_attributes
+        logger.debug @requesting_object
         authorize [:api, :v1, @requesting_object.actable]
-        # puts object_attributes
         params.permit!
         @requesting_object.update! object_attributes
         # puts @requesting_object.inspect
