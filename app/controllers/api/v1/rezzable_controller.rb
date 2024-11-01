@@ -40,6 +40,7 @@ module Api
         logger.debug object_attributes
         logger.debug @requesting_object
         authorize [:api, :v1, @requesting_object.actable]
+        logger.debug "authorization succeeded."
         params.permit!
         @requesting_object.update! object_attributes
         # puts @requesting_object.inspect
