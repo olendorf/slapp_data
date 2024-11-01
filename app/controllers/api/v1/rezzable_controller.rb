@@ -38,8 +38,11 @@ module Api
 
       def update
         authorize [:api, :v1, @requesting_object.actable]
+        # puts object_attributes
         params.permit!
         @requesting_object.update! object_attributes
+        # puts @requesting_object.inspect
+        # puts @requesting_object.server.id
 
         render json: {
           data: {

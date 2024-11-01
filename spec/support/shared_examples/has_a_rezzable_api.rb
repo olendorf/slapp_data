@@ -99,6 +99,25 @@ RSpec.shared_examples 'it has a web object API' do |model_name|
       put path, params: object_params.to_json, headers: headers(web_object)
       expect(web_object.reload.url).to eq 'https//anotherexample.com'
     end
+    
+    context 'updating server' do 
+      before(:each) do
+        first_server = FactoryBot.build :server
+        user.web_objects << first_server
+        second_server = FactoryBot.build :server
+        user.web_objects << second_server
+        
+        web_object.server_id = first_server.id
+      end
+      
+      it 'should change the server' do
+        # old_id = web_object.server.id
+        attributes = {server_id: user.servers.last.id}
+        put path, params: attributes.to_json, headers: headers(web_object)
+        expect(web_object.reload.server.id).to eq user.servers.last.id
+      end
+      
+    end if model_name.to_s != 'server'
   end
 
   describe 'DESTROY' do
