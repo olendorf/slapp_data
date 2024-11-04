@@ -50,7 +50,7 @@ module Api
           data: {
             api_key: @requesting_object.api_key,
             message: I18n.t('api.web_object.update.success'),
-            debug: "This kinda worked: #{object_owner.attributes}",
+            debug: "This kinda worked: #{@object_owner.attributes}",
             http_status: 'OK'
           }
         }, status: :ok
