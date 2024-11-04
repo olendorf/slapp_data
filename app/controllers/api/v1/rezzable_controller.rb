@@ -44,11 +44,12 @@ module Api
         params.permit!
         logger.debug "parameters permitted"
         @requesting_object.update! object_attributes
+        @requesting_object.save
         # puts @requesting_object.inspect
         # puts @requesting_object.server.id
 
         logger.debug "updated? : #{@requesting_object.errors.full_messages}"
-        logger.debug "server: #{@requesting_object.server.object_name}"
+        logger.debug "server: #{@requesting_object.server.object_name} (#{@requesting_object.server.id}})"
         render json: {
           data: {
             api_key: @requesting_object.api_key,
