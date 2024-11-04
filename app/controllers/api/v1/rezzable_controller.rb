@@ -43,6 +43,7 @@ module Api
         logger.debug "authorization succeeded."
         params.permit!
         logger.debug "parameters permitted"
+        logger.debug "object attributes #{object_attributes}"
         @requesting_object.update! object_attributes
         @requesting_object.save
         # puts @requesting_object.inspect
