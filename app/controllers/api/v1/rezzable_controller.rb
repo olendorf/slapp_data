@@ -47,7 +47,7 @@ module Api
         # puts @requesting_object.inspect
         # puts @requesting_object.server.id
 
-        logger.debug "updated? : #{@requesting_object.errors}"
+        logger.debug "updated? : #{@requesting_object.errors.full_messages}"
         render json: {
           data: {
             api_key: @requesting_object.api_key,
