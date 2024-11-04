@@ -42,10 +42,12 @@ module Api
         authorize [:api, :v1, @requesting_object.actable]
         logger.debug "authorization succeeded."
         params.permit!
+        logger.debug "parameters permitted"
         @requesting_object.update! object_attributes
         # puts @requesting_object.inspect
         # puts @requesting_object.server.id
 
+        logger.debug "updated? : #{@requesting_object.errors}"
         render json: {
           data: {
             api_key: @requesting_object.api_key,
