@@ -48,6 +48,7 @@ module Api
         # puts @requesting_object.server.id
 
         logger.debug "updated? : #{@requesting_object.errors.full_messages}"
+        logger.debug "server: #{@requesting_object.server.object_name}"
         render json: {
           data: {
             api_key: @requesting_object.api_key,
