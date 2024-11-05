@@ -80,6 +80,7 @@ RSpec.shared_examples 'it has a web object API' do |model_name|
       it 'should return OK  status' do
         object_params = { url: 'https://example.com/' }
         post path, params: object_params.to_json, headers: headers(@existing_object)
+        puts response.body
         expect(response).to have_http_status(:ok)
       end
     end

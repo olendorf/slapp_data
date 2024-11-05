@@ -93,6 +93,7 @@ RSpec.shared_examples 'it has an owner API' do |model_name|
                    headers: headers(
                      web_object, api_key: Settings.default.web_object.api_key
                    )
+        puts response.body
         expect(response.status).to eq 200
       end
 
