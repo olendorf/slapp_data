@@ -9,8 +9,10 @@ RSpec.describe Rezzable::Terminal, type: :model do
     terminal.save
     terminal
   end
+  
 
   it { expect(Rezzable::Terminal).to act_as(AbstractWebObject) }
+  
 
   describe '.response_data' do
     it 'should return the correct data' do

@@ -80,7 +80,6 @@ RSpec.shared_examples 'it has a web object API' do |model_name|
       it 'should return OK  status' do
         object_params = { url: 'https://example.com/' }
         post path, params: object_params.to_json, headers: headers(@existing_object)
-        puts response.body
         expect(response).to have_http_status(:ok)
       end
     end
@@ -92,7 +91,6 @@ RSpec.shared_examples 'it has a web object API' do |model_name|
     it 'should return OK status' do
       object_params = { url: 'https//anotherexample.com', object_name: 'new name' }
       put path, params: object_params.to_json, headers: headers(web_object)
-      puts response.body
       expect(response).to have_http_status(:ok)
     end
 
@@ -119,6 +117,38 @@ RSpec.shared_examples 'it has a web object API' do |model_name|
         expect(web_object.reload.server.id).to eq user.servers.last.id
       end
       
+    end if model_name.to_s != 'server'
+    
+    context 'removing server' do 
+      before(:each) do 
+        first_server = FactoryBot.build :server
+        user.web_objects << first_server
+      end 
+      let(:inventory) do 
+        inventory = FactoryBot.build :inventory
+        user.inventories << inventory
+        user.servers.first.inventories << inventory
+        inventory
+      end
+      context 'when no inventory is set' do 
+        it 'should have nil inventory' do 
+          attributes = {server_id: ''}
+          put path, params: attributes.to_json, headers: headers(web_object)
+          expect(web_object.reload.inventory_id).to be_nil
+        end
+      end 
+      
+      context 'when inventory is set' do 
+        it 'should have nil inventory' do 
+          web_object.inventory = inventory
+          web_object.save
+          attributes = {server_id: ''}
+          expect(web_object.reload.inventory).to_not be_nil
+          put path, params: attributes.to_json, headers: headers(web_object)
+          expect(web_object.reload.inventory_id).to be_nil
+        end
+      end
+    
     end if model_name.to_s != 'server'
   end
 

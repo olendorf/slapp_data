@@ -20,6 +20,10 @@ ActiveAdmin.register Rezzable::Terminal, as: 'Terminal' do
     column 'Server', sortable: 'server.object_name' do |terminal|
       link_to terminal.server.object_name, admin_server_path(terminal.server) if terminal.server
     end
+    column 'Inventory To Give' do |terminal|
+      link_to terminal.inventory.inventory_name, 
+              admin_inventory_path(terminal.inventory) if terminal.inventory
+    end
     column 'Owner', sortable: 'users.avatar_name' do |terminal|
       if terminal.user
         link_to terminal.user.avatar_name, admin_user_path(terminal.user)
@@ -66,13 +70,20 @@ ActiveAdmin.register Rezzable::Terminal, as: 'Terminal' do
           'No Server'
         end
       end
+      row 'Inventory To Give' do |web_object|
+        if web_object.inventory
+          link_to web_object.inventory.inventory_name, admin_inventory_path(web_object.inventory) 
+        else
+          'Not Set'
+        end
+      end
       row :location, &:slurl
       row :created_at
       row :updated_at
     end
   end
 
-  permit_params :object_name, :description, :server_id
+  permit_params :object_name, :description, :server_id, :inventory_id
 
   form title: proc { "Edit #{resource.object_name}" } do |f|
     f.inputs do
@@ -82,6 +93,8 @@ ActiveAdmin.register Rezzable::Terminal, as: 'Terminal' do
                           as: :select, collection: resource.user.servers.map { |server|
                                                      [server.object_name, server.id]
                                                    }
+      f.input :inventory_id, label: 'Inventory To Give',
+                             as: :select, collection: resource.server.inventories.map { |inventory| [inventory.inventory_name, inventory.id] } if resource.server
     end
     # f.has_many :splits, heading: 'Splits',
     #                     allow_destroy: true do |s|
@@ -90,5 +103,12 @@ ActiveAdmin.register Rezzable::Terminal, as: 'Terminal' do
     #   s.input :percent
     # end
     f.actions
+  end
+  
+   controller do
+    def scoped_collection
+      super.includes(%i[user])
+    end
+    
   end
 end

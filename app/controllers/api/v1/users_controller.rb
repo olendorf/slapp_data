@@ -13,6 +13,8 @@ module Api
         load_requesting_object
         @user = User.new(parsed_params.merge(requesting_object: @requesting_object))
         @user.save!
+        
+        
 
         render json: {
           message: I18n.t('api.user.create.success', url: Settings.default.site_url),

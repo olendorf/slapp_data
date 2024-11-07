@@ -9,11 +9,14 @@ RSpec.describe Analyzable::Inventory, type: :model do
     server.save
     server
   end
+  
+  it { should have_many(:vendors).class_name('AbstractWebObject').dependent(:nullify) }
 
   let(:inventory) { FactoryBot.create :inventory, server_id: server.id, user_id: user.id }
 
   it { should belong_to(:user) }
   it { should belong_to(:server).class_name('Rezzable::Server') }
+
 
   it {
     should define_enum_for(:inventory_type).with_values(

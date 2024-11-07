@@ -27,9 +27,12 @@ RSpec.describe Rezzable::Server, type: :model do
   describe '.response_data' do
     it 'should return the correct data' do
       expect(server.response_data).to include(
+        server_id: server.id,
         api_key: server.api_key,
         object_name: server.object_name,
-        description: server.description
+        object_key: server.object_key,
+        description: server.description,
+        url: server.url
       )
     end
   end
