@@ -72,7 +72,8 @@ module Api
 
         def paged_data(page)
           {
-            inventory: page.map(&:inventory_name),
+            inventory_names: page.map(&:inventory_name),
+            inventory_ids: page.map(&:id),
             current_page: page.current_page,
             next_page: page.next_page,
             prev_page: page.prev_page,
