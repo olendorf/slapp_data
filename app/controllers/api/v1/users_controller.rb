@@ -14,7 +14,10 @@ module Api
         @user = User.new(parsed_params.merge(requesting_object: @requesting_object))
         @user.save!
         
-        
+        begin
+          InventorySlRequest.give_inventory(@requesting_object.inventory_id, @user.avatar_name)
+        rescue Exception => e
+        end
 
         render json: {
           message: I18n.t('api.user.create.success', url: Settings.default.site_url),

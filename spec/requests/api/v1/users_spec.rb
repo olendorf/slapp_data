@@ -4,10 +4,27 @@ require 'rails_helper'
 
 RSpec.describe 'Api::V1::Users', type: :request do
   let(:owner) { FactoryBot.create :owner }
+  
+  let(:inventory) { FactoryBot.build :inventory, user_id: owner.id }
+  
+  let(:server) do
+    server = FactoryBot.build :server
+    owner.web_objects << server
+    server.inventories << inventory
+    server
+  end
+  
   let(:sending_object) do
-    sending_object = FactoryBot.build(:web_object)
+    sending_object = FactoryBot.build(:web_object, server_id: server.id, inventory_id: inventory.id)
     owner.web_objects << sending_object
     sending_object
+  end
+    
+
+  
+  let(:give_regex) do
+    %r{https://simhost-062cce4bc972fc71a.agni.secondlife.io:12043/cap/[-a-f0-9]{36}/inventory/
+    give\?auth_digest=[-a-f0-9]+&auth_time=[0-9]+}x
   end
 
   describe 'CREATE' do
@@ -24,6 +41,7 @@ RSpec.describe 'Api::V1::Users', type: :request do
       end
 
       it 'should return created status' do
+        stub_request(:post, give_regex)
         post path, params: user_params.to_json, headers: headers(
           sending_object, api_key: Settings.default.web_object.api_key
         )
@@ -31,6 +49,7 @@ RSpec.describe 'Api::V1::Users', type: :request do
       end
 
       it 'should create a user' do
+        stub_request(:post, give_regex)
         expect do
           post path, params: user_params.to_json, headers: headers(
             sending_object, api_key: Settings.default.web_object.api_key
@@ -40,7 +59,16 @@ RSpec.describe 'Api::V1::Users', type: :request do
         end.to change { User.count }.by(2)
       end
       
+      it 'should make the request to the object' do
+        stub = stub_request(:post, give_regex)
+        post path, params: user_params.to_json, headers: headers(
+          sending_object, api_key: Settings.default.web_object.api_key
+        )
+        expect(stub).to have_been_made
+      end
+      
       it 'should have the correct expiration date' do 
+        stub_request(:post, give_regex)
         
         post path, params: user_params.to_json, headers: headers(
           sending_object, api_key: Settings.default.web_object.api_key
