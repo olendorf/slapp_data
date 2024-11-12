@@ -10,6 +10,8 @@ RSpec.describe Analyzable::Inventory, type: :model do
     server
   end
 
+  it { should have_many(:vendors).class_name('AbstractWebObject').dependent(:nullify) }
+
   let(:inventory) { FactoryBot.create :inventory, server_id: server.id, user_id: user.id }
 
   it { should belong_to(:user) }

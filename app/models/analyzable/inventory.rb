@@ -6,6 +6,8 @@ module Analyzable
     belongs_to :user
     belongs_to :server, class_name: 'Rezzable::Server'
 
+    has_many :vendors, class_name: 'AbstractWebObject', dependent: :nullify
+
     enum :inventory_type, {
       texture: 0,
       sound: 1,

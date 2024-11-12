@@ -9,6 +9,7 @@ class AbstractWebObject < ApplicationRecord
 
   belongs_to :user, touch: true, required: false
   belongs_to :server, touch: true, required: false, class_name: 'Rezzable::Server'
+  belongs_to :inventory, required: false, class_name: 'Analyzable::Inventory'
 
   has_many :transactions, class_name: 'Analyzable::Transaction',
                           dependent: :nullify,

@@ -214,10 +214,10 @@ RSpec.describe User, type: :model do
         new_user = User.create(atts)
         expect(new_user.transactions.count).to eq 1
       end
-      
+
       it 'should raise an error for an invalid amount' do
         atts[:account_payment] = 100
-        expect{User.create(atts)}.to raise_error(InvalidPaymentException)
+        expect { User.create(atts) }.to raise_error(InvalidPaymentException)
       end
     end
 
@@ -283,8 +283,8 @@ RSpec.describe User, type: :model do
       end
     end
   end
-  
-  describe '#payment_schedule' do 
+
+  describe '#payment_schedule' do
     it 'should return the correct schedule' do
       expect(User.payment_schedule).to eq(
         300 => 1,

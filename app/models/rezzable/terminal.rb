@@ -17,7 +17,10 @@ module Rezzable
       {
         api_key:,
         object_name:,
-        description:
+        object_key:,
+        description:,
+        server_url: server&.url,
+        server_id: server&.id
       }
     end
 

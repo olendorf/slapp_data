@@ -41,8 +41,8 @@ RSpec.describe 'Api::V1::Rezzable::Servers', type: :request do
       it 'returns the correct keys' do
         get path, params: { server_page: 1 }, headers: headers(server)
 
-        expect(JSON.parse(response.body)['data']['server_keys']).to include(
-          *user.servers.limit(9).map(&:object_key)
+        expect(JSON.parse(response.body)['data']['server_ids']).to include(
+          *user.servers.limit(9).map(&:id)
         )
       end
     end

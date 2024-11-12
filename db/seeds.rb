@@ -18,7 +18,7 @@ def give_servers_to_user(user)
     server = FactoryBot.build(:server, user_id: user.id)
     server.save
     rand(1..50).times do
-      server.inventories << FactoryBot.build(:inventory)
+      server.inventories << FactoryBot.build(:inventory, user_id: user.id)
     end
   end
 end
@@ -28,8 +28,13 @@ def give_terminals_to_user(user, _avatars)
     terminal = FactoryBot.build(:terminal)
     user.web_objects << terminal
     # give_splits(terminal, avatars)
-    if rand > 0.1 && user.servers.size.positive?
-      terminal.server_id = user.servers.sample.id
+    next unless rand > 0.1 && user.servers.size.positive?
+
+    terminal.server_id = user.servers.sample.id
+    terminal.save
+
+    if rand > 0.1 && user.inventories.size.positive?
+      terminal.inventory = user.inventories.sample
       terminal.save
     end
 

@@ -14,6 +14,10 @@ module Api
         @user.can_be_owner?
       end
 
+      def index?
+        create?
+      end
+
       def show?
         create?
       end

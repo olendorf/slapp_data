@@ -9,8 +9,14 @@ module Api
           authorize [:api, :v1, @requesting_object.actable]
 
           params['inventory_page'] ||= 1
-          page = @requesting_object.actable.inventories
-                                   .page(params['inventory_page']).per(9)
+
+          page = if @requesting_object.actable.instance_of?(::Rezzable::Server)
+                   @requesting_object.actable.inventories
+                                     .page(params['inventory_page']).per(9)
+                 else
+                   @requesting_object.server.inventories
+                                     .page(params['inventory_page']).per(9)
+                 end
           data = paged_data(page)
           render json: { data: }, status: :ok
         end
@@ -64,7 +70,8 @@ module Api
 
         def paged_data(page)
           {
-            inventory: page.map(&:inventory_name),
+            inventory_names: page.map(&:inventory_name),
+            inventory_ids: page.map(&:id),
             current_page: page.current_page,
             next_page: page.next_page,
             prev_page: page.prev_page,

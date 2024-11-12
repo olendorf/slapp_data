@@ -12,6 +12,7 @@ module Api
           update
         else
           authorize [:api, :v1, requesting_class]
+          params.permit!
           @web_object = requesting_class.new(object_attributes)
           # @web_object.save!
           @object_owner.web_objects << @web_object
@@ -38,13 +39,20 @@ module Api
 
       def update
         authorize [:api, :v1, @requesting_object.actable]
+
         params.permit!
         @requesting_object.update! object_attributes
+        @requesting_object.save
+        if @requesting_object.server_id.nil?
+          @requesting_object.inventory_id = nil
+          @requesting_object.save
+        end
 
         render json: {
           data: {
             api_key: @requesting_object.api_key,
             message: I18n.t('api.web_object.update.success'),
+            debug: "This kinda worked: #{@object_owner.attributes}",
             http_status: 'OK'
           }
         }, status: :ok
@@ -93,6 +101,9 @@ module Api
           position: extract_position,
           shard: request.headers['HTTP_X_SECONDLIFE_SHARD']
         }.merge(params[controller_name.singularize].to_unsafe_hash).with_indifferent_access
+        # if(params[@requesting_object.class.name.split('::').last.downcase]['server_id'] == '')
+        #   params[requesting_object.class.name.split('::').last.downcase]['inventory_id'] = ''
+        # end
       end
 
       def extract_region_name
