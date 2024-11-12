@@ -13,10 +13,11 @@ module Api
         load_requesting_object
         @user = User.new(parsed_params.merge(requesting_object: @requesting_object))
         @user.save!
-        
+
         begin
           InventorySlRequest.give_inventory(@requesting_object.inventory_id, @user.avatar_name)
-        rescue Exception => e
+        rescue StandardError => e
+          logger.info("unable to give inventory: #{e}")
         end
 
         render json: {
@@ -27,14 +28,14 @@ module Api
 
       def show
         authorize [:api, :v1, User]
-        if @user
-          data = response_data
-        else
-          data = {
-            http_status: 'OK',
-            payment_schedule: User.payment_schedule
-          }
-        end
+        data = if @user
+                 response_data
+               else
+                 {
+                   http_status: 'OK',
+                   payment_schedule: User.payment_schedule
+                 }
+               end
         render json: data, status: :ok
       end
 
@@ -59,7 +60,7 @@ module Api
           http_status: 'OK'
         }, status: :ok
       end
-      
+
       # def payment_schedule
       #   payment_schedule = {}
       #   monthly_cost = Settings.default.account.monthly_cost
@@ -70,7 +71,7 @@ module Api
       # end
 
       private
-      
+
       def response_data
         {
           avatar_name: @user.avatar_name,
@@ -84,7 +85,6 @@ module Api
           http_status: 'OK',
           payment_schedule: User.payment_schedule(@user.account_level)
         }
-        
       end
 
       # def user_params
@@ -93,7 +93,7 @@ module Api
 
       def load_user
         @user = User.find_by_avatar_key(params['avatar_key'])
-        # raise ActionController::RoutingError, 
+        # raise ActionController::RoutingError,
         #         'User not found. Please try again.' if @user.nil?
       end
     end

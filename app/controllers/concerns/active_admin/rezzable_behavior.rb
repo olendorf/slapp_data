@@ -9,8 +9,8 @@ module ActiveAdmin
     def self.included(base)
       base.controller do
         def update
-          if(params[resource.class.name.downcase.sub('::', "_")]['server_id'] == '')
-            params[resource.class.name.downcase.sub('::', "_")]['inventory_id'] = ''
+          if params[resource.class.name.downcase.sub('::', '_')]['server_id'] == ''
+            params[resource.class.name.downcase.sub('::', '_')]['inventory_id'] = ''
           end
           super
           resource.reload
@@ -28,14 +28,12 @@ module ActiveAdmin
         end
 
         def destroy
-          begin
-            RezzableSlRequest.derez_web_object!(resource)
-          rescue RestClient::ExceptionWithResponse => e
-            flash[:error] = t('active_admin.web_object.destroy.failure',
-                              message: e.response)
-          ensure
-            super # No matter what, destory the object from the database.
-          end
+          RezzableSlRequest.derez_web_object!(resource)
+        rescue RestClient::ExceptionWithResponse => e
+          flash[:error] = t('active_admin.web_object.destroy.failure',
+                            message: e.response)
+        ensure
+          super # No matter what, destory the object from the database.
         end
       end
     end

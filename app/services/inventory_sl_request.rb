@@ -54,7 +54,6 @@ class InventorySlRequest
     # Rails.logger.debug "Giving inventory #{inventory.inventory_name}"
 
     return if Rails.env.development?
-    
 
     RestClient::Request.execute(
       url: "#{target_server.url}/inventory/give",

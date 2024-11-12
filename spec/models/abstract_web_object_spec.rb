@@ -4,8 +4,8 @@ require 'rails_helper'
 
 RSpec.describe AbstractWebObject, type: :model do
   let(:user) { FactoryBot.create :user }
-  let(:web_object) do 
-    web_object = FactoryBot.build :web_object 
+  let(:web_object) do
+    web_object = FactoryBot.build :web_object
     user.web_objects << web_object
     web_object
   end
@@ -16,7 +16,7 @@ RSpec.describe AbstractWebObject, type: :model do
       .touch(true)
       .required(false)
   }
-  
+
   it {
     should belong_to(:inventory).class_name('Analyzable::Inventory').required(false)
   }
@@ -35,5 +35,4 @@ RSpec.describe AbstractWebObject, type: :model do
   it 'should set the api_key upon creation' do
     expect(web_object.api_key).to_not be_nil
   end
-  
 end

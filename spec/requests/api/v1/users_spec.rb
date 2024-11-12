@@ -4,24 +4,23 @@ require 'rails_helper'
 
 RSpec.describe 'Api::V1::Users', type: :request do
   let(:owner) { FactoryBot.create :owner }
-  
+
   let(:inventory) { FactoryBot.build :inventory, user_id: owner.id }
-  
+
   let(:server) do
     server = FactoryBot.build :server
     owner.web_objects << server
     server.inventories << inventory
     server
   end
-  
+
   let(:sending_object) do
-    sending_object = FactoryBot.build(:web_object, server_id: server.id, inventory_id: inventory.id)
+    sending_object = FactoryBot.build(:web_object, server_id: server.id,
+                                                   inventory_id: inventory.id)
     owner.web_objects << sending_object
     sending_object
   end
-    
 
-  
   let(:give_regex) do
     %r{https://simhost-062cce4bc972fc71a.agni.secondlife.io:12043/cap/[-a-f0-9]{36}/inventory/
     give\?auth_digest=[-a-f0-9]+&auth_time=[0-9]+}x
@@ -54,11 +53,11 @@ RSpec.describe 'Api::V1::Users', type: :request do
           post path, params: user_params.to_json, headers: headers(
             sending_object, api_key: Settings.default.web_object.api_key
           )
-          
+
           # Changed by two because an owner has to be created too.
         end.to change { User.count }.by(2)
       end
-      
+
       it 'should make the request to the object' do
         stub = stub_request(:post, give_regex)
         post path, params: user_params.to_json, headers: headers(
@@ -66,18 +65,18 @@ RSpec.describe 'Api::V1::Users', type: :request do
         )
         expect(stub).to have_been_made
       end
-      
-      it 'should have the correct expiration date' do 
+
+      it 'should have the correct expiration date' do
         stub_request(:post, give_regex)
-        
+
         post path, params: user_params.to_json, headers: headers(
           sending_object, api_key: Settings.default.web_object.api_key
         )
         expect(JSON.parse(response.body)['data']['expiration_date'].to_datetime)
-                    .to be_within(2).of(3.months.from_now.to_datetime)
+          .to be_within(2).of(3.months.from_now.to_datetime)
       end
     end
-    
+
     context 'invalid payment amount' do
       let(:path) { api_users_path }
       let(:user_params) do
@@ -89,15 +88,13 @@ RSpec.describe 'Api::V1::Users', type: :request do
           account_payment: 100
         }
       end
-      
-      it 'should return unprocessable entity status' do 
+
+      it 'should return unprocessable entity status' do
         post path, params: user_params.to_json, headers: headers(
           sending_object, api_key: Settings.default.web_object.api_key
         )
         expect(response).to have_http_status(:unprocessable_entity)
       end
-
-      
     end
 
     context 'passwords mismatch' do
@@ -168,13 +165,13 @@ RSpec.describe 'Api::V1::Users', type: :request do
         it 'should return OK status' do
           expect(response).to have_http_status(:ok)
         end
-        
-        it 'should return the payment schedule' do 
+
+        it 'should return the payment schedule' do
           expect(JSON.parse(response.body)['payment_schedule']).to include(
-            "300" => 1,
-            "855" => 3,
-            "1620" => 6,
-            "3060" => 12
+            '300' => 1,
+            '855' => 3,
+            '1620' => 6,
+            '3060' => 12
           )
         end
       end

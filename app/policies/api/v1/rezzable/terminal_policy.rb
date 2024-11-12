@@ -3,7 +3,8 @@
 module Api
   module V1
     module Rezzable
-      class TerminalPolicy < Api::V1::OwnerPolicy      
+      # Authorization for terminals, inherits from the Owner Policy
+      class TerminalPolicy < Api::V1::OwnerPolicy
         def give?
           show?
         end

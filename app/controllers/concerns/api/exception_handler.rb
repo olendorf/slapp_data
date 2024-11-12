@@ -39,10 +39,10 @@ module Api
       rescue_from ActionController::BadRequest do |e|
         json_response({ message: e.message }, :bad_request)
       end
-      
-    rescue_from InvalidPaymentException do |e|
-      json_response({message: e.message}, :unprocessable_entity)
-    end
+
+      rescue_from InvalidPaymentException do |e|
+        json_response({ message: e.message }, :unprocessable_entity)
+      end
 
       rescue_from Pundit::NotAuthorizedError do |e|
         json_response({ message: e.message }, :forbidden)

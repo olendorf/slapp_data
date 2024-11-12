@@ -23,12 +23,12 @@ module Rezzable
 
     def response_data
       {
-        server_id: self.id,
-        api_key: self.api_key,
-        object_name: self.object_name,
-        object_key: self.object_key,
-        description: self.description,
-        url: self.url
+        server_id: id,
+        api_key:,
+        object_name:,
+        object_key:,
+        description:,
+        url:
       }
     end
 

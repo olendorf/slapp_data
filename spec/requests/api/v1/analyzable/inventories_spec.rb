@@ -91,64 +91,64 @@ RSpec.describe 'Api::V1::Analyzable::Inventories', type: :request do
         )
       end
     end
-    
-    context 'request is not from server' do 
+
+    context 'request is not from server' do
       let(:web_object) do
         web_object = FactoryBot.build :web_object, user_id: user.id, server_id: server.id
         web_object.save
         web_object
-      end 
-      
-      it 'should return ok status' do 
+      end
+
+      it 'should return ok status' do
         get path, headers: headers(web_object)
         expect(response.status).to eq 200
       end
-      
+
       context '1st page' do
         it 'returns the first page' do
           get path, params: { inventory_page: 1 }, headers: headers(web_object)
           expect(JSON.parse(response.body)['data']['inventory_names'].size).to eq 9
         end
-  
+
         it 'returns the correct data' do
           get path, params: { inventory_page: 1 }, headers: headers(web_object)
-  
+
           expect(JSON.parse(response.body)['data']['inventory_names']).to include(
             *server.inventories.limit(9).map(&:inventory_name)
           )
-        end 
-        
+        end
+
         it 'returns the correct ids' do
           get path, params: { inventory_page: 1 }, headers: headers(web_object)
-  
+
           expect(JSON.parse(response.body)['data']['inventory_ids']).to include(
             *server.inventories.limit(9).map(&:id)
           )
         end
       end
-      
+
       context 'second page' do
         it 'returns the second page' do
           get path, params: { inventory_page: 2 }, headers: headers(web_object)
           expect(JSON.parse(response.body)['data']['inventory_names'].size).to eq 9
         end
-  
+
         it 'returns the correct data' do
           get path, params: { inventory_page: 2 }, headers: headers(web_object)
-  
+
           expect(JSON.parse(response.body)['data']['inventory_names']).to include(
             *server.inventories.limit(9).offset((2 - 1) * 9).map(&:inventory_name)
           )
         end
-        
+
         it 'returns the correct ids' do
           get path, params: { inventory_page: 2 }, headers: headers(web_object)
-  
+
           expect(JSON.parse(response.body)['data']['inventory_ids']).to include(
             *server.inventories.limit(9).offset((2 - 1) * 9).map(&:id)
           )
         end
-  
+
         it 'returns the correct metadata' do
           get "#{path}?inventory_page=2", headers: headers(web_object)
           expect(JSON.parse(response.body)['data']).to include(
@@ -159,7 +159,6 @@ RSpec.describe 'Api::V1::Analyzable::Inventories', type: :request do
           )
         end
       end
-      
     end
   end
 

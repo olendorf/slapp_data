@@ -36,7 +36,6 @@ class AbstractWebObject < ApplicationRecord
 
   private
 
-
   def set_api_key
     self.api_key ||= SecureRandom.uuid
   end

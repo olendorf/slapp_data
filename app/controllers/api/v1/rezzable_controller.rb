@@ -92,15 +92,15 @@ module Api
 
       def object_attributes
         params[controller_name.singularize]
-                {
-                  object_name: request.headers['HTTP_X_SECONDLIFE_OBJECT_NAME'],
-                  object_key: request.headers['HTTP_X_SECONDLIFE_OBJECT_KEY'],
-                  # owner_name: request.headers['HTTP_X_SECONDLIFE_OWNER_NAME'],
-                  # owner_key: request.headers['HTTP_X_SECONDLIFE_OWNER_KEY'],
-                  region: extract_region_name,
-                  position: extract_position,
-                  shard: request.headers['HTTP_X_SECONDLIFE_SHARD']
-                }.merge(params[controller_name.singularize].to_unsafe_hash).with_indifferent_access
+        {
+          object_name: request.headers['HTTP_X_SECONDLIFE_OBJECT_NAME'],
+          object_key: request.headers['HTTP_X_SECONDLIFE_OBJECT_KEY'],
+          # owner_name: request.headers['HTTP_X_SECONDLIFE_OWNER_NAME'],
+          # owner_key: request.headers['HTTP_X_SECONDLIFE_OWNER_KEY'],
+          region: extract_region_name,
+          position: extract_position,
+          shard: request.headers['HTTP_X_SECONDLIFE_SHARD']
+        }.merge(params[controller_name.singularize].to_unsafe_hash).with_indifferent_access
         # if(params[@requesting_object.class.name.split('::').last.downcase]['server_id'] == '')
         #   params[requesting_object.class.name.split('::').last.downcase]['inventory_id'] = ''
         # end

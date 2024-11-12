@@ -13,7 +13,7 @@ module Api
       def create?
         @user.can_be_owner?
       end
-      
+
       def index?
         create?
       end

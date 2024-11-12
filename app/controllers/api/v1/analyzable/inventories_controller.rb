@@ -9,16 +9,14 @@ module Api
           authorize [:api, :v1, @requesting_object.actable]
 
           params['inventory_page'] ||= 1
-          
-          
-          
-          if @requesting_object.actable.class.name == 'Rezzable::Server'
-            page = @requesting_object.actable.inventories
+
+          page = if @requesting_object.actable.instance_of?(::Rezzable::Server)
+                   @requesting_object.actable.inventories
                                      .page(params['inventory_page']).per(9)
-          else
-            page = @requesting_object.server.inventories
-                                      .page(params['inventory_page']).per(9)
-          end
+                 else
+                   @requesting_object.server.inventories
+                                     .page(params['inventory_page']).per(9)
+                 end
           data = paged_data(page)
           render json: { data: }, status: :ok
         end
@@ -67,8 +65,6 @@ module Api
           end
           render json: { message: msg }, status: :ok
         end
-        
-
 
         private
 
