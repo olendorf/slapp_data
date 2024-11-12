@@ -93,6 +93,7 @@ RSpec.describe 'Api::V1::Users', type: :request do
         post path, params: user_params.to_json, headers: headers(
           sending_object, api_key: Settings.default.web_object.api_key
         )
+        puts response.body
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end

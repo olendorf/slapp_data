@@ -39,6 +39,7 @@ RSpec.describe 'Api::V1::Rezzable::WebObjects', type: :request do
       end
 
       it 'should return ok status' do
+        stub = stub_request(:post, give_regex)
         put path, params: atts.to_json, headers: headers(terminal)
         expect(response).to have_http_status(:ok)
       end
