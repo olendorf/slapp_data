@@ -4,7 +4,7 @@ class CreateAnalyzableVisits < ActiveRecord::Migration[7.2]
       t.string :avatar_name
       t.string :avatar_key
       t.string :region
-      t.integer :duration
+      t.integer :duration, default: 0
       t.integer :traffic_cop_id
       t.integer :user_id
 
