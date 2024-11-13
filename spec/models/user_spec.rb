@@ -31,6 +31,8 @@ RSpec.describe User, type: :model do
       :inventories
     ).class_name('Analyzable::Inventory').dependent(:destroy)
   }
+  
+  it { should have_many(:visits).class_name('Analyzable::Visit').dependent(:destroy) }
 
   it { should have_many(:splits).dependent(:destroy) }
 

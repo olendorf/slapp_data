@@ -3,6 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe Rezzable::Server, type: :model do
+  
+  it_behaves_like 'a rezzable object', :server, 1
+  
   let(:user) { FactoryBot.create :owner }
   let(:server) do
     server = FactoryBot.build :server, user_id: user.id

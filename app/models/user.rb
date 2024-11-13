@@ -25,6 +25,7 @@ class User < ApplicationRecord
                           before_add: :update_balance,
                           after_add: :handle_splits
   has_many :splits, dependent: :destroy, as: :splittable
+  has_many :visits, class_name: 'Analyzable::Visit', dependent: :destroy
 
   def email_required?
     false
