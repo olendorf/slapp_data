@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_07_132158) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_14_150526) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,6 +52,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_07_132158) do
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource"
   end
 
+  create_table "analyzable_detections", force: :cascade do |t|
+    t.float "x"
+    t.float "y"
+    t.float "z"
+    t.integer "visit_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "analyzable_inventories", force: :cascade do |t|
     t.string "inventory_name"
     t.string "description"
@@ -87,11 +96,32 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_07_132158) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "analyzable_visits", force: :cascade do |t|
+    t.string "avatar_name"
+    t.string "avatar_key"
+    t.string "region"
+    t.integer "duration"
+    t.integer "traffic_cop_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "avatars", force: :cascade do |t|
     t.string "avatar_name"
     t.string "avatar_key"
     t.string "display_name"
     t.datetime "rezday"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "listable_avatars", force: :cascade do |t|
+    t.string "avatar_name"
+    t.string "avatar_key"
+    t.string "list_name"
+    t.integer "listable_id"
+    t.string "listable_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -104,6 +134,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_07_132158) do
   create_table "rezzable_terminals", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "rezzable_traffic_cops", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "sensor_mode"
+    t.integer "security_mode"
+    t.integer "access_mode"
   end
 
   create_table "rezzable_web_objects", force: :cascade do |t|

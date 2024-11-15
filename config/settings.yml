@@ -4,6 +4,8 @@ default:
     api_key: change_me
   request:
     time_limit: 30
+  traffic_cop:
+    visit_limit: 2
   account:
     weight_limit: 100 
     monthly_cost: 300
