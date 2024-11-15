@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_12_184552) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_14_150526) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -116,6 +116,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_12_184552) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "listable_avatars", force: :cascade do |t|
+    t.string "avatar_name"
+    t.string "avatar_key"
+    t.string "list_name"
+    t.integer "listable_id"
+    t.string "listable_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "rezzable_servers", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -129,6 +139,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_12_184552) do
   create_table "rezzable_traffic_cops", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "sensor_mode"
+    t.integer "security_mode"
+    t.integer "access_mode"
   end
 
   create_table "rezzable_web_objects", force: :cascade do |t|
