@@ -5,4 +5,8 @@ module Rezzable
   def self.table_name_prefix
     'rezzable_'
   end
+  
+  def response_data
+    {api_key: self.api_key}
+  end
 end
