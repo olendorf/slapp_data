@@ -19,10 +19,9 @@ module Api
 
           render json: {
             data: {
-              api_key: @web_object.api_key,
               message: I18n.t('api.web_object.create.success'),
               http_status: 'CREATED'
-            }
+            }.merge(@web_object.actable.response_data)
           }, status: :created
         end
       end
@@ -41,7 +40,7 @@ module Api
         authorize [:api, :v1, @requesting_object.actable]
 
         params.permit!
-        @requesting_object.update! object_attributes
+        @requesting_object.actable.update! object_attributes
         @requesting_object.save
         if @requesting_object.server_id.nil?
           @requesting_object.inventory_id = nil
@@ -50,11 +49,9 @@ module Api
 
         render json: {
           data: {
-            api_key: @requesting_object.api_key,
             message: I18n.t('api.web_object.update.success'),
-            debug: "This kinda worked: #{@object_owner.attributes}",
             http_status: 'OK'
-          }
+          }.merge(@requesting_object.actable.response_data)
         }, status: :ok
       end
 

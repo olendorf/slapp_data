@@ -142,6 +142,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_14_150526) do
     t.integer "sensor_mode"
     t.integer "security_mode"
     t.integer "access_mode"
+    t.string "first_visit_message", default: "Welcome!"
+    t.string "repeat_visit_message", default: "Welcome back!"
+    t.string "banned_message", default: "You are not allowed access."
   end
 
   create_table "rezzable_web_objects", force: :cascade do |t|

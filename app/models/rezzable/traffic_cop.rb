@@ -55,6 +55,16 @@ module Rezzable
     def self.ransackable_attributes(_auth_object = nil)
       %w[id id_value]
     end
+    
+    def response_data
+      {
+        api_key: self.api_key,
+        first_visit_message: self.first_visit_message,
+        repeat_visit_message: self.repeat_visit_message,
+        banned_message: self.banned_message,
+        outgoing_messages: self.outgoing_messages
+      }
+    end
 
     private
 
@@ -64,6 +74,10 @@ module Rezzable
       detections.each do |detection|
         handle_detection(detection)
       end
+      self.outgoing_messages[:first_visit] = 
+            self.outgoing_messages[:first_visit] - self.outgoing_messages[:eject]
+      self.outgoing_messages[:first_visit] = 
+            self.outgoing_messages[:first_visit] - self.outgoing_messages[:repeat_visit]
       self.detections = nil
     end
 
@@ -75,6 +89,10 @@ module Rezzable
       outgoing_messages[:eject] << detection[:avatar_key] unless access?(detection)
 
       if previous_visit.nil? || !previous_visit.active?
+        self.outgoing_messages[:first_visit] << detection[:avatar_key] if previous_visit.nil?
+        if previous_visit && previous_visit.created_at < 1.week.ago
+          self.outgoing_message[:repeat_visit] << detection[:avatar_key]
+        end 
         create_visit(detection)
       else
         if visits.last.created_at < 1.week.ago
@@ -91,8 +109,6 @@ module Rezzable
         region:,
         user_id:
       }
-
-      outgoing_messages[:first_visit] << detection[:avatar_key]
 
       visit = Analyzable::Visit.create(atts)
       visit.detections << Analyzable::Detection.new(detection)
