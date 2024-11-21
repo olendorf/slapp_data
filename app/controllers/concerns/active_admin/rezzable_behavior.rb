@@ -9,8 +9,10 @@ module ActiveAdmin
     def self.included(base)
       base.controller do
         def update
-          if params[resource.class.name.downcase.sub('::', '_')]['server_id'] == ''
-            params[resource.class.name.downcase.sub('::', '_')]['inventory_id'] = ''
+          puts resource.class.name.tableize.sub('/', '_').singularize
+          puts params
+          if params[resource.class.name.tableize.sub('/', '_').singularize]['server_id'] == ''
+            params[resource.class.name.tableize.sub('/', '_').singularize]['inventory_id'] = ''
           end
           super
           resource.reload

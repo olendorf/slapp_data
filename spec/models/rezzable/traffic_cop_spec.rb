@@ -48,6 +48,30 @@ RSpec.describe Rezzable::TrafficCop, type: :model do
     )
   }
 
+  it {
+    should define_enum_for(:power).with_values(
+      power_off: 0,
+      power_on: 1
+    )
+  }
+  
+  describe '#current_visitors' do
+    before(:each) do
+      traffic_cop.visits << FactoryBot.build(:visit, created_at: 2.hours.ago,
+                                                      updated_at: 2.hours.ago)
+
+      traffic_cop.visits << FactoryBot.build(:visit, created_at: 1.hours.ago,
+                                                     updated_at: 1.minute.ago)
+
+      traffic_cop.visits << FactoryBot.build(:visit, created_at: 1.hours.ago,
+                                                     updated_at: 1.minute.ago)
+    end
+
+    it 'should return only the current visitors' do
+      expect(traffic_cop.current_visitors.size).to eq 2
+    end
+  end
+
   describe 'detections' do
     let(:detections) { FactoryBot.attributes_for_list :detection, 10 }
     context 'there are no visits' do

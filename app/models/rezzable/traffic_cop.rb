@@ -29,6 +29,11 @@ module Rezzable
       access_mode_banned: 0,
       access_mode_allowed: 1
     }
+    
+    enum :power, {
+      power_off: 0,
+      power_on: 1
+    }
 
     OBJECT_WEIGHT = 25
 
@@ -54,6 +59,10 @@ module Rezzable
 
     def self.ransackable_attributes(_auth_object = nil)
       %w[id id_value]
+    end
+    
+    def current_visitors
+      self.visits.where('updated_at > ?', 2.minutes.ago)
     end
     
     def response_data

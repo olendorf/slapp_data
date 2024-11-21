@@ -139,12 +139,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_14_150526) do
   create_table "rezzable_traffic_cops", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "sensor_mode"
-    t.integer "security_mode"
-    t.integer "access_mode"
+    t.integer "sensor_mode", default: 0
+    t.integer "security_mode", default: 0
+    t.integer "access_mode", default: 0
     t.string "first_visit_message", default: "Welcome!"
     t.string "repeat_visit_message", default: "Welcome back!"
     t.string "banned_message", default: "You are not allowed access."
+    t.integer "power", default: 0
   end
 
   create_table "rezzable_web_objects", force: :cascade do |t|

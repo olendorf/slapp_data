@@ -98,9 +98,8 @@ ActiveAdmin.register Rezzable::Terminal, as: 'Terminal' do
       if resource.server
         f.input :inventory_id, label: 'Inventory To Give',
                                as: :select,
-                               collection: resource.server.inventories.map do |inventory|
-                                 [inventory.inventory_name, inventory.id]
-                               end
+                               collection: resource.server.inventories
+                                      .map { |i| [i.inventory_name, i.id]}
       end
     end
     # f.has_many :splits, heading: 'Splits',
