@@ -4,13 +4,13 @@ module Rezzable
   # Decorator for Web Objects. Most methods will be in AbstractWebObjectDecorator.
   class TrafficCopDecorator < AbstractWebObjectDecorator
     delegate_all
-    
+
     def pretty_power
       h.content_tag :span, class: power_off? ? 'status_tag off' : 'status_tag on' do
         power_off? ? 'Off' : 'On'
       end
     end
-    
+
     def pretty_sensor_mode
       sensor_mode.split('_')[2..].join(' ').titleize
     end

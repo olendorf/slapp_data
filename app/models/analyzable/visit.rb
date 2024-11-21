@@ -8,13 +8,14 @@ module Analyzable
     has_many :detections, class_name: 'Analyzable::Detection',
                           dependent: :destroy,
                           after_add: :update_data
-                          
+
     def self.ransackable_associations(_auth_object = nil)
       %w[detections traffic_cop user]
     end
-    
-    def self.ransackable_attributes(auth_object = nil)
-      %w[avatar_key avatar_name created_at duration id id_value region traffic_cop_id updated_at user_id]
+
+    def self.ransackable_attributes(_auth_object = nil)
+      %w[avatar_key avatar_name created_at duration id id_value region traffic_cop_id updated_at
+         user_id]
     end
 
     def active?

@@ -20,6 +20,11 @@ Layout/LineLength:
 Lint/NestedMethodDefinition:
   Exclude:
     - app/controllers/concerns/**/*
+  
+Metrics/AbcSize:
+  Max: 30
+  Exclude:
+    - app/controllers/concerns/**/*
     
 Metrics/BlockLength:
   Exclude:
@@ -35,14 +40,16 @@ Metrics/BlockLength:
 Metrics/ClassLength:
   Max: 150
   Exclude:
-    - app/models/user.rb
+    - app/models/user.rb   
+    
+Metrics/CyclomaticComplexity:
+  Max: 10
     
 Metrics/MethodLength:
-  Max: 20
-  Exclude:
-    - app/controllers/concerns/**/*
-  
-Metrics/AbcSize:
   Max: 30
   Exclude:
     - app/controllers/concerns/**/*
+    
+Metrics/PerceivedComplexity:
+  Max: 10
+  

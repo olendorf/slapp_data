@@ -51,7 +51,6 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
   # filter :web_object_pinged_at, as: :date_range, label: 'Last Ping'
   filter :abstract_web_object_create_at, as: :date_range, label: 'Created At'
 
-
   show title: :object_name do
     attributes_table do
       row :object_name
@@ -83,7 +82,7 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
       row :updated_at
     end
   end
-  
+
   sidebar :settings, only: %i[edit show] do
     attributes_table do
       # row :power
@@ -104,8 +103,7 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
       row :inventory_to_give
     end
   end
-  
-  
+
   #   panel 'Visitors' do
   #     data = resource.visitors
   #     paginated_data = Kaminari.paginate_array(data).page(params['visitor_page']).per(20)
@@ -126,11 +124,11 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
   #   end
   # end
   # objects_array.sort_by{ |obj| obj.attribute }.reverse
-   sidebar :current_visitors, only: %i[edit show] do
-     
+  sidebar :current_visitors, only: %i[edit show] do
     # data = resource.visits.where('updated_at > ?', 2.minutes.ago)
-    paginated_data = Kaminari.paginate_array(resource.current_visitors).page(params['current_page']).per(10)
-    
+    paginated_data = Kaminari.paginate_array(resource.current_visitors)
+                             .page(params['current_page']).per(10)
+
     div class: 'paginated_data' do
       table_for paginated_data do
         column :avatar_name
@@ -140,7 +138,6 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
         end
       end
     end
-
   end
 
   sidebar :allowed, only: %i[edit show] do
@@ -188,15 +185,17 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
     f.inputs do
       f.input :object_name, label: 'Donation Box name'
       f.input :description
-      f.input :server_id, label: 'Server',
-                          as: :select, collection: resource.user.servers.map { |server|
-                                                     [server.object_name, server.id]
-                                                   } if resource.user.servers.count > 0
-      f.input :power, as: :select, collection: Rezzable::TrafficCop.powers.collect { |k, v|
-                              [k.split('_').last.titleize, k]
-                            },
-                            selected: resource.power,
-                            include_blank: false
+      if resource.user.servers.count.positive?
+        f.input :server_id, label: 'Server',
+                            as: :select, collection: resource.user.servers.map { |server|
+                                                       [server.object_name, server.id]
+                                                     }
+      end
+      f.input :power, as: :select, collection: Rezzable::TrafficCop.powers.collect { |k, _v|
+                                                 [k.split('_').last.titleize, k]
+                                               },
+                      selected: resource.power,
+                      include_blank: false
       f.input :sensor_mode, as: :select,
                             collection: Rezzable::TrafficCop.sensor_modes.collect { |k, _v|
                               [k.split('_')[2..].join(' ').titleize, k]
@@ -221,8 +220,8 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
         f.input :inventory_id, label: 'Inventory To Give',
                                as: :select,
                                collection: resource.server.inventories
-                                    .map { |i| [i.inventory_name, i.id] }
-                              
+                                                   .map { |i| [i.inventory_name, i.id] }
+
       end
     end
     f.actions

@@ -29,7 +29,7 @@ module Rezzable
       access_mode_banned: 0,
       access_mode_allowed: 1
     }
-    
+
     enum :power, {
       power_off: 0,
       power_on: 1
@@ -60,18 +60,18 @@ module Rezzable
     def self.ransackable_attributes(_auth_object = nil)
       %w[id id_value]
     end
-    
+
     def current_visitors
-      self.visits.where('updated_at > ?', 2.minutes.ago)
+      visits.where('updated_at > ?', 2.minutes.ago)
     end
-    
+
     def response_data
       {
-        api_key: self.api_key,
-        first_visit_message: self.first_visit_message,
-        repeat_visit_message: self.repeat_visit_message,
-        banned_message: self.banned_message,
-        outgoing_messages: self.outgoing_messages
+        api_key:,
+        first_visit_message:,
+        repeat_visit_message:,
+        banned_message:,
+        outgoing_messages:
       }
     end
 
@@ -83,13 +83,14 @@ module Rezzable
       detections.each do |detection|
         handle_detection(detection)
       end
-      self.outgoing_messages[:first_visit] = 
-            self.outgoing_messages[:first_visit] - self.outgoing_messages[:eject]
-      self.outgoing_messages[:first_visit] = 
-            self.outgoing_messages[:first_visit] - self.outgoing_messages[:repeat_visit]
+      outgoing_messages[:first_visit] =
+        outgoing_messages[:first_visit] - outgoing_messages[:eject]
+      outgoing_messages[:first_visit] =
+        outgoing_messages[:first_visit] - outgoing_messages[:repeat_visit]
       self.detections = nil
     end
 
+    # rubocop:disable Metrics/AbcSize
     def handle_detection(detection)
       detection = detection.with_indifferent_access
       previous_visit = visits.where(avatar_key: detection['avatar_key'])
@@ -98,10 +99,10 @@ module Rezzable
       outgoing_messages[:eject] << detection[:avatar_key] unless access?(detection)
 
       if previous_visit.nil? || !previous_visit.active?
-        self.outgoing_messages[:first_visit] << detection[:avatar_key] if previous_visit.nil?
+        outgoing_messages[:first_visit] << detection[:avatar_key] if previous_visit.nil?
         if previous_visit && previous_visit.created_at < 1.week.ago
-          self.outgoing_message[:repeat_visit] << detection[:avatar_key]
-        end 
+          outgoing_message[:repeat_visit] << detection[:avatar_key]
+        end
         create_visit(detection)
       else
         if visits.last.created_at < 1.week.ago
@@ -110,6 +111,8 @@ module Rezzable
         previous_visit.detections << Analyzable::Detection.new(detection)
       end
     end
+
+    # rubocop:enable Metrics/AbcSize
 
     def create_visit(detection)
       atts = {

@@ -99,7 +99,7 @@ ActiveAdmin.register Rezzable::Terminal, as: 'Terminal' do
         f.input :inventory_id, label: 'Inventory To Give',
                                as: :select,
                                collection: resource.server.inventories
-                                      .map { |i| [i.inventory_name, i.id]}
+                                                   .map { |i| [i.inventory_name, i.id] }
       end
     end
     # f.has_many :splits, heading: 'Splits',

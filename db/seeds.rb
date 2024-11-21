@@ -13,14 +13,14 @@ DatabaseCleaner.clean_with :truncation if Rails.env.development?
 
 avatars = FactoryBot.create_list(:avatar, 100)
 
-def time_rand from = 0.0, to = Time.now
-  Time.at(from + rand * (to.to_f - from.to_f))
+def time_rand(from = 0.0, to = Time.now)
+  Time.at(from + (rand * (to.to_f - from.to_f)))
 end
 
-def time_rand_array from = 0.0, to = Time.now, num
+def time_rand_array(from = 0.0, to = Time.now, num = 10)
   times = []
   num.times do
-    times += [time_rand(from, to) ]
+    times += [time_rand(from, to)]
   end
   times
 end
@@ -49,48 +49,48 @@ def give_terminals_to_user(user, _avatars)
       terminal.inventory = user.inventories.sample
       terminal.save
     end
-
-    
   end
 end
 
+# rubocop:disable Metrics/AbcSize
+
 def give_visits_to_traffic_cop(traffic_cop, avatars, visit_time = 20)
   times = time_rand_array(2.years.ago, Time.now, rand(100)).sort
-  
-  times.each_with_index do |time, index|
+
+  times.each_with_index do |time, _index|
     avatar = avatars.sample
-    visit = FactoryBot.build :visit, 
-                avatar_name: avatar.avatar_name, 
-                avatar_key: avatar.avatar_key,
-                region: traffic_cop.region,
-                user_id: traffic_cop.user_id,
-                created_at: time
+    visit = FactoryBot.build :visit,
+                             avatar_name: avatar.avatar_name,
+                             avatar_key: avatar.avatar_key,
+                             region: traffic_cop.region,
+                             user_id: traffic_cop.user_id,
+                             created_at: time
     detection_count = 0
-    while rand >= 1.0/(visit_time.to_f)
+    while rand >= 1.0 / visit_time.to_f
       previous_detection = visit.detections.last
-      detection = FactoryBot.build :detection, created_at: visit.created_at + detection_count * 30
+      detection = FactoryBot.build :detection, created_at: visit.created_at + (detection_count * 30)
       if previous_detection
         detection.x = detection.x + rand(-10.0..10.0)
         detection.y = detection.y + rand(-10.0..10.0)
         detection.z = detection.z + rand(-10.0..10.0)
-      end 
+      end
       visit.detections << detection
       detection_count += 1
     end
     traffic_cop.visits << visit
-    traffic_cop.visits.last.update_column(:updated_at, traffic_cop.visits.last.created_at + detection_count * 30)
+    traffic_cop.visits.last.update_column(:updated_at, traffic_cop.visits.last.created_at + (detection_count * 30))
   end
 end
+
+# rubocop:enable Metrics/AbcSize
 
 def give_traffic_cops_to_user(user, avatars)
   puts "Giving Traffic Cops to #{user.avatar_name}"
   rand(3..5).times do
     traffic_cop = FactoryBot.build(:traffic_cop)
-    if rand < 0.7
-      traffic_cop.server = user.servers.sample if user.servers.count > 0
-    end
+    traffic_cop.server = user.servers.sample if rand < 0.7 && user.servers.count.positive?
     user.web_objects << traffic_cop
-    
+
     give_visits_to_traffic_cop(traffic_cop, avatars)
   end
 end
@@ -128,7 +128,7 @@ end
     user.web_objects << web_object
     # puts user.web_object_weight
   end
-  
+
   give_traffic_cops_to_user(user, avatars)
   # puts "acount level: #{user.account_level}: objects: #{objects} - object_weight: #{user.web_object_weight}"
 end
