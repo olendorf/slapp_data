@@ -75,6 +75,14 @@ module Rezzable
       }
     end
 
+    def visitors
+      counts = visits.group(:avatar_key).count
+      data = visits.group(:avatar_key, :avatar_name).sum(:duration).collect do |k, v|
+        { avatar_name: k.last, avatar_key: k.first, time_spent: v, visits: counts[k.first] }
+      end
+      data.sort_by { |h| -h[:time_spent] }
+    end
+
     private
 
     def handle_detections

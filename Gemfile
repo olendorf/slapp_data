@@ -46,6 +46,10 @@ gem 'activeadmin'
 # Configuration for application
 gem 'config'
 
+# Human readable times
+gem 'chronic'
+gem 'chronic_duration'
+
 # A simple HTTP and REST client for Ruby, inspired by the Sinatra's 
 # microframework style of specifying actions: get, put, post, delete.
 gem 'rest-client'

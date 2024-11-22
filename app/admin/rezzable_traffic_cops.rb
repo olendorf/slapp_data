@@ -81,6 +81,44 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
       row :created_at
       row :updated_at
     end
+
+    panel 'Visits' do
+      paginated_collection(
+        resource.visits.order(created_at: :desc).page(
+          params[:visit_page]
+        ).per(20), param_name: 'visit_page', download_links: false
+      ) do
+        table_for collection do
+          column :avatar_name
+          column :avatar_key
+          column 'Start Time', &:created_at
+          column 'Duration' do |visit|
+            ChronicDuration.output(visit.duration)
+          end
+        end
+      end
+    end
+
+    panel 'Visitors' do
+      data = resource.visitors
+      paginated_data = Kaminari.paginate_array(data).page(params['visitor_page']).per(20)
+      div class: 'paginated_collection' do
+        table_for paginated_data do
+          column :avatar_name
+          column :avatar_key
+          column :visits
+          column 'Time spent' do |visitor|
+            ChronicDuration.output(visitor[:time_spent])
+          end
+        end
+        div id: 'visitors-footer' do
+          paginate paginated_data, param_name: 'visitor_page'
+        end
+        div class: 'pagination_information' do
+          page_entries_info paginated_data, entry_name: 'Visitors'
+        end
+      end
+    end
   end
 
   sidebar :settings, only: %i[edit show] do
