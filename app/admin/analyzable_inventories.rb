@@ -3,7 +3,7 @@
 ActiveAdmin.register Analyzable::Inventory, as: 'Inventory' do
   include ActiveAdmin::InventoryBehavior
 
-  menu label: 'Inventory'
+  menu label: 'Inventories'
 
   decorate_with Analyzable::InventoryDecorator
 

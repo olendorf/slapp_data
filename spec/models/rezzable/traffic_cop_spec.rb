@@ -23,6 +23,16 @@ RSpec.describe Rezzable::TrafficCop, type: :model do
 
   it { expect(Rezzable::Server).to act_as(AbstractWebObject) }
 
+  it 'should cover ransackable_associations method ' do
+    expect(subject.class.ransackable_associations)
+      .to include('abstract_web_object', 'actable', 'user', 'created_at')
+  end
+
+  it 'should cover ransackable_attributes method ' do
+    expect(subject.class.ransackable_attributes)
+      .to include('id', 'id_value')
+  end
+
   it { should have_many(:visits).class_name('Analyzable::Visit').dependent(:nullify) }
 
   it {
@@ -47,6 +57,53 @@ RSpec.describe Rezzable::TrafficCop, type: :model do
       access_mode_allowed: 1
     )
   }
+
+  it {
+    should define_enum_for(:power).with_values(
+      power_off: 0,
+      power_on: 1
+    )
+  }
+
+  describe '#current_visitors' do
+    before(:each) do
+      traffic_cop.visits << FactoryBot.build(:visit, created_at: 2.hours.ago,
+                                                     updated_at: 2.hours.ago)
+
+      traffic_cop.visits << FactoryBot.build(:visit, created_at: 1.hours.ago,
+                                                     updated_at: 1.minute.ago)
+
+      traffic_cop.visits << FactoryBot.build(:visit, created_at: 1.hours.ago,
+                                                     updated_at: 1.minute.ago)
+    end
+
+    it 'should return only the current visitors' do
+      expect(traffic_cop.current_visitors.size).to eq 2
+    end
+  end
+
+  describe '#visitors' do
+    before(:each) do
+      traffic_cop.visits << FactoryBot.build(:visit, created_at: 2.hours.ago,
+                                                     updated_at: 1.hour.ago,
+                                                     duration: 1.hour)
+
+      traffic_cop.visits << FactoryBot.build(:visit, avatar_name: 'foo',
+                                                     avatar_key: 'bar',
+                                                     created_at: 1.hours.ago,
+                                                     updated_at: 15.seconds.ago,
+                                                     duration: 1.hour - 15.seconds)
+
+      traffic_cop.visits << FactoryBot.build(:visit, avatar_name: 'foo',
+                                                     avatar_key: 'bar',
+                                                     created_at: 1.hours.ago,
+                                                     updated_at: 30.seconds.ago,
+                                                     duration: 1.hour - 30.seconds)
+    end
+    it 'should return the summed time spent by each avatar' do
+      expect(traffic_cop.visitors.size).to eq 2
+    end
+  end
 
   describe 'detections' do
     let(:detections) { FactoryBot.attributes_for_list :detection, 10 }
@@ -106,84 +163,110 @@ RSpec.describe Rezzable::TrafficCop, type: :model do
         end.to change(traffic_cop.visits, :count).by(1)
       end
     end
-    
-    describe 'response data' do 
+
+    describe 'response data' do
       let(:old_detections) do
         FactoryBot.attributes_for_list :detection, 2, created_at: 1.hour.ago
-      end 
-      before(:each) do 
+      end
+      before(:each) do
         traffic_cop.update detections: old_detections
       end
       let(:detections) { FactoryBot.attributes_for_list :detection, 2 }
-      context 'avatars first visit' do 
-        
-        it 'should set the correct keys' do 
+      context 'avatars first visit' do
+        it 'should set the correct keys' do
           traffic_cop.update detections: detections + old_detections
           expect(traffic_cop.outgoing_messages[:first_visit])
-                  .to eq(detections.collect { |d| d[:avatar_key]})
+            .to eq(detections.collect { |d| d[:avatar_key] })
         end
-      end 
-      
+      end
+
       context 'avatar has not visited recently' do
         let(:avatars) { FactoryBot.create_list :avatar, 1 }
 
-        it ' should set the correct keys' do 
+        it ' should set the correct keys' do
           avies = avatars
           stale_detections = FactoryBot.attributes_for_list(:detection, 1) do |detection, i|
             detection[:avatar_name] = avies[i].avatar_name
             detection[:avatar_key] = avies[i].avatar_key
           end
- 
-          traffic_cop.update detections: stale_detections         
+
+          traffic_cop.update detections: stale_detections
           visit = traffic_cop.visits.last
           visit.created_at = 3.weeks.ago
           visit.save
           traffic_cop.reload
-          repeat_detections = FactoryBot.attributes_for_list(:detection, 
-                                  1) do |detection, i|
+          repeat_detections = FactoryBot.attributes_for_list(:detection,
+                                                             1) do |detection, i|
             detection[:avatar_name] = avies[i].avatar_name
             detection[:avatar_key] = avies[i].avatar_key
           end
-          
+
           traffic_cop.update detections: repeat_detections
           expect(traffic_cop.outgoing_messages[:repeat_visit])
-                  .to eq(avatars.collect { |a| a.avatar_key })
+            .to eq(avatars.collect(&:avatar_key))
         end
       end
-    
-      context 'traffic cop is in access list only mode' do
 
-      end
-        
-      
-      context 'traffic cop is in banned mode' do         
-        let(:banned) { FactoryBot.build_list :banned_avatar, 2 }
-        let(:detections) do 
+      context 'traffic cop is in access list only mode' do
+        let(:allowed) { FactoryBot.build_list :allowed_avatar, 2 }
+        let(:detections) do
           detections = FactoryBot.attributes_for_list :detection, 3
-          banned.each do |avatar|
-            detections += FactoryBot.attributes_for_list :detection, 1, 
-                                  avatar_name: avatar.avatar_name, 
-                                  avatar_key: avatar.avatar_key
+          allowed.each do |avatar|
+            detections += FactoryBot.attributes_for_list :detection, 1,
+                                                         avatar_name: avatar.avatar_name,
+                                                         avatar_key: avatar.avatar_key
           end
           detections
         end
-        before(:each) do 
+        before(:each) do
+          traffic_cop.update(access_mode: :access_mode_allowed)
+          traffic_cop.save
+          traffic_cop.listable_avatars << allowed
+        end
+        it 'should only allow the allowed detections ' do
+          traffic_cop.update(detections:)
+          expect(traffic_cop.outgoing_messages[:first_visit]).to eq(allowed.collect(&:avatar_key))
+        end
+
+        it 'should eject others' do
+          traffic_cop.update(detections:)
+          expected = detections.collect { |a| a[:avatar_key] } - allowed.collect do |a|
+                                                                   a[:avatar_key]
+                                                                 end
+          expect(traffic_cop.outgoing_messages[:eject]).to eq expected
+        end
+      end
+
+      context 'traffic cop is in banned mode' do
+        let(:banned) { FactoryBot.build_list :banned_avatar, 2 }
+        let(:detections) do
+          detections = FactoryBot.attributes_for_list :detection, 3
+          banned.each do |avatar|
+            detections += FactoryBot.attributes_for_list :detection, 1,
+                                                         avatar_name: avatar.avatar_name,
+                                                         avatar_key: avatar.avatar_key
+          end
+          detections
+        end
+        before(:each) do
           traffic_cop.update(access_mode: :access_mode_banned)
           traffic_cop.save
           traffic_cop.listable_avatars << banned
         end
         it 'should only allow the non-banned detections ' do
-          traffic_cop.update detections: detections
-          expected = detections.collect { |a| a[:avatar_key] } - banned.collect { |b| b[:avatar_key] }
+          traffic_cop.update(detections:)
+          expected = detections.collect { |a| a[:avatar_key] } - banned.collect do |b|
+                                                                   b[:avatar_key]
+                                                                 end
           expect(traffic_cop.outgoing_messages[:first_visit]).to eq expected
         end
-        
-        it 'should eject others' do 
-          traffic_cop.update detections: detections
-          expect(traffic_cop.outgoing_messages[:eject]).to eq banned.collect { |b| b.avatar_key }
+
+        it 'should eject others' do
+          traffic_cop.update(detections:)
+          expect(traffic_cop.outgoing_messages[:eject]).to eq(banned.collect(&:avatar_key))
         end
       end
-    end 
+    end
   end
 
   describe '#add_to_allowed_list' do

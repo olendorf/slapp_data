@@ -10,8 +10,18 @@
 // Active Admin's got SASS!
 @import "active_admin/mixins";
 @import "active_admin/base";
+@import "slapp_data_colors";
 
 // Overriding any non-variable Sass must be done after the fact.
 // For example, to change the default status-tag color:
 //
 //   .status_tag { background: #6090DB; }
+
+.status_tag {
+  &.on {
+    background-color: $slapp_data_ok;
+  }
+  &.off {
+    background-color: $am-theme-error;
+  }
+}

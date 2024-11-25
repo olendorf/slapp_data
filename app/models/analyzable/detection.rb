@@ -6,5 +6,9 @@ module Analyzable
     belongs_to :visit, class_name: 'Analyzable::Visit', optional: true
 
     attr_accessor :avatar_name, :avatar_key
+
+    def self.ransackable_attributes(_auth_object = nil)
+      %w[created_at id id_value updated_at visit_id x y z]
+    end
   end
 end

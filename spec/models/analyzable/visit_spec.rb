@@ -9,6 +9,22 @@ RSpec.describe Analyzable::Visit, type: :model do
   it { should belong_to(:traffic_cop).optional(true) }
   it { should have_many(:detections) }
 
+  # it 'should cover ransackable_attributes method ' do
+  #   expect(subject.class.ransackable_attributes).to include('id', 'id_value')
+  # end
+
+  it 'should cover ransackable_associations method ' do
+    expect(subject.class.ransackable_associations)
+      .to include('detections', 'user', 'traffic_cop')
+  end
+
+  it 'should cover ransackable_attributes method ' do
+    expect(subject.class.ransackable_attributes)
+      .to include('avatar_key', 'avatar_name', 'created_at', 'duration',
+                  'id', 'id_value', 'region', 'traffic_cop_id', 'updated_at',
+                  'user_id')
+  end
+
   describe '#active?' do
     context 'visit is active' do
       it 'should return true' do

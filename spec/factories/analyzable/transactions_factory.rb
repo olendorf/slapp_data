@@ -10,5 +10,10 @@ FactoryBot.define do
     target_name { "#{first_name} #{last_name}" }
     target_key { SecureRandom.uuid }
     description { Faker::Quote.most_interesting_man_in_the_world }
+    transaction_type { :other }
+
+    factory :account_payment do
+      transaction_type { :account }
+    end
   end
 end
