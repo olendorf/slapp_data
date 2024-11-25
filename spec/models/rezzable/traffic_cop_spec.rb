@@ -23,6 +23,16 @@ RSpec.describe Rezzable::TrafficCop, type: :model do
 
   it { expect(Rezzable::Server).to act_as(AbstractWebObject) }
 
+  it 'should cover ransackable_associations method ' do
+    expect(subject.class.ransackable_associations)
+      .to include('abstract_web_object', 'actable', 'user', 'created_at')
+  end
+
+  it 'should cover ransackable_attributes method ' do
+    expect(subject.class.ransackable_attributes)
+      .to include('id', 'id_value')
+  end
+
   it { should have_many(:visits).class_name('Analyzable::Visit').dependent(:nullify) }
 
   it {

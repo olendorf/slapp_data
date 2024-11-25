@@ -95,12 +95,54 @@ def give_traffic_cops_to_user(user, avatars)
   end
 end
 
+def add_account_payment_to_user(user, web_object, avatar, t_time)
+  transaction = FactoryBot.build :account_payment,
+                                 amount: User.payment_schedule(rand(1..3)).keys.sample,
+                                 target_name: avatar.avatar_name,
+                                 target_key: avatar.avatar_key,
+                                 description: "Account payment from #{avatar.avatar_name}",
+                                 abstract_web_object_id: web_object.id,
+                                 web_object_type: 'terminal',
+                                 created_at: t_time,
+                                 updated_at: t_time
+  user.transactions << transaction
+end
+
+def add_other_transaction_to_user(user, t_time)
+  transaction = FactoryBot.build :transaction,
+                                 created_at: t_time,
+                                 updated_at: t_time
+  user.transactions << transaction
+end
+
+def give_transactions_to_user(user, avatars, _num = 100)
+  puts "Giving transactions to #{user.avatar_name}"
+  t_times = time_rand_array(2.years.ago, Time.now, 200)
+
+  t_times.each do |t_time|
+    web_object = user.web_objects.sample
+    avatar = avatars.sample
+    if rand < 0.5
+      u = User.all.sample
+      puts "using user #{u.avatar_name}"
+      avatar.avatar_name = u.avatar_name
+      avatar.avatar_key = u.avatar_key
+    end
+    if web_object.actable.instance_of?(Rezzable::Terminal)
+      add_account_payment_to_user(user, web_object, avatar, t_time)
+    else
+      add_other_transaction_to_user(user, t_time)
+    end
+  end
+end
+
 # Create an owner
 puts 'Creating Owner'
 owner = FactoryBot.create(:owner, avatar_name: 'Random Citizen')
 give_servers_to_user(owner)
 give_terminals_to_user(owner, avatars)
 give_traffic_cops_to_user(owner, avatars)
+give_transactions_to_user(owner, avatars)
 # 3.times do
 #   server = FactoryBot.build :server
 #   owner.web_objects << server
@@ -131,4 +173,6 @@ end
 
   give_traffic_cops_to_user(user, avatars)
   # puts "acount level: #{user.account_level}: objects: #{objects} - object_weight: #{user.web_object_weight}"
+
+  give_transactions_to_user(user, avatars)
 end

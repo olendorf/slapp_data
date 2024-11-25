@@ -17,6 +17,20 @@ RSpec.describe Analyzable::Inventory, type: :model do
   it { should belong_to(:user) }
   it { should belong_to(:server).class_name('Rezzable::Server') }
 
+  it 'should cover ransackable_associations method ' do
+    expect(subject.class.ransackable_associations)
+      .to include('server', 'user')
+  end
+
+  it 'should cover ransackable_attributes method ' do
+    expect(subject.class.ransackable_attributes)
+      .to include(
+        'created_at', 'creator_name', 'date_acquired', 'description',
+        'id', 'id_value', 'inventory_name', 'inventory_type', 'next_perms',
+        'owner_perms', 'server_id', 'updated_at', 'user_id'
+      )
+  end
+
   it {
     should define_enum_for(:inventory_type).with_values(
       texture: 0,

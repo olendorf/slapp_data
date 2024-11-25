@@ -14,6 +14,21 @@ RSpec.describe Analyzable::Transaction, type: :model do
 
   let(:user) { FactoryBot.create :user }
 
+  it 'should cover ransackable_associations method ' do
+    expect(subject.class.ransackable_associations)
+      .to include('abstract_web_object', 'user')
+  end
+
+  it 'should cover ransackable_attributes method ' do
+    expect(subject.class.ransackable_attributes)
+      .to include(
+        'abstract_web_object_id', 'amount', 'balance', 'created_at',
+        'description', 'id', 'id_value', 'previous_balance', 'target_key',
+        'target_name', 'transaction_type', 'updated_at', 'user_id',
+        'web_object_type'
+      )
+  end
+
   describe 'balance' do
     context 'first transaction' do
       let(:transaction) { FactoryBot.build :transaction }
