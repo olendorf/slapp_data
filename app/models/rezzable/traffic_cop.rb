@@ -16,7 +16,7 @@ module Rezzable
     enum :sensor_mode, {
       sensor_mode_region: 0,
       sensor_mode_parcel: 1,
-      sensor_mode_owned_parcels: 2
+      sensor_mode_owned: 2
     }
 
     enum :security_mode, {

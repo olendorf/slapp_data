@@ -39,7 +39,7 @@ RSpec.describe Rezzable::TrafficCop, type: :model do
     should define_enum_for(:sensor_mode).with_values(
       sensor_mode_region: 0,
       sensor_mode_parcel: 1,
-      sensor_mode_owned_parcels: 2
+      sensor_mode_owned: 2
     )
   }
 
@@ -53,8 +53,9 @@ RSpec.describe Rezzable::TrafficCop, type: :model do
 
   it {
     should define_enum_for(:access_mode).with_values(
-      access_mode_banned: 0,
-      access_mode_allowed: 1
+      access_mode_anyone: 0,
+      access_mode_banned: 1,
+      access_mode_allowed: 2
     )
   }
 
