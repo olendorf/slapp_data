@@ -26,8 +26,9 @@ module Rezzable
     }
 
     enum :access_mode, {
-      access_mode_banned: 0,
-      access_mode_allowed: 1
+      access_mode_anyone: 0,
+      access_mode_banned: 1,
+      access_mode_allowed: 2
     }
 
     enum :power, {
@@ -71,7 +72,10 @@ module Rezzable
         first_visit_message:,
         repeat_visit_message:,
         banned_message:,
-        outgoing_messages:
+        outgoing_messages:,
+        access_mode:,
+        sensor_mode:,
+        power:,
       }
     end
 
