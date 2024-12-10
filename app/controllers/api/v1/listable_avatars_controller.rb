@@ -9,7 +9,7 @@ class Api::V1::ListableAvatarsController < Api::V1::ApiController
     data = ""
     if params['listable_avatar_page'] ||= 'all'
       page = @requesting_object.actable.send(params['list_name'].to_sym)
-      page = data.collect { |a| {avatar_key: a.avatar_key, avatar_name: a.avatar_name} }
+      page = page.collect { |a| {avatar_key: a.avatar_key, avatar_name: a.avatar_name} }
       data = {params['list_name'] => page}
     else
       params['listable_avatar_page'] ||= 1
