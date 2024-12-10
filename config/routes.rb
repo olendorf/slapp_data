@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     scope module: :v1,
           constraints: ApiConstraints.new(version: 1, default: true) do
       resources :users, except: %i[index new edit], param: :avatar_key
+      resources :listable_avatars, only: %i[index]
 
       namespace :analyzable do
         resources :inventories, except: %i[new edit], param: :inventory_name

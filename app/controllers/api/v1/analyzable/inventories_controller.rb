@@ -18,7 +18,7 @@ module Api
                                      .page(params['inventory_page']).per(9)
                  end
           data = paged_data(page)
-          render json: { data: }, status: :ok
+          render json: { data: data}, status: :ok
         end
 
         def show
@@ -28,7 +28,7 @@ module Api
           )
           data = @inventory.attributes.except(:id, :user_id,
                                               :server_id, :created_at, :updated_at)
-          render json: { message: 'OK', data: }, status: :ok
+          render json: { message: 'OK', data: data }, status: :ok
         end
 
         def create

@@ -28,10 +28,18 @@ module Api
 
       def show
         authorize [:api, :v1, @requesting_object.actable]
+        data = {}
+        if params['attributes'] 
+          params['attributes'].each do |attribute|
+            data[attribute] = @requesting_object.send(attribute)
+          end
+        else
+          data = @requesting_object.attributes.with_indifferent_access.except(
+                        'id', 'url', 'user_id', 'created_at', 'updated_at'
+                      )
+        end
         render json: {
-          data: @requesting_object.attributes.with_indifferent_access.except(
-            'id', 'url', 'user_id', 'created_at', 'updated_at'
-          ),
+          data: data,
           http_status: 'OK'
         }, status: :ok
       end

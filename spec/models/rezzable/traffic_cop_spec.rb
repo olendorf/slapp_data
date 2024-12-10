@@ -293,7 +293,7 @@ RSpec.describe Rezzable::TrafficCop, type: :model do
       traffic_cop.listable_avatars << FactoryBot.build(:allowed_avatar)
       traffic_cop.listable_avatars << FactoryBot.build(:banned_avatar)
       traffic_cop.listable_avatars << FactoryBot.build(:banned_avatar)
-      expect(traffic_cop.allowed_list.size).to eq 3
+      expect(traffic_cop.allowed_avatars.size).to eq 3
     end
   end
 
@@ -304,7 +304,7 @@ RSpec.describe Rezzable::TrafficCop, type: :model do
       traffic_cop.listable_avatars << FactoryBot.build(:allowed_avatar)
       traffic_cop.listable_avatars << FactoryBot.build(:banned_avatar)
       traffic_cop.listable_avatars << FactoryBot.build(:banned_avatar)
-      expect(traffic_cop.banned_list.size).to eq 2
+      expect(traffic_cop.banned_avatars.size).to eq 2
     end
   end
 end

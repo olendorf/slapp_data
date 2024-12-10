@@ -49,10 +49,11 @@ module Rezzable
         )
       end
 
-      define_method("#{list}_list") do
+      define_method("#{list}_avatars") do
         listable_avatars.where(list_name: list.to_sym)
       end
     end
+
 
     def self.ransackable_associations(_auth_object = nil)
       %w[abstract_web_object actable user created_at]
@@ -140,9 +141,9 @@ module Rezzable
     end
 
     def access?(detection)
-      has_access = banned_list.where(avatar_key: detection[:avatar_key]).empty?
+      has_access = banned_avatars.where(avatar_key: detection[:avatar_key]).empty?
       if access_mode_allowed? && has_access
-        has_access = allowed_list.where(avatar_key: detection[:avatar_key]).size.positive?
+        has_access = allowed_avatars.where(avatar_key: detection[:avatar_key]).size.positive?
       end
       has_access
     end
