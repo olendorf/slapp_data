@@ -8,8 +8,9 @@ class Api::V1::ListableAvatarsController < Api::V1::ApiController
     authorize [:api, :v1, @requesting_object.actable]
     data = ""
     if params['listable_avatar_page'] ||= 'all'
-      data = @requesting_object.actable.send(params['list_name'].to_sym)
-      data = data.collect { |a| {avatar_key: a.avatar_key, avatar_name: a.avatar_name} }
+      page = @requesting_object.actable.send(params['list_name'].to_sym)
+      page = data.collect { |a| {avatar_key: a.avatar_key, avatar_name: a.avatar_name} }
+      data = {params['list_name'] => page}
     else
       params['listable_avatar_page'] ||= 1
       page = @requesting_object.actable.send(params['list_name'].to_sym)
