@@ -4,4 +4,5 @@
 class ListableAvatar < ApplicationRecord
   belongs_to :listable, polymorphic: true
   
+  validates_uniqueness_of :avatar_key, scope: [:listable_id, :listable_type]
 end

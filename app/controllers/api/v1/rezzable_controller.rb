@@ -46,7 +46,7 @@ module Api
 
       def update
         authorize [:api, :v1, @requesting_object.actable]
-
+        
         params.permit!
         @requesting_object.actable.update! object_attributes
         @requesting_object.save

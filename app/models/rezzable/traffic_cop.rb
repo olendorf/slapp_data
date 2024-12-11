@@ -8,6 +8,8 @@ module Rezzable
     has_many :visits, class_name: 'Analyzable::Visit', dependent: :nullify
 
     has_many :listable_avatars, as: :listable, dependent: :destroy
+    
+    accepts_nested_attributes_for :listable_avatars, allow_destroy: true
 
     attr_accessor :detections, :outgoing_messages
 

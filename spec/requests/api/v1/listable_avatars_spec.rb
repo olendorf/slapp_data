@@ -94,8 +94,6 @@ RSpec.describe "ListableAvatars", type: :request do
             get path, 
                 params: {list_name: 'banned_avatars', listable_avatar_page: 2},
                 headers: headers(traffic_cop)
-            
-            
             expected = traffic_cop.banned_avatars[9..-1].collect do |a| 
               a.avatar_key
             end
