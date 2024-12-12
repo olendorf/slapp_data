@@ -18,8 +18,8 @@ class Api::V1::ListableAvatarsController < Api::V1::ApiController
       params['listable_avatar_page'] ||= 1
       page = @requesting_object.actable.send(params['list_name'].to_sym)
                     .page(params['listable_avatar_page']).per(9)
-      page = page.collect { |a| {avatar_name: a.avatar_name, avatar_id: a.id} }
-      data = {params['list_name'] => page }
+      page = page.collect { |a| [avatar_name: a.avatar_name, avatar_id: a.id] }
+      data = {params['list_name'] => page.flatten }
     end
     
     render json: {message: 'OK', data: data}, status: :ok
