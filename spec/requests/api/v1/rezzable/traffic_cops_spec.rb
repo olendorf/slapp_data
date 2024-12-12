@@ -48,7 +48,7 @@ RSpec.describe 'Api::V1::Rezzable::TrafficCops', type: :request do
     let(:path) { api_rezzable_traffic_cop_path(traffic_cop) }
     context 'banned avatars' do 
       let(:atts) do
-        {listable_avatars_attributes: [FactoryBot.attributes_for(:banned_avatar)]}
+        {listable_avatars_attributes: [FactoryBot.attributes_for(:banned)]}
       end 
       it 'should return OK status' do 
         put path, params: atts.to_json, headers: headers(traffic_cop)
@@ -58,14 +58,14 @@ RSpec.describe 'Api::V1::Rezzable::TrafficCops', type: :request do
       it 'should add the listable avatar' do 
         expect{
           put path, params: atts.to_json, headers: headers(traffic_cop)
-        }.to change(traffic_cop.banned_avatars, :count).by(1)
+        }.to change(traffic_cop.banned, :count).by(1)
       end
       
     end 
     
     context 'allowed avatars' do       
       let(:atts) do
-        {listable_avatars_attributes: [FactoryBot.attributes_for(:allowed_avatar)]}
+        {listable_avatars_attributes: [FactoryBot.attributes_for(:allowed)]}
       end
       it 'should return OK status' do 
         put path, params: atts.to_json, headers: headers(traffic_cop)
@@ -75,7 +75,7 @@ RSpec.describe 'Api::V1::Rezzable::TrafficCops', type: :request do
       it 'should add the listable avatar' do 
         expect{
           put path, params: atts.to_json, headers: headers(traffic_cop)
-        }.to change(traffic_cop.allowed_avatars, :count).by(1)
+        }.to change(traffic_cop.allowed, :count).by(1)
       end
     end
   end 

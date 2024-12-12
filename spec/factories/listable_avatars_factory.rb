@@ -8,11 +8,11 @@ FactoryBot.define do
     end
     avatar_name { "#{first_name} #{last_name}" }
     avatar_key { SecureRandom.uuid }
-    factory :allowed_avatar do
+    factory :allowed do
       list_name { 'allowed' }
     end
 
-    factory :banned_avatar do
+    factory :banned do
       list_name { 'banned' }
     end
   end

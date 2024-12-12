@@ -12,13 +12,13 @@ RSpec.describe "ListableAvatars", type: :request do
         
         15.times do |index|
           traffic_cop.listable_avatars << FactoryBot
-                          .build(:allowed_avatar, 
+                          .build(:allowed, 
                                     avatar_name: "Allowed_#{index} Citizen")
         end
         
         17.times do |index|
           traffic_cop.listable_avatars << FactoryBot
-                          .build(:banned_avatar, 
+                          .build(:banned, 
                                     avatar_name: "Banned_#{index} Citizen")
         end
         
@@ -29,18 +29,18 @@ RSpec.describe "ListableAvatars", type: :request do
       
       context 'getting allowed list' do 
         it 'should return ok status' do 
-          get path, params: {list_name: 'allowed_avatars'}, headers: headers(traffic_cop)
+          get path, params: {list_name: 'allowed'}, headers: headers(traffic_cop)
           expect(response).to have_http_status(:ok)
         end
         
         context 'first page' do 
           it 'should return the correct data' do 
-            get path, params: {list_name: 'allowed_avatars'}, 
+            get path, params: {list_name: 'allowed'}, 
                       headers: headers(traffic_cop)
-            expected = traffic_cop.allowed_avatars[0..8].collect do |a| 
+            expected = traffic_cop.allowed[0..8].collect do |a| 
               a.avatar_key
             end
-            observed = JSON.parse(response.body)['data']['allowed_avatars'].collect do |a|
+            observed = JSON.parse(response.body)['data']['allowed'].collect do |a|
               a['avatar_key']
             end
             expect(observed)
@@ -51,14 +51,14 @@ RSpec.describe "ListableAvatars", type: :request do
         context 'last page' do 
           it 'should return the correct data' do 
             get path, 
-                params: {list_name: 'allowed_avatars', listable_avatar_page: 2},
+                params: {list_name: 'allowed', listable_avatar_page: 2},
                 headers: headers(traffic_cop)
             
             
-            expected = traffic_cop.allowed_avatars[9..-1].collect do |a| 
+            expected = traffic_cop.allowed[9..-1].collect do |a| 
               a.avatar_key
             end
-            observed = JSON.parse(response.body)['data']['allowed_avatars'].collect do |a|
+            observed = JSON.parse(response.body)['data']['allowed'].collect do |a|
               a['avatar_key']
             end
             
@@ -70,18 +70,18 @@ RSpec.describe "ListableAvatars", type: :request do
       
       context 'getting banned list' do 
         it 'should return ok status' do 
-          get path, params: {list_name: 'banned_avatars'}, headers: headers(traffic_cop)
+          get path, params: {list_name: 'banned'}, headers: headers(traffic_cop)
           expect(response).to have_http_status(:ok)
         end
         
         context 'first page' do 
           it 'should return the correct data' do 
-            get path, params: {list_name: 'banned_avatars'}, 
+            get path, params: {list_name: 'banned'}, 
                       headers: headers(traffic_cop)
-            expected = traffic_cop.banned_avatars[0..8].collect do |a| 
+            expected = traffic_cop.banned[0..8].collect do |a| 
               a.avatar_key
             end
-            observed = JSON.parse(response.body)['data']['banned_avatars'].collect do |a|
+            observed = JSON.parse(response.body)['data']['banned'].collect do |a|
               a['avatar_key']
             end
             expect(observed)
@@ -92,12 +92,12 @@ RSpec.describe "ListableAvatars", type: :request do
         context 'last page' do 
           it 'should return the correct data' do 
             get path, 
-                params: {list_name: 'banned_avatars', listable_avatar_page: 2},
+                params: {list_name: 'banned', listable_avatar_page: 2},
                 headers: headers(traffic_cop)
-            expected = traffic_cop.banned_avatars[9..-1].collect do |a| 
+            expected = traffic_cop.banned[9..-1].collect do |a| 
               a.avatar_key
             end
-            observed = JSON.parse(response.body)['data']['banned_avatars'].collect do |a|
+            observed = JSON.parse(response.body)['data']['banned'].collect do |a|
               a['avatar_key']
             end
             

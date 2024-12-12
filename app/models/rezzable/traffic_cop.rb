@@ -43,7 +43,7 @@ module Rezzable
     LISTS = %i[allowed banned].freeze
 
     LISTS.each do |list|
-      define_method("add_to_#{list}_list") do |avatar_name, avatar_key|
+      define_method("add_to_#{list}") do |avatar_name, avatar_key|
         listable_avatars << ListableAvatar.new(
           avatar_name:,
           avatar_key:,
@@ -51,7 +51,7 @@ module Rezzable
         )
       end
 
-      define_method("#{list}_avatars") do
+      define_method("#{list}") do
         listable_avatars.where(list_name: list.to_sym)
       end
     end
@@ -143,9 +143,9 @@ module Rezzable
     end
 
     def access?(detection)
-      has_access = banned_avatars.where(avatar_key: detection[:avatar_key]).empty?
+      has_access = banned.where(avatar_key: detection[:avatar_key]).empty?
       if access_mode_allowed? && has_access
-        has_access = allowed_avatars.where(avatar_key: detection[:avatar_key]).size.positive?
+        has_access = allowed.where(avatar_key: detection[:avatar_key]).size.positive?
       end
       has_access
     end
