@@ -180,7 +180,7 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
 
   sidebar :allowed, only: %i[edit show] do
     paginated_collection(
-      resource.allowed_avatars.order(:avatar_name).page(
+      resource.allowed.order(:avatar_name).page(
         params[:allowed_page]
       ).per(10), param_name: 'allowed_page', download_links: false
     ) do
@@ -199,7 +199,7 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
 
   sidebar :banned, only: %i[edit show] do
     paginated_collection(
-      resource.banned_avatars.order(:avatar_name).page(
+      resource.banned_.order(:avatar_name).page(
         params[:banned_page]
       ).per(10), param_name: 'banned_page', download_links: false
     ) do
