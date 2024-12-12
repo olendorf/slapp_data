@@ -199,7 +199,7 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
 
   sidebar :banned, only: %i[edit show] do
     paginated_collection(
-      resource.banned_.order(:avatar_name).page(
+      resource.banned.order(:avatar_name).page(
         params[:banned_page]
       ).per(10), param_name: 'banned_page', download_links: false
     ) do
