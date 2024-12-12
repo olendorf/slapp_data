@@ -79,4 +79,8 @@ RSpec.describe 'Api::V1::Rezzable::TrafficCops', type: :request do
       end
     end
   end 
+  
+  describe 'removing listable avatars' do
+    let(:path) { api_rezzable_traffic_cop_path(traffic_cop) }
+  end 
 end
