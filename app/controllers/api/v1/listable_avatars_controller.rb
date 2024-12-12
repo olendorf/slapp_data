@@ -28,7 +28,7 @@ class Api::V1::ListableAvatarsController < Api::V1::ApiController
   
   def paged_data(page)
     {
-      avatar_names: page.map(&:object_name),
+      avatar_names: page.map(&:avatar_name),
       avatar_ids: page.map(&:id),
       current_page: page.current_page,
       next_page: page.next_page,
