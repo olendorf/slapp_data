@@ -123,7 +123,7 @@ module Rezzable
         if visits.last.created_at < 1.week.ago
           outgoing_messages[:repeat_visit] << detection[:avatar_key]
         end
-        previous_visit.detections << Analyzable::Detection.new(detection)
+        previous_visit.detections << Analyzable::Detection.create(detection)
       end
     end
 
