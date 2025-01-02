@@ -46,6 +46,8 @@ gem 'activeadmin'
 # Configuration for application
 gem 'config'
 
+gem 'gon'
+
 # Human readable times
 gem 'chronic'
 gem 'chronic_duration'

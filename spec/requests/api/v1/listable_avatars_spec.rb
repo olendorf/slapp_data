@@ -38,11 +38,9 @@ RSpec.describe "ListableAvatars", type: :request do
             get path, params: {list_name: 'allowed'}, 
                       headers: headers(traffic_cop)
             expected = traffic_cop.allowed[0..8].collect do |a| 
-              a.avatar_key
+              a.id
             end
-            observed = JSON.parse(response.body)['data']['allowed'].collect do |a|
-              a['avatar_key']
-            end
+            observed = JSON.parse(response.body)['data']['avatar_ids']
             expect(observed)
                 .to eq(expected)
           end
@@ -56,11 +54,9 @@ RSpec.describe "ListableAvatars", type: :request do
             
             
             expected = traffic_cop.allowed[9..-1].collect do |a| 
-              a.avatar_key
+              a.id
             end
-            observed = JSON.parse(response.body)['data']['allowed'].collect do |a|
-              a['avatar_key']
-            end
+            observed = JSON.parse(response.body)['data']['avatar_ids']
             
             expect(observed)
                 .to eq(expected)
@@ -79,11 +75,9 @@ RSpec.describe "ListableAvatars", type: :request do
             get path, params: {list_name: 'banned'}, 
                       headers: headers(traffic_cop)
             expected = traffic_cop.banned[0..8].collect do |a| 
-              a.avatar_key
+              a.id
             end
-            observed = JSON.parse(response.body)['data']['banned'].collect do |a|
-              a['avatar_key']
-            end
+            observed = JSON.parse(response.body)['data']['avatar_ids']
             expect(observed)
                 .to eq(expected)
           end
@@ -95,11 +89,9 @@ RSpec.describe "ListableAvatars", type: :request do
                 params: {list_name: 'banned', listable_avatar_page: 2},
                 headers: headers(traffic_cop)
             expected = traffic_cop.banned[9..-1].collect do |a| 
-              a.avatar_key
+              a.id
             end
-            observed = JSON.parse(response.body)['data']['banned'].collect do |a|
-              a['avatar_key']
-            end
+            observed = JSON.parse(response.body)['data']['avatar_ids']
             
             expect(observed)
                 .to eq(expected)

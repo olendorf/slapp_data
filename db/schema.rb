@@ -100,7 +100,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_22_135313) do
     t.string "avatar_name"
     t.string "avatar_key"
     t.string "region"
-    t.integer "duration"
+    t.integer "duration", default: 0
     t.integer "traffic_cop_id"
     t.integer "user_id"
     t.datetime "created_at", null: false

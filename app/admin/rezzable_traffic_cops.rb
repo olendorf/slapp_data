@@ -119,6 +119,15 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
         end
       end
     end
+    
+    panel '' do
+      div class: 'column md' do
+        render partial: 'visits_histogram'
+      end
+      # div class: 'column md' do
+      #   render partial: 'visitors_time_histogram'
+      # end
+    end
   end
 
   sidebar :settings, only: %i[edit show] do
@@ -172,11 +181,13 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
         column :avatar_name
         column :start_time
         column 'Duration' do |visit|
-          "#{visit.duration / 60.0} mins"
+          ChronicDuration.output(visit.duration)
         end
       end
     end
   end
+  
+  
 
   sidebar :allowed, only: %i[edit show] do
     paginated_collection(
@@ -263,5 +274,14 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
       end
     end
     f.actions
+  end
+  
+  controller do
+    def show
+      gon.ids = [resource.id]
+      params['resource_ids'] = [resource.id]
+      puts "Gon IDs: #{gon.ids}"
+      super
+    end
   end
 end
