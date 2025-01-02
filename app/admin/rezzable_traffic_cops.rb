@@ -278,9 +278,8 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
   
   controller do
     def show
-      gon.ids = [resource.id]
+      # gon.ids = [resource.id]
       params['resource_ids'] = [resource.id]
-      puts "Gon IDs: #{gon.ids}"
       super
     end
   end
