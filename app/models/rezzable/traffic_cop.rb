@@ -40,7 +40,7 @@ module Rezzable
 
     OBJECT_WEIGHT = 25
 
-    LISTS = %i[allowed banned].freeze
+    LISTS = %i[allowed banned excluded].freeze
 
     LISTS.each do |list|
       define_method("add_to_#{list}") do |avatar_name, avatar_key|
@@ -108,6 +108,9 @@ module Rezzable
     # rubocop:disable Metrics/AbcSize
     def handle_detection(detection)
       detection = detection.with_indifferent_access
+      
+      return unless self.excluded.where(avatar_key: detection[:avatar_key]).empty?
+      
       previous_visit = visits.where(avatar_key: detection['avatar_key'])
                              .order(created_at: :desc).limit(1).first
 

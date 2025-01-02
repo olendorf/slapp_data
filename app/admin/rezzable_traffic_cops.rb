@@ -226,6 +226,25 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
 
     render partial: 'add_listable_form', locals: { list_name: 'banned' }
   end
+  
+  sidebar :excluded, only: %i[edit show] do
+    paginated_collection(
+      resource.excluded.order(:avatar_name).page(
+        params[:excluded]
+      ).per(10), param_name: 'excluded_page', download_links: false
+    ) do
+      table_for collection do
+        column :avatar_name
+        column '' do |avatar|
+          link_to 'Delete',  admin_listable_avatar_path(avatar),
+                  method: :delete,
+                  data: { confirm: 'Unban this avatar?' }
+        end
+      end
+    end
+
+    render partial: 'add_listable_form', locals: { list_name: 'excluded' }
+  end
 
   permit_params :object_name, :description, :server_id, :power, :sensor_mode, :security_mode,
                 :access_mode, :first_visit_message, :repeat_visit_message, :inventory_id

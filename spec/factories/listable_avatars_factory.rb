@@ -15,5 +15,9 @@ FactoryBot.define do
     factory :banned do
       list_name { 'banned' }
     end
+    
+    factory :excluded do 
+      list_name { 'excluded' }
+    end 
   end
 end
