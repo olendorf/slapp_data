@@ -18,6 +18,16 @@ class VisitData
     end
   end
   
+  def self.visitors_counts_histogram(ids)
+      Analyzable::Visit.where(traffic_cop_id: ids).group(:avatar_key).count.collect { |_k, v| v }
+  end
+  
+  def self.visitors_duration_counts_scatter(ids)
+    counts = Analyzable::Visit.where(traffic_cop_id: ids).group(:avatar_name).count
+    durations = Analyzable::Visit.where(traffic_cop_id: ids).group(:avatar_name).sum(:duration)
+    counts.collect { |k, v| { x: v, y: durations[k] / 60.0, name: k } }
+  end
+  
   def self.visits_heatmap(ids)
     visits = Analyzable::Visit.where(traffic_cop_id: ids).order(:created_at)
     data = []
