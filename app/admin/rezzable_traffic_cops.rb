@@ -124,9 +124,19 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
       div class: 'column md' do
         render partial: 'visits_histogram'
       end
-      # div class: 'column md' do
-      #   render partial: 'visitors_time_histogram'
-      # end
+      div class: 'column md' do
+        render partial: 'visitors_time_histogram'
+      end
+    end
+    
+    panel '' do
+      div class: 'column md' do
+        render partial: 'visitors_counts_histogram'
+      end
+
+      div class: 'column md' do
+        render partial: 'visitors_counts_duration_scatter'
+      end
     end
   end
 

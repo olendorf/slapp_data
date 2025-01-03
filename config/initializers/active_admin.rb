@@ -380,6 +380,7 @@ ActiveAdmin.setup do |config|
   # override the content of the footer here.
   #
   # config.footer = 'my custom footer text'
+  config.footer = "Slapp Data V0.0.1"
 
   # == Sorting
   #

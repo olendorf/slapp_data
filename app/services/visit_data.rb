@@ -9,4 +9,12 @@ class VisitData
       v.duration / 60.0
     end.compact
   end
+  
+  
+  def self.visitors_time_histogram(ids)
+    Analyzable::Visit.where(traffic_cop_id: ids)
+                     .group(:avatar_key).sum(:duration).collect do |_k, v|
+      v / 60.0
+    end
+  end
 end

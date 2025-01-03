@@ -51,6 +51,42 @@ RSpec.describe 'Async::Visits', type: :request do
           expect(JSON.parse(response.body).size).to eq traffic_cop.visits.size
         end
       end
+      
+      describe 'visitor duraation data' do
+        it 'should return ok status' do
+          get path, params: { chart: 'visitors_time_histogram', ids: traffic_cop.id }
+          expect(response.status).to eq 200
+        end
+
+        it 'should return the data' do
+          get path, params: { chart: 'visitors_time_histogram', ids: traffic_cop.id }
+          expect(JSON.parse(response.body).size).to be_between(1, 20)
+        end
+      end
+      
+      describe 'visitor counts data' do
+        it 'should return ok status' do
+          get path, params: { chart: 'visitors_counts_histogram', ids: traffic_cop.id }
+          expect(response.status).to eq 200
+        end
+
+        it 'should return the data' do
+          get path, params: { chart: 'visitors_counts_histogram', ids: traffic_cop.id }
+          expect(JSON.parse(response.body).size).to be_between(1, 20)
+        end
+      end
+      
+      describe 'visitor duration counts scatter data' do
+        it 'should return ok status' do
+          get path, params: { chart: 'visitors_duration_counts_scatter', ids: traffic_cop.id }
+          expect(response.status).to eq 200
+        end
+
+        it 'should return the data' do
+          get path, params: { chart: 'visitors_duration_counts_scatter', ids: traffic_cop.id }
+          expect(JSON.parse(response.body).size).to be_between(1, 20)
+        end
+      end
     end 
   end
 end
