@@ -21,4 +21,16 @@ class Async::VisitsController < ApplicationController
     durations = Analyzable::Visit.where(traffic_cop_id: ids).group(:avatar_name).sum(:duration)
     counts.collect { |k, v| { x: v, y: durations[k] / 60.0, name: k } }
   end
+  
+  def visits_heatmap(ids)
+    VisitData.visits_heatmap(ids)
+  end
+  
+  def duration_heatmap(ids)
+    VisitData.duration_heatmap(ids)
+  end
+  
+  def visit_location_heatmap(ids)
+    VisitData.visit_location_heatmap(ids)
+  end
 end

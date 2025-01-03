@@ -246,6 +246,7 @@ ActiveAdmin.setup do |config|
   config.register_javascript 'https://code.highcharts.com/12.1.1/highcharts-more.js'
   config.register_javascript 'https://code.highcharts.com/modules/histogram-bellcurve.js'
   config.register_javascript 'https://code.highcharts.com/modules/accessibility.src.js'
+  config.register_javascript 'https://code.highcharts.com/modules/heatmap.js'
 
   # == CSV options
   #

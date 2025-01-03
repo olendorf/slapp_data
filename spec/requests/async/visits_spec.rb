@@ -87,6 +87,43 @@ RSpec.describe 'Async::Visits', type: :request do
           expect(JSON.parse(response.body).size).to be_between(1, 20)
         end
       end
+      
+      describe 'visit heatmap data' do
+        it 'should return ok status' do
+          get path, params: { chart: 'visits_heatmap', ids: traffic_cop.id }
+          expect(response.status).to eq 200
+        end
+
+        it 'should return the correct data' do
+          get path, params: { chart: 'visits_heatmap', ids: traffic_cop.id }
+          expect(JSON.parse(response.body).collect { |d| d[2] }.max).to eq 5
+        end
+      end
+      
+      describe 'duration heatmap data' do
+        it 'should return ok status' do
+          get path, params: { chart: 'duration_heatmap', ids: traffic_cop.id }
+          expect(response.status).to eq 200
+        end
+
+        it 'should return the correct data' do
+          get path, params: { chart: 'duration_heatmap', ids: traffic_cop.id }
+          expect(JSON.parse(response.body).collect { |d| d[2] }.max).to eq 12.5
+        end
+      end
+      
+      describe 'visit_location_heatmap' do
+        it 'should return ok status' do
+          get path, params: { chart: 'visit_location_heatmap', ids: traffic_cop.id }
+          expect(response.status).to eq 200
+        end
+
+        it 'should return the correct data' do
+          get path, params: { chart: 'visit_location_heatmap', ids: traffic_cop.id }
+
+          expect(JSON.parse(response.body)['data'].collect { |d| d[2] }.max).to be > 0
+        end
+      end
     end 
   end
 end

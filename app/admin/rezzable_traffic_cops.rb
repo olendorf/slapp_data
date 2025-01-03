@@ -138,6 +138,22 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
         render partial: 'visitors_counts_duration_scatter'
       end
     end
+    
+    panel '' do
+      div class: 'column md' do
+        render partial: 'visits_heatmap'
+      end
+
+      div class: 'column md' do
+        render partial: 'duration_heatmap'
+      end
+    end
+    
+    panel '' do
+      div class: 'column centered' do
+        render partial: 'visits_location_heatmap'
+      end
+    end
   end
 
   sidebar :settings, only: %i[edit show] do
