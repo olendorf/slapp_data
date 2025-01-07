@@ -1,0 +1,145 @@
+
+        <section class="bg-half-170 bg-light d-table w-100">
+            <div class="container">
+                <div class="row mt-5 justify-content-center">
+                    <div class="col-lg-12 text-center">
+                        <div class="pages-heading">
+                            <h4 class="title mb-0"> Documentation </h4>
+                        </div>
+                    </div>  <!--end col-->
+                </div><!--end row-->
+            </div> <!--end container-->
+        </section><!--end section-->
+        <!-- Hero End -->
+
+
+
+        <!-- Documentation Start -->
+        <section class="section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h4 class="mb-4">Introduction</h4>
+                        <p>Your <b>Traffic Cop</b> is a multifunctional tool primarily designed to collect data about the visitor traffic to your parcel or region. While data collection is it's primary purpose, since it is already
+                        monitoring visitors, we also gave it Security and Greeting functionality. As part of the greeting functionality, it can greet first time and returning visitors differently as well as give an item such as a landmark or
+                        welcome package to your visitors. This can reduce the number of scripted objects you use, reducing lag.</p>
+                        
+                        <p>Your Traffic Cop can be turned on and off, and you can inactivate the greeting and security functions. It can also function on group owned land.</p>
+
+                        <h4 class="mt-5">Usage</h4>
+
+                        <h5 class="mt-4">Setup</h5>
+                        <p>To start using a traffic cop, first rez it. You should rename it, especially if you are using multiple traffic cops. Touch it, then choose <b>Reset</b> from the dialog menu.</p>
+                        
+                        <p>In it's default state, a traffic cop is powered off. To turn it on, choose <b>Sensor On</b> from the menu. Once powered on, the object will
+                        start scanning every 30 seconds and sending data about visitors to the database. Additionally, the unit must be powered on for security and greeting
+                        functionality.</p> 
+                        
+                        
+                        <h5 class="mt-4">Settings</h5>
+                        
+                        <h6 class="mt-3">Linking a Server and Inventory</h6>
+                        <p>You only need to link a <b>Server</b> if you want your traffic cop to give visitors inventory. To link a server and inventory to give, you will first need to rez a server and put 
+                        the inventory you desire into the server's contents. You can get instructions how to do that <%= link_to 'here', static_pages_docs_servers_path %>. You can link to a server via the web site or 
+                        from the traffic cop.</p>
+                        
+                        <p>To link a server and inventory from the website, go to the page for your traffic cop and click the edit button. First link the desired server by choosing it from the dropdown list then
+                        hitting <b>Update Traffic cop</b>. Edit the traffic cop again, then choose the inventory you desire, then click <b>Update Traffic cop</b>.</p>
+                        
+                        <p>Linking from the object itself follows a similar workflow. First chose <b>Server</b> from the dialog menu, then choose the desired server. Then click the <b>Inventory</b> button and 
+                        choose the desired inventory. If you do not want the traffic cop to give anything, just leave the inventory unset.</p>
+            
+                        
+                        <p class="text-muted mb-0">Please follow below steps to install and setup all prerequisites:</p>
+
+                        <ul class="list-unstyled mt-3">
+                            <li class="d-flex mt-2">
+                                <i class="mdi mdi-arrow-right"></i>
+                                <div class="ms-2">
+                                    <h6>Yarn</h6>
+                                    <p class="text-muted">Make sure to have the <a href="https://classic.yarnpkg.com/en/" class="text-primary fw-bold" target="_blank">Yarn</a> installed & running in your computer. If you already have installed Yarn on your computer, you can skip this step. We suggest you to use Yarn instead of NPM.</p>
+                                </div>
+                            </li>
+
+                            <li class="d-flex mt-2">
+                                <i class="mdi mdi-arrow-right"></i>
+                                <div class="ms-2">
+                                    <h6>Nodejs</h6>
+                                    <p class="text-muted">Make sure to have the <a href="https://nodejs.org/" class="text-primary fw-bold" target="_blank">Node.js</a> installed & running in your computer. If you already have installed Node on your computer, you can skip this step if your existing node version is greater than 16.</p>
+                                </div>
+                            </li>
+
+                            <li class="d-flex mt-2">
+                                <i class="mdi mdi-arrow-right"></i>
+                                <div class="ms-2">
+                                    <h6>Gulp</h6>
+                                    <p class="text-muted">Make sure to have the <a href="https://gulpjs.com/" class="text-primary fw-bold" target="_blank">Gulp</a> installed & running in your computer. If you already have installed gulp on run command npm install -g gulp from your terminal.</p>
+                                </div>
+                            </li>
+
+                            <li class="d-flex mt-2">
+                                <i class="mdi mdi-arrow-right"></i>
+                                <div class="ms-2">
+                                    <h6>Git</h6>
+                                    <p class="text-muted">Make sure to have the <a href="https://git-scm.com/" class="text-primary fw-bold" target="_blank">Git</a> installed globally & running on your computer. If you already have installed git on your computer, you can skip this step.</p>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <h5 class="mt-4">Installation</h5>
+                        <p class="text-muted mb-0">To setup the admin theme, follow below-mentioned steps:</p>
+
+                        <ul class="list-unstyled mt-3">
+                            <li class="d-flex">
+                                <i class="mdi mdi-arrow-right"></i>
+                                <div class="ms-2">
+                                    <h6>Install Prerequisites</h6>
+                                    <p class="text-muted">Make sure to have all above prerequisites installed & running on your computer</p>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <p class="text-muted mb-4">After you finished with the above steps, you can run the following commands into the terminal / command prompt from the root directory of the project to run the project locally or build for production use:</p>
+
+                        <div class="table-responsive bg-white rounded">
+                            <table class="table table-bordered mb-0 table-center">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20%;"><i class="ti-file"></i> Command</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="fs-5">
+                                            <code>yarn install</code>
+                                        </td>
+                                        <td>
+                                            This would install all the required dependencies in the <code class="fw-bold">node_modules</code> folder.
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="fs-5">
+                                            <code>gulp</code>
+                                        </td>
+                                        <td>
+                                            Runs the project locally, starts the development server and watches for any changes in your code, including your HTML, javascript, sass, etc. The development server is accessible at <a href="http://localhost:3000" class="text-primary fw-bold" target="_blank">http://localhost:3000</a>.
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="fs-5">
+                                            <code>gulp build</code>
+                                        </td>
+                                        <td>
+                                            Generates a <code class="fw-bold">/dist</code> directory with all the production files.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>

@@ -1,0 +1,94 @@
+<div id="visits_timeline_container" class='centered' data-ids="<%= params['resource_ids'] %>"
+     style="width:1200px; height:400px;; background: url('/assets/512px-Loader.gif'); background-repeat:no-repeat; background-position: center"></div>
+
+<script type="text/javascript">
+
+        $(function () {  
+                var resource_ids = $('#visits_timeline_container').data('ids')
+                $.getJSON('/async/visits', 
+                                {
+                                    ids: resource_ids,
+                                    chart: 'visits_timeline'
+                                },
+                                function(data) {
+
+                    // draw chart
+                    $('#visits_timeline_container').highcharts({ 
+                          chart: {
+                                zoomType: 'x',
+                                style: {
+                                  fontFamily: 'Arial, Helvetica, Clean, sans-serif'
+                                },
+                                events: {
+                                  load: function() {
+                	                        document.getElementById('visits_timeline_container').style.background = 'none';
+                                        }
+                                }
+                            },
+                            title: {
+                                text: 'Traffic Timeline'
+                            },
+                            xAxis: {
+                                title: {
+                                    enabled: true,
+                                    text: 'Date'
+                                },
+                                type: 'datetime'
+                            },
+                            yAxis: [{
+                                title: {
+                                    text: 'Visits'
+                                },
+                                min: 0
+                            }, {
+                                opposite: true,
+                                title: {
+                                  text: 'Time Spent'
+                                }
+                            }],
+                            legend: {
+                                enabled: true
+                            },  
+                            credits: {
+                              enabled: false
+                            },
+                            plotOptions: {
+                                line: {
+                                    marker: {
+                                        radius: 2,
+                                        states: {
+                                            hover: {
+                                                enabled: true,
+                                                // lineColor: 'rgb(100,100,100)'
+                                            }
+                                        }
+                                    },
+                                    states: {
+                                        hover: {
+                                            marker: {
+                                                enabled: false
+                                            }
+                                        }
+                                    },
+                                    // tooltip: {
+                                    //     headerFormat: '<b>{point.point.name}</b><br>',
+                                    //     pointFormat: '{point.x} visits, {point.y} minutes'
+                                    // }
+                                }
+                            },
+                            series: [{
+                                name: 'Visits',
+                                data: data
+                            }, {
+                              name: 'Time Spent (Minutes)',
+                              data: data,
+                              yAxis: 1
+                            }]
+                    
+   
+                    }); 
+                });
+            });
+
+
+</script>

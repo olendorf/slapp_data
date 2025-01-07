@@ -5,4 +5,3 @@ default:
     api_key: change_me
   request:
     time_limit: 30
-  

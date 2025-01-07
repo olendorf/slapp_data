@@ -39,6 +39,18 @@ RSpec.describe 'Async::Visits', type: :request do
     before(:each) { sign_in user }
 
     context 'asking for data from a single traffic_cop' do
+      describe 'visits timeline data' do 
+        it 'should return ok status' do
+          get path, params: { chart: 'visits_timeline', ids: traffic_cop.id }
+          expect(response.status).to eq 200
+        end        
+        
+        it 'should return the data' do
+          get path, params: { chart: 'visits_timeline', ids: traffic_cop.id }
+          expect(JSON.parse(response.body).size).to eq 1
+        end
+      end
+      
       describe 'visits histogram data' do
         it 'should return ok status' do
           get path, params: { chart: 'visits_histogram', ids: traffic_cop.id }

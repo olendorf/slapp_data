@@ -121,6 +121,12 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
     end
     
     panel '' do
+      div class: 'column centered' do
+        render partial: 'visits_timeline'
+      end
+    end
+    
+    panel '' do
       div class: 'column md' do
         render partial: 'visits_histogram'
       end

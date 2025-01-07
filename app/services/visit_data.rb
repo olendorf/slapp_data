@@ -3,6 +3,18 @@
 # Handles data processing for parcels
 class VisitData
   # include DataHelper
+  
+  def self.visits_timeline(ids)
+    visits = Rezzable::TrafficCop.find(ids.first).visits
+    counts = visits.group_by_day(:created_at).count
+    durations = visits.group_by_day(:created_at).sum(:duration)
+    data = counts.keys.sort.map { |k| [k.to_time.to_i * 1000, counts[k], durations[k]] }
+    puts data
+    data
+  end 
+  
+  def self.duration_timeline(ids)
+  end
 
   def self.visits_histogram(ids)
     Analyzable::Visit.select(:duration).where(traffic_cop_id: ids).collect do |v|

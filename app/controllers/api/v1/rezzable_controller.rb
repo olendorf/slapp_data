@@ -34,9 +34,7 @@ module Api
             data[attribute] = @requesting_object.send(attribute)
           end
         else
-          data = @requesting_object.attributes.with_indifferent_access.except(
-                        'id', 'url', 'user_id', 'created_at', 'updated_at'
-                      )
+          data = @requesting_object.response.data
         end
         render json: {
           data: data,

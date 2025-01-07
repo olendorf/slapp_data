@@ -6,7 +6,12 @@ Rails.application.routes.draw do
 
   get 'static_pages/home'
   get 'static_pages/products'
+  get 'static_pges/product_servers'
+  get 'static_pages/product_traffic_cops'
   get 'static_pages/docs'
+  get 'static_pages/docs_getting_started'
+  get 'static_pages/docs_servers'
+  get 'static_pages/docs_traffic_cops'
   get 'static_pages/help'
   require 'api_constraints'
 

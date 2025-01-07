@@ -83,6 +83,10 @@
   vertical-align: middle;
 }
 
+.bg-half-170 {
+    padding: 70px 0;    
+}
+
 .border-top-dashed {
   border-top: dashed !important;
 }
@@ -7459,6 +7463,11 @@ textarea.form-control-lg {
 .page-item:last-child .page-link {
   border-top-right-radius: var(--bs-pagination-border-radius);
   border-bottom-right-radius: var(--bs-pagination-border-radius);
+}
+
+.pages-heading .title {
+    font-size: 48px!important;
+    letter-spacing: 1px;
 }
 
 .pagination-lg {
