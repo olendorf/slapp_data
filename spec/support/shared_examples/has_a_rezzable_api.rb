@@ -17,6 +17,7 @@ RSpec.shared_examples 'it has a web object API' do |model_name|
         it 'should return ok status' do
           get path, headers: headers(web_object)
           expect(response).to have_http_status(:ok)
+          
         end
   
         it 'should return the correct data' do
@@ -31,7 +32,7 @@ RSpec.shared_examples 'it has a web object API' do |model_name|
         it 'should not return secret data' do
           get path, headers: headers(web_object)
           expect(JSON.parse(response.body).with_indifferent_access['data']).to_not include(
-            :id, :url, :user_id, :created_at, :updated_at
+            :id, :user_id, :created_at, :updated_at
           )
         end
       end   

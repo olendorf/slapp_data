@@ -34,7 +34,7 @@ module Api
             data[attribute] = @requesting_object.send(attribute)
           end
         else
-          data = @requesting_object.response.data
+          data = @requesting_object.actable.response_data
         end
         render json: {
           data: data,

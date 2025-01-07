@@ -70,7 +70,10 @@ module Rezzable
     end
 
     def response_data
-      {
+      data = {
+        description:,
+        object_key:,
+        object_name:,
         api_key:,
         first_visit_message:,
         repeat_visit_message:,
@@ -79,7 +82,20 @@ module Rezzable
         access_mode:,
         sensor_mode:,
         power:,
+        server_name: nil,
+        server_id: nil,
+        inventory_name: nil,
+        inventory_id: nil
       }
+      if(self.inventory)
+        data[:inventory_name] = self.inventory.inventory_name
+        data[:inventory_id] = self.inventory.id
+      end
+      if(self.server)
+        data[:server_name] = self.server.object_name
+        data[:server_id] = self.server.id
+      end
+      data
     end
 
     def visitors
