@@ -34,12 +34,15 @@
                     
                         xAxis: {
                             max: 255,
-                            title: null
+                            title: null,
+                            endOnTick: true,
+                            tickInterval: 16
                         },                    
                         yAxis: {
                             max: 255,
                             title: null,
-                            endOnTick: false
+                            endOnTick: true,
+                            tickInterval: 16
                         },
                     
                         legend: {
@@ -55,8 +58,8 @@
                         },
                     
                         colorAxis: {
-                            minColor: '#367bc7',
-                            maxColor: '#F99F4A',
+                            minColor: '#FFFFFF',
+                            maxColor: '#367bc7',
                             min: 0,
                             max: data.max,
                             startOnTick: false,

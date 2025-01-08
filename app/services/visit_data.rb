@@ -66,7 +66,7 @@ class VisitData
   end
   
   def self.visit_location_heatmap(ids)
-    visits = Analyzable::Visit.includes(:detections).where(traffic_cop_id: ids)
+    visits = Analyzable::Visit.includes(:detections).where(traffic_cop_id: ids).limit(1000)
     data = []
     256.times { |x| 256.times { |y| data << [x, y, 0] } }
     visits.each do |visit|
