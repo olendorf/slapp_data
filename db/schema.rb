@@ -82,7 +82,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_22_135313) do
   end
 
   create_table "analyzable_transactions", force: :cascade do |t|
-    t.integer "amount"
+    t.integer "amount"#
     t.integer "balance"
     t.integer "previous_balance"
     t.integer "user_id"

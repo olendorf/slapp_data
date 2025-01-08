@@ -8,6 +8,9 @@ class User < ApplicationRecord
          :timeoutable, :trackable
 
   validate :password_complexity
+  
+  
+  # auto_strip_attributes :password, :password_confirmation
 
   attr_accessor :account_payment, :requesting_object
 

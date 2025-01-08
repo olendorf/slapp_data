@@ -6,12 +6,14 @@ class AbstractWebObjectDecorator < Draper::Decorator
 
   def slurl(target: :_blank)
     position = JSON.parse(self.position)
-    href = "https://maps.secondlife.com/secondlife/#{region}/#{position['x'].to_i.round}/" \
+    href = "http://maps.secondlife.com/secondlife/#{region.strip}/#{position['x'].to_i.round}/" \
            "#{position['y'].to_i.round}/#{position['z'].to_i.round}/"
-    text = "#{region} (#{position['x'].to_i.round}, " \
+    text = "#{region.strip} (#{position['x'].to_i.round}, " \
            "#{position['y'].to_i.round}, #{position['z'].to_i.round})"
     h.link_to(text, href, target: target)
   end
+  
+  # http://maps.secondlife.com/secondlife/Schear/228/36/2505
 
   # Define presentation-specific methods here. Helpers are accessed through
   # `helpers` (aka `h`). You can override attributes, for example:
