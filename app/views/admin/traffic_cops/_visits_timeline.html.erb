@@ -33,6 +33,7 @@
                                     enabled: true,
                                     text: 'Date'
                                 },
+                                categories: data[0],
                                 type: 'datetime'
                             },
                             yAxis: [{
@@ -78,11 +79,13 @@
                             },
                             series: [{
                                 name: 'Visits',
-                                data: data
+                                yAxis: 0,
+                                data: data[1]
                             }, {
-                              name: 'Time Spent (Minutes)',
-                              data: data,
-                              yAxis: 1
+                                
+                              name: 'Time Spent (minutes)',
+                              yAxis: 1,
+                              data: data[2]
                             }]
                     
    
