@@ -42,7 +42,6 @@ RSpec.describe 'Async::Visits', type: :request do
       describe 'visits timeline data' do 
         it 'should return ok status' do
           get path, params: { chart: 'visits_timeline', ids: traffic_cop.id }
-          puts response.body
           expect(response.status).to eq 200
         end        
         
@@ -136,6 +135,18 @@ RSpec.describe 'Async::Visits', type: :request do
           get path, params: { chart: 'visit_location_heatmap', ids: traffic_cop.id }
 
           expect(JSON.parse(response.body)['data'].collect { |d| d[2] }.max).to be > 0
+        end
+      end
+      
+      describe 'visitor_locations' do 
+        it 'should return ok status' do 
+          get path, params: {chart: 'visitor_locations', ids: traffic_cop.id}
+          expect(response.status).to eq 200
+        end
+        
+        it 'should return the correct data' do 
+          get path, params: {chart: 'visitor_locations', ids: traffic_cop.id}
+          expect(JSON.parse(response.body).size).to eq 5
         end
       end
     end 

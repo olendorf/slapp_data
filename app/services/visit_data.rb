@@ -5,10 +5,10 @@ class VisitData
   # include DataHelper
   
   def self.visits_timeline(ids)
-    visits = Rezzable::TrafficCop.find(ids).first.visits
-    data = visits.group_by_day(:created_at).count
+    # visits = Rezzable::TrafficCop.find(ids).first.visits
+    data = Analyzable::Visit.where(traffic_cop_id: ids).group_by_day(:created_at).count
     counts = data.collect{ |k, v| v}
-    durations = visits.group_by_day(:created_at).sum(:duration).collect{ |k, v| v }.map { |v| v/60.0}
+    durations = Analyzable::Visit.where(traffic_cop_id: ids).group_by_day(:created_at).sum(:duration).collect{ |k, v| v }.map { |v| v/60.0}
     dates = data.keys.map { |k| k }
     [dates, counts, durations]
     
@@ -78,5 +78,22 @@ class VisitData
       end
     end
     { data: data, max: data.collect { |d| d[2] }.max }
+  end
+  
+  def self.visitor_locations(ids)
+    visits = Analyzable::Visit.includes(:detections).where(traffic_cop_id: ids).limit(1000).decorate
+    data = []
+    visits.each do |visit|
+      if(visit.detections.last)
+        data << {
+                  x: visit.detections.last.x, 
+                  y: visit.detections.last.y,
+                  z: visit.detections.last.z,
+                  avatar_name: visit.avatar_name,
+                  slurl: visit.slurl
+        }
+      end
+    end
+    data
   end
 end
