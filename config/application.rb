@@ -23,7 +23,7 @@ module SlappData
     config.autoload_lib(ignore: %w[assets tasks])
 
     config.time_zone = 'Pacific Time (US & Canada)'
-    config.active_record.default_timezone = :local
+    config.active_record.default_timezone = :utc
 
     # Configuration for the application, engines, and railties goes here.
     #

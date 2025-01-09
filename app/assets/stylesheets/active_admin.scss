@@ -25,3 +25,62 @@
     background-color: $am-theme-error;
   }
 }
+
+.chart-container {
+  max-width: 100%;
+}
+
+.color_box {
+  width: 50px;
+}
+
+.panel {   
+  
+  .column {
+    vertical-align: top; 
+    
+   .table-name {
+      font-size: 1.5em;
+      font: bold;
+      margin-bottom: 10px;
+    }
+    
+
+    
+    &.sm {
+      width: 30%;
+      display: inline-block;
+      margin: 20px 50px;
+      
+      &.right {
+        margin-right: 10px;
+        margin-left: auto;
+      }
+    }
+    &.md {
+      width: 40%;
+      display: inline-block;
+      margin: 20px 50px;
+      
+    }
+    
+    &.lg {
+      width: 80%;
+      display: inline-block;
+      margin: 20px 50px;
+    }
+    
+    .centered {
+      margin: 50px auto 50px;
+    }
+  }
+  
+  &.sidebar_section {
+    width: 100%;
+  }
+  
+  width: 90%;
+  margin: auto;
+
+
+}

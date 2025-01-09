@@ -1,0 +1,94 @@
+
+<div id="visits_container" data-ids="<%= params['resource_ids']%>"
+     style="width:600px; height:400px;; background: url('/assets/512px-Loader.gif'); background-repeat:no-repeat; background-position: center"></div>
+
+
+<script type="text/javascript">
+
+        $(function () {
+                // var processed_json = new Array();   
+                var resource_ids = $('#visits_container').data('ids')
+                $.getJSON('/async/visits', 
+                                {
+                                    ids: resource_ids,
+                                    chart: 'visits_histogram'
+                                },
+                                function(data) {
+
+                    // draw chart
+                     $('#visits_container').highcharts({ 
+                        chart: {
+                            style: {
+                              fontFamily: 'Arial, Helvetica, Clean, sans-serif'
+                            },
+                            events: {
+                              load: function() {
+            	                        document.getElementById('visits_container').style.background = 'none';
+                                    }
+                            }
+                        },
+                        title: {
+                          text: 'Frequency of Visit Durations'
+                          //text: data
+                            // text: gon.ids
+                        },
+                    
+                        xAxis: [{
+                            alignTicks: false,
+                            visible: false
+                        }, {
+                            title: { text: 'Visit Duration (minutes)' },
+                            alignTicks: false
+                        }],
+                    
+                        yAxis: [{
+                            visible: false
+                        }, {
+                            title: { text: 'Count' }
+                        }],
+                    
+                        plotOptions: {
+                            histogram: {
+                                accessibility: {
+                                    valueDescriptionFormat: function (point) {
+                                        var ix = point.index + 1,
+                                            x1 = point.x.toFixed(3),
+                                            x2 = point.x2.toFixed(3),
+                                            val = point.y;
+                                        return ix + '. ' + x1 + ' to ' + x2 + ', ' + val + '.';
+                                    }
+                                }
+                            }
+                        },
+                        
+                        legend: {
+                        	enabled: false
+                        }, 
+                        credits: {
+                          enabled: false
+                        },
+                    
+                        series: [{
+                            name: 'Durations',
+                            type: 'histogram',
+                            binsNumber: 'rice',
+                            xAxis: 1,
+                            yAxis: 1,
+                            baseSeries: 's1',
+                            zIndex: -1
+                        }, {
+                            name: 'Data',
+                            visible: false,
+                            type: 'scatter',
+                            data: data,
+                            id: 's1',
+                            marker: {
+                                radius: 1.5
+                            }
+                        }]
+                    }); 
+                });
+            });
+
+
+</script>

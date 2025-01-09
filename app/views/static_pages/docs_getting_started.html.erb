@@ -1,0 +1,42 @@
+
+        <section class="bg-half-170 bg-light d-table w-100">
+            <div class="container">
+                <div class="row mt-5 justify-content-center">
+                    <div class="col-lg-12 text-center">
+                        <div class="pages-heading">
+                            <h4 class="title mb-0"> Documentation </h4>
+                        </div>
+                    </div>  <!--end col-->
+                </div><!--end row-->
+            </div> <!--end container-->
+        </section><!--end section-->
+        <!-- Hero End -->
+
+
+
+        <!-- Documentation Start -->
+        <section class="section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h4 class="mb-4">Introduction</h4>
+                        <p>The first step in getting started is to visit one of our terminals in our <%= link_to 'store', Settings.default.store_slurl, target: :_blank %>. </p>
+
+                        <h4 class="mt-5">Creating and Renewing an Account</h4>
+                        <p>Click on a terminal and choose <b>New Account</b>. You will be prompted to enter a password and confirm it. The password must be at least 8 characters long and contain 1 uppercase, 1 lowercase, 1 digit and 1 special character. You will then be prompted to pay for a 
+                        subscription. This initial payment is for a <b>level 1</b> account. See below to learn about account levels. When you need to renew your account, just visit one of our terminals again and pay again.</p>
+
+                        <h5 class="mt-4">Account Levels and Object Weight</h5>
+                        <p>The different objects tend to use different amounts of computing resources. The Traffic Cop is by far the most resource intensive, so it has a much higher weight. Most objects only use resources when someone is using it, like vendors and tip jars. These have a very low object weight. 
+                        Each account gets an allotment of <%= Settings.default.account.weight_limit %> weight units per account level. If you should need to rez more objects than your allotted amount, simply go to one of our <%= link_to 'terminals', Settings.default.store_slurl, target: :_blank %> and use the 
+                        menu to increase your object weight. Your expiration time will automacally be adjusted. Conversely, if you wish to reduce your account level just go to a terminal and decrease it, your expiration date will be adjusted.
+                        </p>
+                        <h5 class="mt-4">Changing Your Password</h5>
+                        <p>You can change your password either on the website or at a terminal. The terminal is secure, all in world communication with the terminal is done through a random highly negative channel. It is not, however, encrypted. The website has the standard safety protocols you would find
+                        on any trusted website.</p>
+
+
+                    </div>
+                </div>
+            </div>
+        </section>

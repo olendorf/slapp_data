@@ -46,6 +46,11 @@ gem 'activeadmin'
 # Configuration for application
 gem 'config'
 
+# Strips whitespace from input
+gem "auto_strip_attributes"
+
+# Allows grouping by date in queries
+gem 'groupdate'
 # Human readable times
 gem 'chronic'
 gem 'chronic_duration'

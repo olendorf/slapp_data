@@ -119,6 +119,53 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
         end
       end
     end
+    
+    panel '' do
+      div class: 'column centered' do
+        render partial: 'visits_timeline'
+      end
+    end
+    
+    panel '' do
+      div class: 'column md' do
+        render partial: 'visits_histogram'
+      end
+      div class: 'column md' do
+        render partial: 'visitors_time_histogram'
+      end
+    end
+    
+    panel '' do
+      div class: 'column md' do
+        render partial: 'visitors_counts_histogram'
+      end
+
+      div class: 'column md' do
+        render partial: 'visitors_counts_duration_scatter'
+      end
+    end
+    
+    panel '' do
+      div class: 'column md' do
+        render partial: 'visits_heatmap'
+      end
+
+      div class: 'column md' do
+        render partial: 'duration_heatmap'
+      end
+    end
+    
+    panel '' do
+      div class: 'column centered' do
+        render partial: 'visits_location_heatmap'
+      end
+    end
+    
+    panel '' do
+      div class: 'column centered' do 
+        render partial: 'visitor_locations'
+      end
+    end
   end
 
   sidebar :settings, only: %i[edit show] do
@@ -172,15 +219,17 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
         column :avatar_name
         column :start_time
         column 'Duration' do |visit|
-          "#{visit.duration / 60.0} mins"
+          ChronicDuration.output(visit.duration)
         end
       end
     end
   end
+  
+  
 
   sidebar :allowed, only: %i[edit show] do
     paginated_collection(
-      resource.allowed_list.order(:avatar_name).page(
+      resource.allowed.order(:avatar_name).page(
         params[:allowed_page]
       ).per(10), param_name: 'allowed_page', download_links: false
     ) do
@@ -199,7 +248,7 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
 
   sidebar :banned, only: %i[edit show] do
     paginated_collection(
-      resource.banned_list.order(:avatar_name).page(
+      resource.banned.order(:avatar_name).page(
         params[:banned_page]
       ).per(10), param_name: 'banned_page', download_links: false
     ) do
@@ -214,6 +263,25 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
     end
 
     render partial: 'add_listable_form', locals: { list_name: 'banned' }
+  end
+  
+  sidebar :excluded, only: %i[edit show] do
+    paginated_collection(
+      resource.excluded.order(:avatar_name).page(
+        params[:excluded]
+      ).per(10), param_name: 'excluded_page', download_links: false
+    ) do
+      table_for collection do
+        column :avatar_name
+        column '' do |avatar|
+          link_to 'Delete',  admin_listable_avatar_path(avatar),
+                  method: :delete,
+                  data: { confirm: 'Unban this avatar?' }
+        end
+      end
+    end
+
+    render partial: 'add_listable_form', locals: { list_name: 'excluded' }
   end
 
   permit_params :object_name, :description, :server_id, :power, :sensor_mode, :security_mode,
@@ -263,5 +331,13 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
       end
     end
     f.actions
+  end
+  
+  controller do
+    def show
+      # gon.ids = [resource.id]
+      params['resource_ids'] = [resource.id]
+      super
+    end
   end
 end

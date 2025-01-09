@@ -1,0 +1,77 @@
+<div id="duration_heatmap_container" data-ids="<%= params['resource_ids']%>"
+     style="width:600px; height:600px;; background: url('/assets/512px-Loader.gif'); background-repeat:no-repeat; background-position: center"></div>
+
+<script type="text/javascript">
+
+        $(function () {
+                var resource_ids = $('#duration_heatmap_container').data('ids')
+                $.getJSON('/async/visits', 
+                                {
+                                    ids: resource_ids,
+                                    chart: 'duration_heatmap'
+                                },
+                                function(data) {
+                     $('#duration_heatmap_container').highcharts({ 
+                        chart: {
+                            type: 'heatmap',
+                            style: {
+                              fontFamily: 'Arial, Helvetica, Clean, sans-serif'
+                            },
+                            events: {
+                              load: function() {
+            	                        document.getElementById('duration_heatmap_container').style.background = 'none';
+                                    }
+                            }
+                        },
+                    
+                    
+                        title: {
+                            text: 'Time Spent By Day and Time'
+                        },
+                    
+                        xAxis: {
+                            categories: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 
+                                            'Thursday', 'Friday', 'Saturday']
+                        },
+                    
+                        yAxis: {
+                            categories: [
+                                            '1 AM', '2 AM', '3 AM', '4 AM', '5 AM', '6 AM', '7 AM', 
+                                            '8 AM', '9 AM', '10 AM', '11 AM', 'Noon', '1 PM', 
+                                            '2 PM', '3 PM', '4 PM', '5 PM', '6 PM', '7 PM', 
+                                            '8 PM', '9 PM', '10 PM', '11 PM', '12 PM'
+                                        ],
+                            title: null
+                            // reversed: true
+                        },
+                    
+                        colorAxis: {
+                            min: 0,
+                            minColor: '#FFFFFF',
+                            maxColor: Highcharts.getOptions().colors[0]
+                        },
+                    
+                        legend: {
+                            align: 'right',
+                            layout: 'vertical',
+                            margin: 0,
+                            verticalAlign: 'top',
+                            y: 25,
+                            symbolHeight: 280
+                        },  
+                        credits: {
+                          enabled: false
+                        },
+                    
+                        series: [{
+                            name: 'Time Spent By Time and Day',
+                            borderWidth: 1,
+                            data: data
+                        }]
+
+                    }); 
+                });
+            });
+
+
+</script>

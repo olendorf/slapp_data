@@ -39,7 +39,7 @@ RSpec.describe Rezzable::TrafficCop, type: :model do
     should define_enum_for(:sensor_mode).with_values(
       sensor_mode_region: 0,
       sensor_mode_parcel: 1,
-      sensor_mode_owned_parcels: 2
+      sensor_mode_owned: 2
     )
   }
 
@@ -53,8 +53,9 @@ RSpec.describe Rezzable::TrafficCop, type: :model do
 
   it {
     should define_enum_for(:access_mode).with_values(
-      access_mode_banned: 0,
-      access_mode_allowed: 1
+      access_mode_anyone: 0,
+      access_mode_banned: 1,
+      access_mode_allowed: 2
     )
   }
 
@@ -117,6 +118,29 @@ RSpec.describe Rezzable::TrafficCop, type: :model do
       it 'should set the visit region' do
         traffic_cop.update(detections:)
         expect(traffic_cop.visits.last.region).to eq traffic_cop.region
+      end
+    end
+    
+    context 'detetion is excluded' do 
+      let(:excluded) { FactoryBot.build_list :excluded, 2 }
+      
+      let(:detections) do
+        detections = FactoryBot.attributes_for_list :detection, 3
+        excluded.each do |avatar|
+          detections += FactoryBot.attributes_for_list :detection, 1,
+                                                       avatar_name: avatar.avatar_name,
+                                                       avatar_key: avatar.avatar_key
+        end
+        detections
+      end
+      before(:each) do
+        traffic_cop.listable_avatars << excluded
+      end
+      
+      it 'should not create visits for excluded avatars' do
+        expect do
+          traffic_cop.update(detections: detections)
+        end.to change(traffic_cop.visits, :count).by(3)
       end
     end
 
@@ -208,7 +232,7 @@ RSpec.describe Rezzable::TrafficCop, type: :model do
       end
 
       context 'traffic cop is in access list only mode' do
-        let(:allowed) { FactoryBot.build_list :allowed_avatar, 2 }
+        let(:allowed) { FactoryBot.build_list :allowed, 2 }
         let(:detections) do
           detections = FactoryBot.attributes_for_list :detection, 3
           allowed.each do |avatar|
@@ -238,7 +262,7 @@ RSpec.describe Rezzable::TrafficCop, type: :model do
       end
 
       context 'traffic cop is in banned mode' do
-        let(:banned) { FactoryBot.build_list :banned_avatar, 2 }
+        let(:banned) { FactoryBot.build_list :banned, 2 }
         let(:detections) do
           detections = FactoryBot.attributes_for_list :detection, 3
           banned.each do |avatar|
@@ -272,7 +296,7 @@ RSpec.describe Rezzable::TrafficCop, type: :model do
   describe '#add_to_allowed_list' do
     it 'should add the listable ' do
       avatar = FactoryBot.build(:avatar)
-      traffic_cop.add_to_allowed_list(avatar.avatar_name, avatar.avatar_key)
+      traffic_cop.add_to_allowed(avatar.avatar_name, avatar.avatar_key)
       expect(traffic_cop.listable_avatars.where(list_name: 'allowed').size).to eq 1
     end
   end
@@ -280,30 +304,30 @@ RSpec.describe Rezzable::TrafficCop, type: :model do
   describe '#add_to_banned_list' do
     it 'should add the listable' do
       avatar = FactoryBot.build(:avatar)
-      traffic_cop.add_to_banned_list(avatar.avatar_name, avatar.avatar_key)
+      traffic_cop.add_to_banned(avatar.avatar_name, avatar.avatar_key)
       expect(traffic_cop.listable_avatars.where(list_name: 'banned').size).to eq 1
     end
   end
 
   describe '#allowed_list' do
     it 'should return only allowed avatars' do
-      traffic_cop.listable_avatars << FactoryBot.build(:allowed_avatar)
-      traffic_cop.listable_avatars << FactoryBot.build(:allowed_avatar)
-      traffic_cop.listable_avatars << FactoryBot.build(:allowed_avatar)
-      traffic_cop.listable_avatars << FactoryBot.build(:banned_avatar)
-      traffic_cop.listable_avatars << FactoryBot.build(:banned_avatar)
-      expect(traffic_cop.allowed_list.size).to eq 3
+      traffic_cop.listable_avatars << FactoryBot.build(:allowed)
+      traffic_cop.listable_avatars << FactoryBot.build(:allowed)
+      traffic_cop.listable_avatars << FactoryBot.build(:allowed)
+      traffic_cop.listable_avatars << FactoryBot.build(:banned)
+      traffic_cop.listable_avatars << FactoryBot.build(:banned)
+      expect(traffic_cop.allowed.size).to eq 3
     end
   end
 
   describe '#banned_list' do
     it 'should return only banned avatars' do
-      traffic_cop.listable_avatars << FactoryBot.build(:allowed_avatar)
-      traffic_cop.listable_avatars << FactoryBot.build(:allowed_avatar)
-      traffic_cop.listable_avatars << FactoryBot.build(:allowed_avatar)
-      traffic_cop.listable_avatars << FactoryBot.build(:banned_avatar)
-      traffic_cop.listable_avatars << FactoryBot.build(:banned_avatar)
-      expect(traffic_cop.banned_list.size).to eq 2
+      traffic_cop.listable_avatars << FactoryBot.build(:allowed)
+      traffic_cop.listable_avatars << FactoryBot.build(:allowed)
+      traffic_cop.listable_avatars << FactoryBot.build(:allowed)
+      traffic_cop.listable_avatars << FactoryBot.build(:banned)
+      traffic_cop.listable_avatars << FactoryBot.build(:banned)
+      expect(traffic_cop.banned.size).to eq 2
     end
   end
 end

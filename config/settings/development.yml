@@ -1,6 +1,8 @@
 default:
   site_url: "https://example.com/"
+  store_slurl: "http://maps.secondlife.com/secondlife/Schear/232/36/2505"
   web_object:
     api_key: change_me
   request:
     time_limit: 30
+  

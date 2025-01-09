@@ -11,7 +11,7 @@ RSpec.describe AbstractWebObjectDecorator do
   describe :slurl do
     it 'returns the correct url' do
       expect(web_object.decorate.slurl).to eq(
-        '<a href="https://maps.secondlife.com/secondlife/' \
+        '<a target="_blank" href="http://maps.secondlife.com/secondlife/' \
         'Foo Man Choo/10/20/30/">Foo Man Choo (10, 20, 30)</a>'
       )
     end

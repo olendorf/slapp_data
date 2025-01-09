@@ -4,6 +4,9 @@
 class AbstractWebObject < ApplicationRecord
   after_initialize :set_api_key
   before_destroy :decrement_user_caches
+  
+  
+  auto_strip_attributes :region
 
   actable
 

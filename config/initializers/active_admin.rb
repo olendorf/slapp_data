@@ -242,6 +242,11 @@ ActiveAdmin.setup do |config|
   #
   # To load a javascript file:
   #   config.register_javascript 'my_javascript.js'
+  config.register_javascript "https://code.highcharts.com/highcharts.js"
+  config.register_javascript 'https://code.highcharts.com/12.1.1/highcharts-more.js'
+  config.register_javascript 'https://code.highcharts.com/modules/histogram-bellcurve.js'
+  config.register_javascript 'https://code.highcharts.com/modules/accessibility.src.js'
+  config.register_javascript 'https://code.highcharts.com/modules/heatmap.js'
 
   # == CSV options
   #
@@ -376,6 +381,7 @@ ActiveAdmin.setup do |config|
   # override the content of the footer here.
   #
   # config.footer = 'my custom footer text'
+  config.footer = "Slapp Data V0.0.1"
 
   # == Sorting
   #

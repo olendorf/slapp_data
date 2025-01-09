@@ -1,0 +1,191 @@
+
+        <section class="bg-half-170 bg-light d-table w-100">
+            <div class="container">
+                <div class="row mt-5 justify-content-center">
+                    <div class="col-lg-12 text-center">
+                        <div class="pages-heading">
+                            <h4 class="title mb-0"> Documentation </h4>
+                        </div>
+                    </div>  <!--end col-->
+                </div><!--end row-->
+            </div> <!--end container-->
+        </section><!--end section-->
+        <!-- Hero End -->
+
+
+
+        <!-- Documentation Start -->
+        <section class="section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="mb-4">Introduction</h3>
+                        <p>Your <b>Traffic Cop</b> is a multifunctional tool primarily designed to collect data about the visitor traffic to your parcel or region. While data collection is it's primary purpose, since it is already
+                        monitoring visitors, we also gave it Security and Greeting functionality. As part of the greeting functionality, it can greet first time and returning visitors differently as well as give an item such as a landmark or
+                        welcome package to your visitors. This can reduce the number of scripted objects you use, reducing lag.</p>
+                        
+                        <p>Your Traffic Cop can be turned on and off, and you can inactivate the greeting and security functions. It can also function on group owned land.</p>
+
+                        <h3 class="mt-5">Usage</h3>
+
+                        <h4 class="mt-4">Setup</h4>
+                        <p>To start using a traffic cop, first rez it. You should rename it, especially if you are using multiple traffic cops. Touch it, then choose <b>Reset</b> from the dialog menu.</p>
+                        
+                        <p>In it's default state, a traffic cop is powered off. To turn it on, choose <b>Sensor On</b> from the menu. Once powered on, the object will
+                        start scanning every 30 seconds and sending data about visitors to the database. Additionally, the unit must be powered on for security and greeting
+                        functionality. To stop the sensor scan, choose <b>Sensor Off</b></p> 
+                        
+                        
+                        <h4 class="mt-4">Main Menu</h4>
+                        
+                        <h5 class="mt-3">Linking a Server and Inventory</h5>
+                        <p>You only need to link a <b>Server</b> if you want your traffic cop to give visitors inventory. To link a server and inventory to give, you will first need to rez a server and put 
+                        the inventory you desire into the server's contents. You can get instructions how to do that <%= link_to 'here', static_pages_docs_servers_path %>. You can link to a server via the web site or 
+                        from the traffic cop.</p>
+                        
+                        <p>To link a server and inventory from the website, go to the page for your traffic cop and click the edit button. First link the desired server by choosing it from the dropdown list then
+                        hitting <b>Update Traffic cop</b>. Edit the traffic cop again, then choose the inventory you desire, then click <b>Update Traffic cop</b>.</p>
+                        
+                        <p>Linking from the object itself follows a similar workflow. First chose <b>Server</b> from the dialog menu, then choose the desired server. Then click the <b>Inventory</b> button and 
+                        choose the desired inventory. If you do not want the traffic cop to give anything, just leave the inventory unset.</p>
+                        
+                        <h5 class="mt-3">Reset</h5>
+                        <p>This will refresh the Traffic Cops connection to the web server and set all the settings to those stored on 
+                        the database. It DOES NOT reset the object to it's default settings.</p>
+                        
+                        <h5 class="mt-3">Delete</h5>
+                        <p>Deleting the object via the object's menu is prefered over deleting the object directly. Using the Traffic Cop's 
+                        menu ensure the object is removed from the database as well. If you do delete the object directly, you can just delete the
+                        object on the website as well. Likewise, using the delete function on the website will delete the object in world.</p>
+                        
+                        <h5 class="mt-3">Done</h5>
+                        <p>This closes the dialog.</p>
+            
+                       <h5 class="mt-3">Settings Menu</h5> 
+                       
+                       <p>The following settings are available under the <b>Settings</b> menu accessed from the <b>Main</b> menu.</p>
+                       
+                       <ul class="text-muted mb-0">                           
+                           <li class="list-unstyled mt-3">
+                               <i class="mdi mdi-arrow-right"></i>
+                               <div class="ms-2">
+                                   <h6>Sensor</h6>
+                                   <ul>
+                                       <li class="list-unstyled mt-3">
+                                           <h6>Parcel</h6>
+                                           <p>The sensor will only scan people on the parcel on which the Traffic Cop is placed.</p>
+                                       </li>
+                                       <li class="list-unstyled mt-3">
+                                           <h6>Region</h6>
+                                           <p>The sensor will scan the entire region.</p>
+                                       </li>
+                                       <li class="list-unstyled mt-3">
+                                           <h6>Owned</h6>
+                                           <p>The sensor will only scan parcels in the region with the same owner as the Traffic Cop.</p>
+                                       </li>
+                                   </ul>
+                               </div>
+                           </li>
+                           <li class="list-unstyled mt-3">
+                               <i class="mdi mdi-arrow-right"></i>
+                               <div class="ms-2">
+                                   <h6>Access</h6>
+                                   <ul>
+                                       <li class="list-unstyled mt-3">
+                                           <h6>Anyone</h6>
+                                           <p>Anyone can access land.</p>
+                                       </li>
+                                       <li class="list-unstyled mt-3">
+                                           <h6>Banned</h6>
+                                           <p>People on the banned list are excluded.</p>
+                                       </li>
+                                       <li class="list-unstyled mt-3">
+                                           <h6>Allowed</h6>
+                                           <p>Only those on the allowed list can enter.</p>
+                                       </li>
+                                   </ul>
+                               </div>
+                           </li>
+                       </ul>
+                       
+                       <p>The security will only message or eject avatars from land with the same owner as the traffic cop. So if you set the Traffic Cop to 
+                       <b>Region</b> but the parcels have different owners, data about their visit will be collected, but only avatars on land with the
+                       same owner will be messaged or ejected. If the land is group owned, then deed the traffic cop to the same group. You will need to 
+                       have the same group active to interact with the traffic cop though.</p>
+                       
+                       <h5 class="mt-3">Lists</h5>
+                       
+                       <p>The Traffic Cop makes use of three lists. For each list you have the option of displaying the list, adding 
+                       avatars to it or removing them. You can also make these changed both at the object and on the Traffic Cop's pages.</p>
+                       
+                       <ul class="text-unstyled mt-3">
+                           <li class="d-flex mt-2" >
+                               <i class="mdi mdi-arrow-right"></i>
+                               <div class"ms-2">
+                                   <h6>Excluded</h6>
+                                   <p>Avatars on this list will not have their visit data collected, messaged or ejected. 
+                                   This is useful for things such as you, bot avatars or other avatars that might be 
+                                   spending a lot of time in the area but you don't want them skewing the data.</p>
+                               </div>
+                           </li>
+                           <li class="d-flex mt-2" >
+                               <i class="mdi mdi-arrow-right"></i>
+                               <div class"ms-2">
+                                   <h6>Allowed</h6>
+                                   <p>These avatars will always be allowed on the scanned area that is under the same ownership as 
+                                   the Traffic Cop.</p>
+                               </div>
+                           </li>
+                           <li class="d-flex mt-2" >
+                               <i class="mdi mdi-arrow-right"></i>
+                               <div class"ms-2">
+                                   <h6>Banned</h6>
+                                   <p>These avatars will be ejected from sensored areas under the same ownership as the Traffic Cop.</p>
+                               </div>
+                           </li>
+                       </ul>
+                       
+                     
+      
+                        <!--<div class="table-responsive bg-white rounded">-->
+                        <!--    <table class="table table-bordered mb-0 table-center">-->
+                        <!--        <thead>-->
+                        <!--            <tr>-->
+                        <!--                <th style="width: 20%;"><i class="ti-file"></i> Command</th>-->
+                        <!--                <th>Description</th>-->
+                        <!--            </tr>-->
+                        <!--        </thead>-->
+                        <!--        <tbody>-->
+                        <!--            <tr>-->
+                        <!--                <td class="fs-5">-->
+                        <!--                    <code>yarn install</code>-->
+                        <!--                </td>-->
+                        <!--                <td>-->
+                        <!--                    This would install all the required dependencies in the <code class="fw-bold">node_modules</code> folder.-->
+                        <!--                </td>-->
+                        <!--            </tr>-->
+
+                        <!--            <tr>-->
+                        <!--                <td class="fs-5">-->
+                        <!--                    <code>gulp</code>-->
+                        <!--                </td>-->
+                        <!--                <td>-->
+                        <!--                    Runs the project locally, starts the development server and watches for any changes in your code, including your HTML, javascript, sass, etc. The development server is accessible at <a href="http://localhost:3000" class="text-primary fw-bold" target="_blank">http://localhost:3000</a>.-->
+                        <!--                </td>-->
+                        <!--            </tr>-->
+
+                        <!--            <tr>-->
+                        <!--                <td class="fs-5">-->
+                        <!--                    <code>gulp build</code>-->
+                        <!--                </td>-->
+                        <!--                <td>-->
+                        <!--                    Generates a <code class="fw-bold">/dist</code> directory with all the production files.-->
+                        <!--                </td>-->
+                        <!--            </tr>-->
+                        <!--        </tbody>-->
+                        <!--    </table>-->
+                        <!--</div>-->
+                    </div>
+                </div>
+            </div>
+        </section>

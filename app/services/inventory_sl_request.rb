@@ -51,7 +51,7 @@ class InventorySlRequest
     inventory = Analyzable::Inventory.find(inventory_id)
     target_server = inventory.server
 
-    # Rails.logger.debug "Giving inventory #{inventory.inventory_name}"
+    Rails.logger.debug "Giving inventory #{inventory.inventory_name}"
 
     return if Rails.env.development?
 
