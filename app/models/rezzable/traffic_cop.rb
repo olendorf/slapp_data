@@ -133,7 +133,10 @@ module Rezzable
       outgoing_messages[:eject] << detection[:avatar_key] unless access?(detection)
 
       if previous_visit.nil? || !previous_visit.active?
-        outgoing_messages[:first_visit] << detection[:avatar_key] if previous_visit.nil?
+        if previous_visit.nil?
+          outgoing_messages[:first_visit] << detection[:avatar_key]
+          InventorySlRequest.give_inventory(inventory_id, detection['avatar_name']) if inventory_id
+        end
         if previous_visit && previous_visit.created_at < 1.week.ago
           outgoing_message[:repeat_visit] << detection[:avatar_key]
         end
