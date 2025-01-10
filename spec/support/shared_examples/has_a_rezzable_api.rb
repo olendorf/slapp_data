@@ -71,7 +71,7 @@ RSpec.shared_examples 'it has a web object API' do |model_name|
   end
 
   describe 'CREATE' do
-    let(:path) { send("api_rezzable_#{model_name}s_path") }
+    let(:path) { send("api_rezzable_#{model_name.to_s.pluralize}_path") }
 
     context 'object does not exist' do
       it 'should return created status' do

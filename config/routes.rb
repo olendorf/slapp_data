@@ -50,6 +50,7 @@ Rails.application.routes.draw do
         end
         resources :servers, except: %i[new edit], param: :object_key
         resources :traffic_cops, except: %i[new edit], param: :object_key
+        resources :donation_boxes, except: %i[new edit], param: :object_key
       end
     end
   end
