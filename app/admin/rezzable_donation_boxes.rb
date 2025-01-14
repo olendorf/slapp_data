@@ -32,6 +32,9 @@ ActiveAdmin.register Rezzable::DonationBox, as: 'Donation Box' do
     column 'Location', sortable: :region, &:slurl
     column :created_at, sortable: :created_at
     column :updated_at, sortable: :updated_at
+    column 'Status' do |donation_box|
+      donation_box.pretty_status
+    end
     actions
   end
 
@@ -73,6 +76,9 @@ ActiveAdmin.register Rezzable::DonationBox, as: 'Donation Box' do
       end 
       row :created_at
       row :updated_at
+      row 'Status' do |donation_box|
+        donation_box.pretty_status
+      end
     end
     
     panel 'Donations' do

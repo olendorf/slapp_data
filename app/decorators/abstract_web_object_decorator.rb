@@ -13,6 +13,12 @@ class AbstractWebObjectDecorator < Draper::Decorator
     h.link_to(text, href, target: target)
   end
   
+  def pretty_status
+    h.content_tag :span, class: active? ? 'status_tag off' : 'status_tag on' do
+      active? ? 'Inactive' : 'Active'
+    end
+  end
+  
   # http://maps.secondlife.com/secondlife/Schear/228/36/2505
 
   # Define presentation-specific methods here. Helpers are accessed through

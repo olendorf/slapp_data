@@ -41,6 +41,10 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
     #   end
     # end
     column :created_at, sortable: :created_at
+    column :updated_at, sortable: :updated_at
+    column 'Status' do |traffic_cop|
+      traffic_cop.pretty_status
+    end
     actions
   end
 
@@ -80,6 +84,9 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
       row :location, &:slurl
       row :created_at
       row :updated_at
+      row 'Status' do |traffic_cop|
+        traffic_cop.pretty_status
+      end
     end
 
     panel 'Visits' do
@@ -176,9 +183,6 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
       end
       row 'Sensor mode' do |traffic_cop|
         traffic_cop.decorate.pretty_sensor_mode
-      end
-      row 'Security mode' do |traffic_cop|
-        traffic_cop.decorate.pretty_security_mode
       end
       row 'Access mode' do |traffic_cop|
         traffic_cop.decorate.pretty_access_mode
