@@ -120,7 +120,7 @@ module Rezzable
       self.detections = nil
     end
 
-    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity
     def handle_detection(detection)
       detection = detection.with_indifferent_access
 
@@ -148,7 +148,7 @@ module Rezzable
       end
     end
 
-    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable  Metrics/AbcSize, Metrics/PerceivedComplexity
 
     def create_visit(detection)
       atts = {

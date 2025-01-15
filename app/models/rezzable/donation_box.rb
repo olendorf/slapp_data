@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Rezzable
+  # Model for Donation Boxes. Allows avatars to donate to another.
   class DonationBox < ApplicationRecord
     acts_as :abstract_web_object
 

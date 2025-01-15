@@ -9,7 +9,7 @@ class VisitData
     data = Analyzable::Visit.where(traffic_cop_id: ids).group_by_day(:created_at).count
     counts = data.collect { |_k, v| v }
     durations = Analyzable::Visit.where(traffic_cop_id: ids).group_by_day(:created_at)
-                      .sum(:duration).collect { |_k, v| v/60.0 }
+                                 .sum(:duration).collect { |_k, v| v / 60.0 }
     dates = data.keys.map { |k| k }
     [dates, counts, durations]
   end
@@ -78,7 +78,7 @@ class VisitData
 
   def self.visitor_locations(ids)
     visits = Analyzable::Visit.includes(:detections)
-                  .where(traffic_cop_id: ids).limit(1000).decorate
+                              .where(traffic_cop_id: ids).limit(1000).decorate
     data = []
     visits.each do |visit|
       next unless visit.detections.last

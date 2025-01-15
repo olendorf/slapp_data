@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Rezzable
+  # Decoroate for Donation Boxes
   class DonationBoxDecorator < AbstractWebObjectDecorator
     delegate_all
 

@@ -2,6 +2,7 @@
 
 module Api
   module V1
+    # Controller for API requests for Listable Avatars.
     class ListableAvatarsController < Api::V1::ApiController
       def create
         authorize [:api, :v1, @requesting_object.actable]

@@ -2,6 +2,7 @@
 
 module Api
   module V1
+    # Authorization for Listable Avatars.
     class ListableAvatarPolicy < ApplicationPolicy
       def create?
         false
