@@ -25,7 +25,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  
+
   namespace :async, defaults: { format: 'json' } do
     resources :visits, only: %i[index]
     resources :donations, only: %i[index]

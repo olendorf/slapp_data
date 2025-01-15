@@ -42,9 +42,7 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
     # end
     column :created_at, sortable: :created_at
     column :updated_at, sortable: :updated_at
-    column 'Status' do |traffic_cop|
-      traffic_cop.pretty_status
-    end
+    column 'Status', &:pretty_status
     actions
   end
 
@@ -84,9 +82,7 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
       row :location, &:slurl
       row :created_at
       row :updated_at
-      row 'Status' do |traffic_cop|
-        traffic_cop.pretty_status
-      end
+      row 'Status', &:pretty_status
     end
 
     panel 'Visits' do
@@ -126,13 +122,13 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
         end
       end
     end
-    
+
     panel '' do
       div class: 'column centered' do
         render partial: 'visits_timeline'
       end
     end
-    
+
     panel '' do
       div class: 'column md' do
         render partial: 'visits_histogram'
@@ -141,7 +137,7 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
         render partial: 'visitors_time_histogram'
       end
     end
-    
+
     panel '' do
       div class: 'column md' do
         render partial: 'visitors_counts_histogram'
@@ -151,7 +147,7 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
         render partial: 'visitors_counts_duration_scatter'
       end
     end
-    
+
     panel '' do
       div class: 'column md' do
         render partial: 'visits_heatmap'
@@ -161,15 +157,15 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
         render partial: 'duration_heatmap'
       end
     end
-    
+
     panel '' do
       div class: 'column centered' do
         render partial: 'visits_location_heatmap'
       end
     end
-    
+
     panel '' do
-      div class: 'column centered' do 
+      div class: 'column centered' do
         render partial: 'visitor_locations'
       end
     end
@@ -228,8 +224,6 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
       end
     end
   end
-  
-  
 
   sidebar :allowed, only: %i[edit show] do
     paginated_collection(
@@ -268,7 +262,7 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
 
     render partial: 'add_listable_form', locals: { list_name: 'banned' }
   end
-  
+
   sidebar :excluded, only: %i[edit show] do
     paginated_collection(
       resource.excluded.order(:avatar_name).page(
@@ -336,7 +330,7 @@ ActiveAdmin.register Rezzable::TrafficCop, as: 'Traffic Cop' do
     end
     f.actions
   end
-  
+
   controller do
     def show
       # gon.ids = [resource.id]

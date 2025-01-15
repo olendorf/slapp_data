@@ -54,27 +54,26 @@ def give_terminals_to_user(user, _avatars)
   end
 end
 
-def give_donation_boxes_to_user(user, avatars)
+def give_donation_boxes_to_user(user, _avatars)
   puts "Giving donation boxes to #{user.avatar_name}"
-  rand(3..10).times do 
+  rand(3..10).times do
     donation_box = FactoryBot.build(:donation_box)
     user.web_objects << donation_box
     next unless rand > 0.1 && user.servers.size.positive?
-    
+
     donation_box.server_id = user.servers.sample.id
     donation_box.save
-    
+
     if rand > 0.1 && user.inventories.size.positive?
       donation_box.inventory = user.inventories.sample
       donation_box.save
-    end 
+    end
   end
 end
 
 # rubocop:disable Metrics/AbcSize
 
 def give_visits_to_traffic_cop(traffic_cop, avatars, visit_time = 20)
-  
   puts "Giving visits to #{traffic_cop.user.avatar_name}"
   times = time_rand_array(2.years.ago, Time.now, rand(100)).sort
 

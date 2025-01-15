@@ -43,10 +43,8 @@ ActiveAdmin.register Rezzable::Terminal, as: 'Terminal' do
     #   end
     # end
     column :created_at, sortable: :created_at
-    column :updated_at, sortable: :updated_at 
-    column 'Status' do |terminal|
-      terminal.pretty_status
-    end
+    column :updated_at, sortable: :updated_at
+    column 'Status', &:pretty_status
     actions
   end
 
@@ -86,9 +84,7 @@ ActiveAdmin.register Rezzable::Terminal, as: 'Terminal' do
       row :location, &:slurl
       row :created_at
       row :updated_at
-      row 'Status' do |terminal|
-        terminal.pretty_status
-      end
+      row 'Status', &:pretty_status
     end
   end
 

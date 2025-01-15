@@ -32,9 +32,7 @@ ActiveAdmin.register Rezzable::DonationBox, as: 'Donation Box' do
     column 'Location', sortable: :region, &:slurl
     column :created_at, sortable: :created_at
     column :updated_at, sortable: :updated_at
-    column 'Status' do |donation_box|
-      donation_box.pretty_status
-    end
+    column 'Status', &:pretty_status
     actions
   end
 
@@ -73,36 +71,32 @@ ActiveAdmin.register Rezzable::DonationBox, as: 'Donation Box' do
       row 'Biggest Donor' do |donation_box|
         donor = donation_box.biggest_donor
         "#{donor[:target_name]} ( L$ #{donor[:amount]} )"
-      end 
+      end
       row :created_at
       row :updated_at
-      row 'Status' do |donation_box|
-        donation_box.pretty_status
-      end
+      row 'Status', &:pretty_status
     end
-    
+
     panel 'Donations' do
       paginated_collection(
         resource.transactions.order(created_at: :desc).page(
-        params[:donation_page]
+          params[:donation_page]
         ).per(20), param_name: 'donation_page', download_links: false
-      ) do 
+      ) do
         table_for collection do
           column :target_name
           column :target_key
           column :amount
-          column 'Date' do |donation|
-            donation.created_at
-          end
+          column 'Date', &:created_at
         end
       end
     end
-    
-    panel 'Donors' do 
+
+    panel 'Donors' do
       data = resource.donors
       paginated_data = Kaminari.paginate_array(data).page(params['donor_page']).per(20)
       div class: 'paginated_collection' do
-        table_for paginated_data do 
+        table_for paginated_data do
           column :target_name
           column :target_key
           column :amount
@@ -113,36 +107,34 @@ ActiveAdmin.register Rezzable::DonationBox, as: 'Donation Box' do
         div id: 'donors-footer' do
           paginate paginated_data, param_name: 'donor_Page'
         end
-        div class: 'pagination_information' do 
+        div class: 'pagination_information' do
           page_entries_info paginated_data, entry_name: 'Donors'
         end
       end
     end
-    
-      
-    panel '' do 
-      div class: 'column centered' do 
+
+    panel '' do
+      div class: 'column centered' do
         render partial: 'donations_timeline'
-      end 
+      end
     end
-    
-    panel '' do 
-      div class: 'column md' do 
+
+    panel '' do
+      div class: 'column md' do
         render partial: 'donations_histogram'
       end
-      
-      div class: 'column md' do 
+
+      div class: 'column md' do
         render partial: 'donors_histogram'
       end
     end
-    
-    panel '' do 
-      div class: 'column md centered' do 
+
+    panel '' do
+      div class: 'column md centered' do
         render partial: 'donor_amount_count_scatter'
       end
     end
   end
-
 
   # Uncomment all parameters which should be permitted for assignment
   #
@@ -174,7 +166,7 @@ ActiveAdmin.register Rezzable::DonationBox, as: 'Donation Box' do
   #   permitted << :other if params[:action] == 'create' && current_user.admin?
   #   permitted
   # end
-  
+
   controller do
     def show
       d = Rezzable::DonationBox.find resource.id

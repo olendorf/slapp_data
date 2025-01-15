@@ -15,7 +15,7 @@ FactoryBot.define do
     factory :account_payment do
       transaction_type { :account }
     end
-    
+
     factory :donation do
       transaction_type { :donation }
     end

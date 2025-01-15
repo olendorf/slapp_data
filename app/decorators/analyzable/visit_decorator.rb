@@ -4,12 +4,12 @@ module Analyzable
   # Decorator class for Analyzable::Visit model
   class VisitDecorator < Draper::Decorator
     delegate_all
-    
+
     def slurl
       href = "https://maps.secondlife.com/secondlife/#{region}/#{detections.last.x.round}/" \
              "#{detections.last.y.round}/#{detections.last.z.round}/"
       text = "#{avatar_name} (#{detections.last.x.round}, " \
-            "#{detections.last.y.round}, #{detections.last.z.round})"
+             "#{detections.last.y.round}, #{detections.last.z.round})"
       h.link_to(text, href, target: :_blank)
       # href
     end

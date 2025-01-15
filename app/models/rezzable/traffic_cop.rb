@@ -8,7 +8,7 @@ module Rezzable
     has_many :visits, class_name: 'Analyzable::Visit', dependent: :nullify
 
     has_many :listable_avatars, as: :listable, dependent: :destroy
-    
+
     accepts_nested_attributes_for :listable_avatars, allow_destroy: true
 
     attr_accessor :detections, :outgoing_messages
@@ -51,11 +51,10 @@ module Rezzable
         )
       end
 
-      define_method("#{list}") do
+      define_method(list.to_s) do
         listable_avatars.where(list_name: list.to_sym)
       end
     end
-
 
     def self.ransackable_associations(_auth_object = nil)
       %w[abstract_web_object actable user created_at]
@@ -87,13 +86,13 @@ module Rezzable
         inventory_name: nil,
         inventory_id: nil
       }
-      if(self.inventory)
-        data[:inventory_name] = self.inventory.inventory_name
-        data[:inventory_id] = self.inventory.id
+      if inventory
+        data[:inventory_name] = inventory.inventory_name
+        data[:inventory_id] = inventory.id
       end
-      if(self.server)
-        data[:server_name] = self.server.object_name
-        data[:server_id] = self.server.id
+      if server
+        data[:server_name] = server.object_name
+        data[:server_id] = server.id
       end
       data
     end
@@ -124,9 +123,9 @@ module Rezzable
     # rubocop:disable Metrics/AbcSize
     def handle_detection(detection)
       detection = detection.with_indifferent_access
-      
-      return unless self.excluded.where(avatar_key: detection[:avatar_key]).empty?
-      
+
+      return unless excluded.where(avatar_key: detection[:avatar_key]).empty?
+
       previous_visit = visits.where(avatar_key: detection['avatar_key'])
                              .order(created_at: :desc).limit(1).first
 

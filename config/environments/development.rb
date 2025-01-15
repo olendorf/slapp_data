@@ -117,7 +117,6 @@ Rails.application.configure do
   config.action_controller.raise_on_missing_callback_actions = true
 
   config.hosts << 'ec0896c0be6f417f9e0f45613a3c31b1.vfs.cloud9.us-east-2.amazonaws.com'
-  
-  
+
   config.web_console.permissions = '152.7.255.0/16'
 end
