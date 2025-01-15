@@ -29,7 +29,7 @@ module Api
       def show
         authorize [:api, :v1, @requesting_object.actable]
         data = {}
-        if params['attributes'] 
+        if params['attributes']
           params['attributes'].each do |attribute|
             data[attribute] = @requesting_object.send(attribute)
           end
@@ -37,14 +37,14 @@ module Api
           data = @requesting_object.actable.response_data
         end
         render json: {
-          data: data,
+          data:,
           http_status: 'OK'
         }, status: :ok
       end
 
       def update
         authorize [:api, :v1, @requesting_object.actable]
-        
+
         params.permit!
         @requesting_object.actable.update! object_attributes
         @requesting_object.save

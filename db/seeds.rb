@@ -26,6 +26,7 @@ def time_rand_array(from = 0.0, to = Time.now, num = 10)
 end
 
 def give_servers_to_user(user)
+  puts "Giving servers to #{user.avatar_name}"
   rand(1..10).times do
     server = FactoryBot.build(:server, user_id: user.id)
     server.save
@@ -36,6 +37,7 @@ def give_servers_to_user(user)
 end
 
 def give_terminals_to_user(user, _avatars)
+  puts "Giving terminals to #{user.avatar_name}"
   rand(3..10).times do
     terminal = FactoryBot.build(:terminal)
     user.web_objects << terminal
@@ -52,9 +54,27 @@ def give_terminals_to_user(user, _avatars)
   end
 end
 
+def give_donation_boxes_to_user(user, _avatars)
+  puts "Giving donation boxes to #{user.avatar_name}"
+  rand(3..10).times do
+    donation_box = FactoryBot.build(:donation_box)
+    user.web_objects << donation_box
+    next unless rand > 0.1 && user.servers.size.positive?
+
+    donation_box.server_id = user.servers.sample.id
+    donation_box.save
+
+    if rand > 0.1 && user.inventories.size.positive?
+      donation_box.inventory = user.inventories.sample
+      donation_box.save
+    end
+  end
+end
+
 # rubocop:disable Metrics/AbcSize
 
 def give_visits_to_traffic_cop(traffic_cop, avatars, visit_time = 20)
+  puts "Giving visits to #{traffic_cop.user.avatar_name}"
   times = time_rand_array(2.years.ago, Time.now, rand(100)).sort
 
   times.each_with_index do |time, _index|
@@ -124,7 +144,6 @@ def give_transactions_to_user(user, avatars, _num = 100)
     avatar = avatars.sample
     if rand < 0.5
       u = User.all.sample
-      puts "using user #{u.avatar_name}"
       avatar.avatar_name = u.avatar_name
       avatar.avatar_key = u.avatar_key
     end
@@ -142,6 +161,7 @@ owner = FactoryBot.create(:owner, avatar_name: 'Random Citizen')
 give_servers_to_user(owner)
 give_terminals_to_user(owner, avatars)
 give_traffic_cops_to_user(owner, avatars)
+give_donation_boxes_to_user(owner, avatars)
 give_transactions_to_user(owner, avatars)
 # 3.times do
 #   server = FactoryBot.build :server

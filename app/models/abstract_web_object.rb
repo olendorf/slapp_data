@@ -4,8 +4,7 @@
 class AbstractWebObject < ApplicationRecord
   after_initialize :set_api_key
   before_destroy :decrement_user_caches
-  
-  
+
   auto_strip_attributes :region
 
   actable
@@ -27,6 +26,10 @@ class AbstractWebObject < ApplicationRecord
     user.web_object_count -= 1
     user.web_object_weight -= object_weight
     user.save
+  end
+
+  def active?
+    updated_at < 2.hours.ago
   end
 
   def self.ransackable_attributes(_auth_object = nil)

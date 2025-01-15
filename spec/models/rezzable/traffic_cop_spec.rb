@@ -120,10 +120,10 @@ RSpec.describe Rezzable::TrafficCop, type: :model do
         expect(traffic_cop.visits.last.region).to eq traffic_cop.region
       end
     end
-    
-    context 'detetion is excluded' do 
+
+    context 'detetion is excluded' do
       let(:excluded) { FactoryBot.build_list :excluded, 2 }
-      
+
       let(:detections) do
         detections = FactoryBot.attributes_for_list :detection, 3
         excluded.each do |avatar|
@@ -136,10 +136,10 @@ RSpec.describe Rezzable::TrafficCop, type: :model do
       before(:each) do
         traffic_cop.listable_avatars << excluded
       end
-      
+
       it 'should not create visits for excluded avatars' do
         expect do
-          traffic_cop.update(detections: detections)
+          traffic_cop.update(detections:)
         end.to change(traffic_cop.visits, :count).by(3)
       end
     end

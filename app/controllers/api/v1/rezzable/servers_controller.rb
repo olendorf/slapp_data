@@ -12,7 +12,7 @@ module Api
           page = @requesting_object.user.servers
                                    .page(params['server_page']).per(9)
           data = paged_data(page)
-          render json: {message: 'OK', data: }, status: :ok
+          render json: { message: 'OK', data: }, status: :ok
         end
 
         private

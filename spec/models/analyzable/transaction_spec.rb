@@ -9,7 +9,7 @@ RSpec.describe Analyzable::Transaction, type: :model do
 
   it {
     should define_enum_for(:transaction_type)
-      .with_values(other: 0, account: 1, share: 2)
+      .with_values(other: 0, account: 1, share: 2, donation: 3)
   }
 
   let(:user) { FactoryBot.create :user }

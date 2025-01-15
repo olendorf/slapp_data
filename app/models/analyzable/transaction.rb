@@ -22,7 +22,8 @@ module Analyzable
     enum :transaction_type, {
       other: 0,
       account: 1,
-      share: 2
+      share: 2,
+      donation: 3
     }
   end
 end

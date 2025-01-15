@@ -27,10 +27,8 @@ module Analyzable
     def update_data(detection)
       self.avatar_name ||= detection.avatar_name
       self.avatar_key ||= detection.avatar_key
-      self.duration = detection.created_at - self.created_at
-      self.save
-      logger.debug "self created at: #{self.created_at}\ndetecte created_at: #{detection.created_at}\nduration: #{self.duration}"
-      
+      self.duration = detection.created_at - created_at
+      save
     end
   end
 end
