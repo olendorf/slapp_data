@@ -38,5 +38,27 @@ RSpec.describe "Async::Donations", type: :request  do
         expect(response.status).to eq 200
       end
     end 
+    
+    describe 'donation count historgram data' do 
+      it 'should return ok status' do 
+        get path, params: { chart: 'donation_count_histogram', ids: donation_box.id}
+        expect(response.status).to eq 200
+      end
+    end
+    
+    describe 'donor count histogram data' do 
+      it 'should return ok status' do 
+        get path, params: { chart: 'donor_count_histogram', ids: donation_box.id }
+        expect(response.status).to eq 200
+      end
+    end
+    
+    describe 'donor amount count scatter data' do 
+      it 'should return ok status' do 
+        get path, params: { chart: 'donor_amount_count_scatter', ids: donation_box.id }
+        expect(response.status).to eq 200
+      end
+    end
+    
   end 
 end

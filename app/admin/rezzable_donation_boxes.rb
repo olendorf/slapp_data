@@ -125,6 +125,22 @@ ActiveAdmin.register Rezzable::DonationBox, as: 'Donation Box' do
         render partial: 'donations_timeline'
       end 
     end
+    
+    panel '' do 
+      div class: 'column md' do 
+        render partial: 'donations_histogram'
+      end
+      
+      div class: 'column md' do 
+        render partial: 'donors_histogram'
+      end
+    end
+    
+    panel '' do 
+      div class: 'column md centered' do 
+        render partial: 'donor_amount_count_scatter'
+      end
+    end
   end
 
 
@@ -158,4 +174,12 @@ ActiveAdmin.register Rezzable::DonationBox, as: 'Donation Box' do
   #   permitted << :other if params[:action] == 'create' && current_user.admin?
   #   permitted
   # end
+  
+  controller do
+    def show
+      d = Rezzable::DonationBox.find resource.id
+      params['resource_ids'] = [d.abstract_web_object.id]
+      super
+    end
+  end
 end

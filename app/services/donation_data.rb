@@ -6,8 +6,26 @@ class DonationData
   
   def self.donations_timeline(ids)
     data = Analyzable::Transaction.where(abstract_web_object_id: ids).group_by_day(:created_at).sum(:amount)
-    [data.keys.map { |k| k }, data.collect { |k, v| v }]
+    data = [data.keys.map { |k| k }, data.collect { |k, v| v }]
+    data
   end 
+  
+  def self.donation_count_histogram(ids)
+    Analyzable::Transaction.where(abstract_web_object_id: ids).collect { |t| t.amount }
+  end
+  
+  def self.donor_count_histogram(ids)
+    Analyzable::Transaction.where(abstract_web_object_id: ids).group(:target_key).sum(:amount).collect { |_k, v| v }
+  end
+  
+  def self.donor_amount_count_scatter(ids)
+    counts = Analyzable::Transaction.where(abstract_web_object_id: ids).group(:target_key).count
+    data = Analyzable::Transaction.where(abstract_web_object_id: ids)
+              .group(:target_key, :target_name ).sum(:amount).collect do |k, v|
+                {target_name: k.last, target_key: k.first, y: v, x: counts[k.first]} 
+              end
+    data
+  end
   
   # def self.visits_timeline(ids)
   #   # visits = Rezzable::TrafficCop.find(ids).first.visits

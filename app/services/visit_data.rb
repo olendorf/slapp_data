@@ -13,9 +13,6 @@ class VisitData
     [dates, counts, durations]
     
   end
-  
-  def self.duration_timeline(ids)
-  end
 
   def self.visits_histogram(ids)
     Analyzable::Visit.select(:duration).where(traffic_cop_id: ids).collect do |v|

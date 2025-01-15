@@ -1,48 +1,51 @@
-<div id="donations_timeline_container" class='centered' data-ids="<%= params['resource_ids'] %>"
-     style="width:1200px; height:400px;; background: url('/assets/512px-Loader.gif'); background-repeat:no-repeat; background-position: center"></div>
+<div id="donor_amount_count_scatter_container" data-ids="<%= params['resource_ids'] %>"
+     style="width:600px; height:400px;; background: url('/assets/512px-Loader.gif'); background-repeat:no-repeat; background-position: center"></div>
 
 <script type="text/javascript">
 
         $(function () {  
-                var resource_ids = $('#donations_timeline_container').data('ids')
+                var resource_ids = $('#donor_amount_count_scatter_container').data('ids')
                 $.getJSON('/async/donations', 
                                 {
                                     ids: resource_ids,
-                                    chart: 'donations_timeline'
+                                    chart: 'donor_amount_count_scatter'
                                 },
                                 function(data) {
 
                     // draw chart
-                    $('#donations_timeline_container').highcharts({ 
+                     $('#donor_amount_count_scatter_container').highcharts({ 
                           chart: {
-                                zoomType: 'x',
+                                type: 'scatter',
+                                zoomType: 'xy',
                                 style: {
                                   fontFamily: 'Arial, Helvetica, Clean, sans-serif'
                                 },
                                 events: {
                                   load: function() {
-                	                        document.getElementById('donations_timeline_container').style.background = 'none';
+                	                        document.getElementById('donor_amount_count_scatter_container').style.background = 'none';
                                         }
                                 }
                             },
                             title: {
-                                text: 'Donations Over Time'
-                                // text: data
+                                text: 'Amount Donated by Number of Donations'
                             },
                             xAxis: {
                                 title: {
                                     enabled: true,
-                                    text: 'Date'
+                                    text: 'Donations'
                                 },
-                                categories: data[0],
-                                type: 'datetime'
+                                min: 0,
+                                startOnTick: true,
+                                endOnTick: true,
+                                showLastLabel: true,
+                                tickInterval: 1
                             },
-                            yAxis: [{
+                            yAxis: {
                                 title: {
-                                    text: 'Amount Donated'
+                                    text: 'Amount Donated ( L$ )'
                                 },
                                 min: 0
-                            }],
+                            },
                             legend: {
                                 enabled: false
                             },  
@@ -50,13 +53,13 @@
                               enabled: false
                             },
                             plotOptions: {
-                                line: {
+                                scatter: {
                                     marker: {
-                                        radius: 2,
+                                        radius: 5,
                                         states: {
                                             hover: {
                                                 enabled: true,
-                                                // lineColor: 'rgb(100,100,100)'
+                                                lineColor: 'rgb(100,100,100)'
                                             }
                                         }
                                     },
@@ -67,18 +70,16 @@
                                             }
                                         }
                                     },
-                                    // tooltip: {
-                                    //     headerFormat: '<b>{point.point.name}</b><br>',
-                                    //     pointFormat: '{point.x} visits, {point.y} minutes'
-                                    // }
+                                    tooltip: {
+                                        headerFormat: '<b>{point.target_name}</b><br>',
+                                        pointFormat: '{point.x} donation, {point.y} L$'
+                                    }
                                 }
                             },
                             series: [{
-                                name: 'Amount Donated',
-                                yAxis: 0,
-                                data: data[1]
-                            }
-                            ]
+                                name: 'Donations',
+                                data: data
+                            }]
                     
    
                     }); 
