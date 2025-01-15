@@ -3,6 +3,7 @@
 # Base model for rezzable objects
 class AbstractWebObject < ApplicationRecord
   after_initialize :set_api_key
+  before_create :set_pinged_at
   before_destroy :decrement_user_caches
 
   auto_strip_attributes :region
@@ -29,7 +30,7 @@ class AbstractWebObject < ApplicationRecord
   end
 
   def active?
-    updated_at < 2.hours.ago
+    pinged_at < 2.hours.ago
   end
 
   def self.ransackable_attributes(_auth_object = nil)
@@ -41,6 +42,10 @@ class AbstractWebObject < ApplicationRecord
   end
 
   private
+  
+  def set_pinged_at 
+    self.pinged_at = Time.now
+  end
 
   def set_api_key
     self.api_key ||= SecureRandom.uuid

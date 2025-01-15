@@ -5,6 +5,7 @@ module Api
     # Controller for all API web object requests. Almost everythign is handled here.
     class RezzableController < Api::V1::ApiController
       # before_action :load_requested_object, except: [:create]
+      before_action :set_pinged, except: [:create]
 
       def create
         if AbstractWebObject.find_by_object_key(object_attributes[:object_key])
@@ -14,6 +15,7 @@ module Api
           authorize [:api, :v1, requesting_class]
           params.permit!
           @web_object = requesting_class.new(object_attributes)
+          @web_object.pinged_at = @web_object.created_at
           # @web_object.save!
           @object_owner.web_objects << @web_object
 
@@ -86,6 +88,10 @@ module Api
 
       #   @web_object.actable
       # end
+      
+      def set_pinged
+        @requesting_object.pinged_at = @requesting_object.updated_at
+      end
 
       def requesting_class
         "::Rezzable::#{controller_name.classify}".constantize
