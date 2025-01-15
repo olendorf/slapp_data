@@ -182,6 +182,7 @@ RSpec.describe User, type: :model do
       let(:atts) do
         amount = User.payment_schedule.keys[1] * user.account_level
         FactoryBot.attributes_for :user,
+                                  avatar_name: 'Newuser Resident',
                                   account_payment: amount,
                                   requesting_object:,
                                   expiration_date: nil
