@@ -30,7 +30,11 @@ class AbstractWebObject < ApplicationRecord
   end
 
   def active?
-    pinged_at < 2.hours.ago
+    if pinged_at
+      pinged_at < 2.hours.ago
+    else
+      false
+    end
   end
 
   def self.ransackable_attributes(_auth_object = nil)
