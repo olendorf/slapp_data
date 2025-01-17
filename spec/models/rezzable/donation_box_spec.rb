@@ -4,7 +4,9 @@ require 'rails_helper'
 
 RSpec.describe Rezzable::DonationBox, type: :model do
   it_behaves_like 'a rezzable object', :donation_box, 1
-
+  
+  # it { should accept_nested_attributes_for(:transactions).allow_destroy(true) }
+  
   let(:user) { FactoryBot.create :user }
   let(:donation_box) do
     donation_box = FactoryBot.build :donation_box
@@ -39,7 +41,6 @@ RSpec.describe Rezzable::DonationBox, type: :model do
 
   describe '#donors' do
     it 'should return the correct data' do
-      puts donation_box.donors
       expect(donation_box.donors.size).to eq 6
     end
   end

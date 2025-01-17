@@ -50,6 +50,10 @@ class AbstractWebObject < ApplicationRecord
   def set_api_key
     self.api_key ||= SecureRandom.uuid
   end
+  
+  def handle_data(transaction)
+    transaction.user_id = self.user.id
+  end
 
   def handle_splits(transaction)
     return if transaction.transaction_type == :share || transaction.amount <= 0

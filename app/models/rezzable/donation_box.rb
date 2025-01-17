@@ -4,6 +4,12 @@ module Rezzable
   # Model for Donation Boxes. Allows avatars to donate to another.
   class DonationBox < ApplicationRecord
     acts_as :abstract_web_object
+    
+    attr_accessor :donation
+    
+    after_update :handle_donation!, if: :donation
+    
+    # accepts_nested_attributes_for :transactions, allow_destroy: true
 
     def self.ransackable_associations(_auth_object = nil)
       %w[abstract_web_object actable user created_at]
@@ -26,6 +32,8 @@ module Rezzable
     end
 
     def response_data
+      last_data = self.transactions.last
+      
       {
         server_id: id,
         api_key:,
@@ -34,10 +42,34 @@ module Rezzable
         description:,
         url:,
         payment_schedule:,
-        message:
+        message:,
+        total: self.transactions.sum(:amount),
+        last_tip: last_data.nil? ? nil : last_data.amount,
+        last_tipper: last_data.nil? ? nil : last_data.target_name,
+        biggest_donor: last_data.nil? ? nil : self.biggest_donor
       }
     end
 
     OBJECT_WEIGHT = 1
+    
+    private
+    
+    def handle_donation!
+      data = donation.merge!({
+        'description' => "Donation from #{donation['target_name']}",
+        'abstract_web_object_id' => self.abstract_web_object.id,
+        'transaction_type' => :donation,
+        'web_object_type' => 'donation_box'
+        })
+      # donation = donation.merge({
+      #   'user_id' => self.user.id,
+      #   # 'description' => "Donation from #{donation['target_name']}",
+      #   'transaction_type' => :donation,
+      #   'web_object_type' => 'donation_box'
+      # })
+      self.donation = nil
+      self.user.transactions << Analyzable::Transaction.new(data)
+      # puts self.transactions.last.inspect
+    end 
   end
 end
