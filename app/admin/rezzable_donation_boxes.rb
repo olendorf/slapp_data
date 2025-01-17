@@ -66,11 +66,19 @@ ActiveAdmin.register Rezzable::DonationBox, as: 'Donation Box' do
         "L$ #{donation_box.transactions.sum(:amount)}"
       end
       row 'Largest Donation' do |donation_box|
-        "L$ #{donation_box.transactions.order(:amount).last.amount}"
+        if(donatation_box.transaactions.last)
+          "L$ #{donation_box.transactions.order(:amount).last.amount}"
+        else
+          ''
+        end
       end
       row 'Biggest Donor' do |donation_box|
-        donor = donation_box.biggest_donor
-        "#{donor[:target_name]} ( L$ #{donor[:amount]} )"
+        if(donation_box.transactions.last)
+          donor = donation_box.biggest_donor
+          "#{donor[:target_name]} ( L$ #{donor[:amount]} )"
+        else
+          ''
+        end
       end
       row :created_at
       row :updated_at
