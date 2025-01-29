@@ -77,6 +77,7 @@ module Rezzable
         first_visit_message:,
         repeat_visit_message:,
         banned_message:,
+        outgoing_messages:,
         access_mode:,
         sensor_mode:,
         power:,
@@ -107,7 +108,7 @@ module Rezzable
     private
 
     def handle_detections
-      outgoing_messages = { first_visit: [], repeat_visit: [], eject: [] }
+      self.outgoing_messages = { first_visit: [], repeat_visit: [], eject: [] }
 
       detections.each do |detection|
         handle_detection(detection)
