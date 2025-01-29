@@ -107,7 +107,7 @@ module Rezzable
     private
 
     def handle_detections
-      self.outgoing_messages = { first_visit: [], repeat_visit: [], eject: [] }
+      outgoing_messages = { first_visit: [], repeat_visit: [], eject: [] }
 
       detections.each do |detection|
         handle_detection(detection)
