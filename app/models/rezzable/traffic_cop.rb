@@ -77,7 +77,6 @@ module Rezzable
         first_visit_message:,
         repeat_visit_message:,
         banned_message:,
-        outgoing_messages:,
         access_mode:,
         sensor_mode:,
         power:,
