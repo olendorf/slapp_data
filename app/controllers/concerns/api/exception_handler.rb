@@ -13,6 +13,8 @@ module Api
       # end
 
       rescue_from Exception do |e|
+        Rails.logger.info e.message
+        Rails.ogger.info e.backtrace
         json_response({ message: e.message }, :internal_server_error)
       end
 
