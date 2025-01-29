@@ -14,7 +14,7 @@ module Api
 
       rescue_from Exception do |e|
         Rails.logger.info e.message
-        Rails.logger.info e.backtrace
+        Rails.logger.info e.backtrace.join($/)
         json_response({ message: e.message }, :internal_server_error)
       end
 
