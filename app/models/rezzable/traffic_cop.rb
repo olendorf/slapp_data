@@ -136,7 +136,7 @@ module Rezzable
           InventorySlRequest.give_inventory(inventory_id, detection['avatar_name']) if inventory_id
         end
         if previous_visit && previous_visit.created_at < 1.week.ago
-          outgoing_message[:repeat_visit] << detection[:avatar_key]
+          outgoing_messages[:repeat_visit] << detection[:avatar_key]
         end
         create_visit(detection)
       else
